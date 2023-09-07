@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rental">
+
+	<!-- 렌트정보 저장 -->
+<insert id="rental_in" parameterType="rental">
+  INSERT INTO cid_rentals (rental_id, m_id, car_id, reservation_date, rental_date_time, return_date_time, rental_cost)
+VALUES (rentals_seq.NEXTVAL, #{m_id}, #{car_id}, #{reservation_date}, #{rental_date_time}, #{return_date_time}, #{rental_cost})
+</insert>
+
+	<!-- 방금 렌트신청한것 가져오기 -->
+    <select id="get_rentCar" resultType="rental" parameterType="rental">
+    	SELECT * FROM cid_rentals WHERE m_id = #{m_id} ORDER BY reservation_date DESC FETCH FIRST 1 ROW ONLY
+	</select>
+	
+	<!-- 차량 정보 조회 -->
+	<select id="c_list" resultType="car" parameterType="car">
+	    SELECT * FROM cid_cars WHERE car_id = #{car_id}
+	</select>
+	
+    <!-- 렌트 모든 내역 가져오기 -->
+    <select id="get_rlist" resultType="rental" parameterType="rental">
+    	select * from cid_rentals where m_id = #{m_id} order by rental_date desc
+    </select>
+    
+    <!-- cid_rentals 테이블에 렌트비용 추가  (환불할때 용이)-->
+    <update id="cost_in">
+    	update cid_rentals set rental_cost = #{rental_cost} where rental_id = #{rental_id}
+    </update>
+    
+    <!-- cid_rentals 테이블에 주문번호 추가  (환불할때 용이)-->
+    <update id="insertMerchantId">
+    	update cid_rentals set merchantId = #{merchantId} where rental_id = #{rental_id}
+    </update>
+    
+
+</mapper>
