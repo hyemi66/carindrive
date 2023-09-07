@@ -28,8 +28,8 @@
         예약자 연락처: <span>${orderInfo.buyer_phone}</span><hr>
         예약한 차량: <span>${orderInfo.buy_product_name}</span><br>
         결제일자: <span>${orderInfo.buy_date}</span><br>
-        실제 대여일자: <span>${rental.rental_date_time}부터</span><br>
-        반납일자: <span>${rental.return_date_time}까지</span><br>
+        실제 대여일자: <span>${rental.cr_sdate}부터</span><br>
+        반납일자: <span>${rental.cr_edate}까지</span><br>
         렌트 비용: <span>${orderInfo.amount}원</span><br>
         주문 번호: <span>${orderInfo.merchantId}</span><br>
 	     <form action="/rent/refund" method="post">

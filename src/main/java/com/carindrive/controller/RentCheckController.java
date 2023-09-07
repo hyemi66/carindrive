@@ -2,7 +2,6 @@ package com.carindrive.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,12 +33,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
@@ -47,16 +44,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.carindrive.service.MemberService;
 import com.carindrive.service.RentService;
-import com.carindrive.vo.CarVO;
 import com.carindrive.vo.MemberVO;
 import com.carindrive.vo.OrderVO;
 import com.carindrive.vo.RentalVO;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-//테스트확인
+
 @Controller
 @RequestMapping("/rent/*")
 public class RentCheckController {
+	
 	@Autowired
 	private RentService rentService;
 
@@ -83,8 +80,8 @@ public class RentCheckController {
 			MemberVO loggedInUser = (MemberVO) session.getAttribute("loggedInUser");
 			 // 렌탈 정보 가져오기
 			RentalVO rental = this.rentService.getRentOne(loggedInUser.getM_id());
-			//RentalVO에 주문번호 추가
-			this.rentService.insertMerchantId(mId, rental.getRental_id());
+			//RentalVO에 예약번호를 이용해서 주문번호 추가
+			this.rentService.insertMerchantId(mId, rental.getCr_num());
 			// 데이터베이스에 OrderVO 정보 저장 (필요한 서비스 메서드를 호출)
 	        this.rentService.saveOrder(order);
 
@@ -93,43 +90,65 @@ public class RentCheckController {
 
 			mav.addObject("orderInfo", orderInfo); // JSP에서 사용할 수 있게 orderInfo를 모델에 추가
 			mav.addObject("rental", rental);
-			mav.setViewName("/rent/rent_Check"); // testInfo.jsp를 view로 설정
+			mav.setViewName("/rent/rent_Check"); //
 		} catch (Exception e) {
 			log.error("Error fetching payment info: ", e);
 			mav.setViewName("/main/error"); // 에러 발생 시, errorPage로 리다이렉트
 		}
 		return mav;
+		
 	}
-
+	
+	
 	//예약내역 확인
-	@RequestMapping(value = "/rent_Check_List", method = RequestMethod.GET)
-	public String rent_Check_List(Model model, HttpSession session, RedirectAttributes rttr) {
+	@RequestMapping(value = "/rent_Check_List")
+	public ModelAndView rent_Check_List(HttpSession session, RedirectAttributes rttr) {
+		ModelAndView mav = new ModelAndView();
 		MemberVO loggedInUser = (MemberVO) session.getAttribute("loggedInUser");	//로그인 정보를 가져옴
-
-		try {
-			if (loggedInUser != null) {//로그인이 되었을 때
-				RentalVO rental = this.rentService.getRentOne(loggedInUser.getM_id());
-				CarVO car = this.rentService.getCarInfo(rental.getCar_id());	//렌탈비용 데이터베이스에 추가
-				List<OrderVO> order = this.rentService.getOrder(loggedInUser.getM_id());
-
-				//DecimalFormat 는 숫자의 출력형태를 변환한다.
-				DecimalFormat decimalFormat = new DecimalFormat("#,###");
-				String rental_cost_total = decimalFormat.format(rental.getRental_cost());
-
-				model.addAttribute("rental", rental);	//렌탈정보
-				model.addAttribute("order",order);
-				model.addAttribute("rental_cost_total",rental_cost_total);//렌트비용
-
-				return "/rent/rent_Check_List";
-			}else {
-				// 로그인 정보가 없을 경우 로그인 페이지로 이동 또는 처리
-				rttr.addFlashAttribute("LoginNull", "alert('로그인 이후 이용 가능합니다!');");
-				return "redirect:/member/memberLogin";
-			}//else
-		}catch (Exception e) {
-			return "/rent/rent_Check_List_Null";
+		
+		if (loggedInUser != null) {//로그인이 되었을 때
+			List<RentalVO> rental = this.rentService.getRentList(loggedInUser.getM_id());	//로그인 아이디로 렌트 정보 가져오기
+			
+		}else {
+			// 로그인 정보가 없을 경우 로그인 페이지로 이동 또는 처리
+			rttr.addFlashAttribute("LoginNull", "alert('로그인 이후 이용 가능합니다!');");
+			mav.setViewName("redirect:/member/memberLogin");
+			return mav;
 		}
+		
+		mav.setViewName("/rent/rent_Check_List");
+		return mav;
 	}
+
+//	//예약내역 확인
+//	@RequestMapping(value = "/rent_Check_List", method = RequestMethod.GET)
+//	public String rent_Check_List(Model model, HttpSession session, RedirectAttributes rttr) {
+//		MemberVO loggedInUser = (MemberVO) session.getAttribute("loggedInUser");	//로그인 정보를 가져옴
+//
+//		try {
+//			if (loggedInUser != null) {//로그인이 되었을 때
+//				RentalVO rental = this.rentService.getRentOne(loggedInUser.getM_id());
+//				CarVO car = this.rentService.getCarInfo(rental.getCar_id());	//렌탈비용 데이터베이스에 추가
+//				List<OrderVO> order = this.rentService.getOrder(loggedInUser.getM_id());
+//
+//				//DecimalFormat 는 숫자의 출력형태를 변환한다.
+//				DecimalFormat decimalFormat = new DecimalFormat("#,###");
+//				String rental_cost_total = decimalFormat.format(rental.getRental_cost());
+//
+//				model.addAttribute("rental", rental);	//렌탈정보
+//				model.addAttribute("order",order);
+//				model.addAttribute("rental_cost_total",rental_cost_total);//렌트비용
+//
+//				return "/rent/rent_Check_List";
+//			}else {
+//				// 로그인 정보가 없을 경우 로그인 페이지로 이동 또는 처리
+//				rttr.addFlashAttribute("LoginNull", "alert('로그인 이후 이용 가능합니다!');");
+//				return "redirect:/member/memberLogin";
+//			}//else
+//		}catch (Exception e) {
+//			return "/rent/rent_Check_List_Null";
+//		}
+//	}
 	
 	//환불 관련 메서드
 

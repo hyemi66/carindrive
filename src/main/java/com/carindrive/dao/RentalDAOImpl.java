@@ -28,8 +28,8 @@ public class RentalDAOImpl implements RentalDAO {
 	}
 	
 	@Override
-	public RentalVO getRentOne(String m_id) {
-	    return this.sqlSession.selectOne("get_rentCar", m_id);
+	public RentalVO getRentOne(String cr_mid) {
+	    return this.sqlSession.selectOne("get_rentCar", cr_mid);
 	}
 
 	@Override
@@ -38,23 +38,23 @@ public class RentalDAOImpl implements RentalDAO {
 	}
 
 	@Override
-	public CarVO getCarInfo(int car_id) {
-		return this.sqlSession.selectOne("c_list",car_id);
+	public CarVO getCarInfo(String cr_cid) {
+		return this.sqlSession.selectOne("c_list",cr_cid);
 	}
 
 	@Override
-	public int insertCost(int rental_id, double rental_cost) {
+	public void insertCost(int cr_num, double one_price) {
 		RentalVO rentalVO = new RentalVO();
-        rentalVO.setRental_id(rental_id);
-        rentalVO.setRental_cost(rental_cost);
-        return sqlSession.update("cost_in", rentalVO);
+        rentalVO.setCr_num(cr_num);
+        rentalVO.setCr_price(one_price);
+        this.sqlSession.update("cost_in", rentalVO);
 	}
 
 	@Override
-	public void insertMerchantId(String merchantId, int rental_id) {
+	public void insertMerchantId(String merchantId, int cr_num) {
 	    RentalVO rentalVO = new RentalVO();
-	    rentalVO.setMerchantId(merchantId);  // RentalVO에 해당하는 메서드명으로 변경해야 합니다.
-	    rentalVO.setRental_id(rental_id);       // RentalVO에 해당하는 메서드명으로 변경해야 합니다.
+	    rentalVO.setCr_order(merchantId);  // RentalVO에 해당하는 메서드명으로 변경해야 합니다.
+	    rentalVO.setCr_num(cr_num);       // RentalVO에 해당하는 메서드명으로 변경해야 합니다.
 	    this.sqlSession.update("insertMerchantId", rentalVO);
 	}
 

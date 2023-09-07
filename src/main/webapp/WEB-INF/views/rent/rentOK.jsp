@@ -13,17 +13,17 @@
 <link href="${path}/css/rent.css" rel="stylesheet"/>
 <link href="${path}/css/rent_Check.css" rel="stylesheet" />
 <script>
-function cardPay(rental_m_id, mem_m_phone, mem_m_name, car_car_name, car_car_color, car_car_year, rental_cost_total) {
+function cardPay(rental_cr_mid, mem_m_phone, mem_m_name, car_c_name, car_c_color, car_c_year, total_price) {
     IMP.init('imp87360186'); //iamport 대신 자신의 "가맹점 식별코드"를 사용
     
-    var showName = car_car_year+'년식 ' + car_car_color + ' ' + car_car_name;
+    var showName = car_c_year+'년식 ' + car_c_color + ' ' + car_c_name;
     IMP.request_pay({
       pg: "html5_inicis",
       pay_method: "card",
       merchant_uid : 'merchant_'+new Date().getTime(),
       name : showName,
-      amount : rental_cost_total,
-      buyer_name : rental_m_id,
+      amount : total_price,
+      buyer_name : rental_cr_mid,
       buyer_tel : mem_m_phone,
     }, function (rsp) { // callback
         if (rsp.success) {
@@ -49,23 +49,23 @@ function cardPay(rental_m_id, mem_m_phone, mem_m_name, car_car_name, car_car_col
                     }
                 }
             });
-         	 location.href='/rent/rent_Check?m_id=${rental.m_id}';
+         	 location.href='/rent/rent_Check?cr_mid=${rental.cr_mid}';
         } else {
           alert("결제에 실패했습니다.");
         }
     });
 }
-function kakaoPay(rental_m_id, mem_m_phone, mem_m_name, car_car_name, car_car_color, car_car_year, rental_cost_total) {
+function kakaoPay(rental_cr_mid, mem_m_phone, mem_m_name, car_c_name, car_c_color, car_c_year, total_price) {
 	IMP.init('imp87360186');
 
-	 var showName = car_car_year+'년식 ' + car_car_color + ' ' + car_car_name;
+	 var showName = car_c_year+'년식 ' + car_c_color + ' ' + car_c_name;
 	IMP.request_pay({
 	    pg : 'kakaopay',
 	    pay_method : 'card', //카드결제
 	    merchant_uid : 'merchant_' + new Date().getTime(),
 	    name : showName,
-	    amount : rental_cost_total *1000, //판매가격
-	    buyer_name : rental_m_id,
+	    amount : total_price *1000, //판매가격
+	    buyer_name : rental_cr_mid,
 	    buyer_tel : mem_m_phone,
 	}, function(rsp) {
 	    if ( rsp.success ) {
@@ -232,24 +232,24 @@ function kakaoPay(rental_m_id, mem_m_phone, mem_m_name, car_car_name, car_car_co
 		
 				<div id="member">
 					<h2>&nbsp;예약자 정보</h2>
-					아이디: <span>${rental.m_id}</span><br> 연락처: <span>${mem.m_phone}</span><br>
+					아이디: <span>${rental.cr_mid}</span><br> 연락처: <span>${mem.m_phone}</span><br>
 					이름: <span>${mem.m_name}</span>
 					<hr>
 
 					<h2>&nbsp;차량 정보</h2>
-					차종: <span>${car.car_name}</span><br> 차량색상: <span>${car.car_color}</span><br>
-					연식: <span>${car.car_year}년식</span><br>
+					차종: <span>${car.c_name}</span><br> 차량색상: <span>${car.c_color}</span><br>
+					연식: <span>${car.c_year}년식</span><br>
 				</div>
 
 				<div id="car">
 					<h2>&nbsp;렌트 정보</h2>
-					예약일자: <span>${rental.reservation_date}</span><br> 실제 대여일자: <span>${rental.rental_date_time}부터</span><br>
-					반납일자: <span>${rental.return_date_time}까지</span><br> 렌트 비용: <span>${rental_cost_total}원</span><br>
+					예약일자: <span>${rental.cr_rdate}</span><br> 실제 대여일자: <span>${rental.cr_sdate}부터</span><br>
+					반납일자: <span>${rental.cr_edate}까지</span><br> 렌트 비용: <span>${total_price}원</span><br>
 					<button
-						onclick="cardPay('${rental.m_id}', '${mem.m_phone}', '${mem.m_name}', '${car.car_name}', '${car.car_color}', '${car.car_year}', ${rental_cost_total})">카드
+						onclick="cardPay('${rental.cr_mid}', '${mem.m_phone}', '${mem.m_name}', '${car.c_name}', '${car.c_color}', '${car.c_year}', ${total_price})">카드
 						결제</button>
 					<button
-						onclick="kakaoPay('${rental.m_id}', '${mem.m_phone}', '${mem.m_name}', '${car.car_name}',  '${car.car_color}', '${car.car_year}', ${rental_cost_total})">카카오페이
+						onclick="kakaoPay('${rental.cr_mid}', '${mem.m_phone}', '${mem.m_name}', '${car.c_name}',  '${car.c_color}', '${car.c_year}', ${total_price})">카카오페이
 						결제</button>
 					</div>
 				</div>

@@ -16,18 +16,18 @@
   <div class="clear"></div>
 <form method="post">
 <!-- 로그인 아이디 값을 히든으로 넘김 -->
-<input type="hidden" name="m_id" id="m_id" value="${loggedInUser.m_id}" required><br>
+<input type="hidden" name="cr_mid" id="cr_mid" value="${loggedInUser.m_id}" required><br>
 <%-- 예약 선택 메뉴 --%>
 <div class="mainmenu">
 <div id="menu01">
 	<input type="checkbox" name="accordian" id="car01">
 	<label for="car01">빌리는 날짜 및 시간</label>
-	<div><p><input type="datetime-local" name="rental_date_time" id="rental_date_time" required></p></div>
+	<div><p><input type="datetime-local" name="cr_sdate" id="cr_sdate" required></p></div>
 </div>
 <div  id="menu02">
 	<input type="checkbox" name="accordian" id="car02">
 	<label for="car02">반납하는 날짜</label>
-	<div><p><input type="datetime-local" name="return_date_time" id="return_date_time" required></p></div>
+	<div><p><input type="datetime-local" name="cr_edate" id="cr_edate" required></p></div>
 </div>
 <div  id="menu03">
 	<input type="checkbox" name="accordian" id="car03">
@@ -67,7 +67,7 @@
 	<label for="tab06">전기차</label>
 	
 		<!-- 임시 코드 -->
-        <input type="hidden" name="car_id" id="car_id" value="1">
+        <input type="hidden" name="cr_cid" id="cr_cid" value="ray">
 
 	
 	<div class="conbox con1"> <!-- 전체 -->

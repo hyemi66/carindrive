@@ -13,15 +13,15 @@ public interface RentalDAO {
 
 	List<RentalVO> getRentList(String m_id);
 	
-	RentalVO getRentOne(String m_id);
+	RentalVO getRentOne(String cr_mid);
 
 	void getMemberList(MemberVO m);
 
-	CarVO getCarInfo(int car_id);
+	CarVO getCarInfo(String cr_cid);
 
-	int insertCost(int rental_id, double rental_cost);
+	void insertCost(int cr_num, double one_price);
 
-	void insertMerchantId(String merchantId, int rental_id);
+	void insertMerchantId(String merchantId, int cr_num);
 
 	void saveOrder(OrderVO order);
 

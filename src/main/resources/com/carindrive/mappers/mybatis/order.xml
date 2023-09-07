@@ -5,7 +5,7 @@
 
     <!-- 결제 정보 저장 -->
     <insert id="saveOrder" parameterType="order">
-        INSERT INTO cid_order_info 
+        INSERT INTO c_order_info 
         (
             ID,
             BUYER_NAME,
@@ -41,7 +41,7 @@
     
     <!-- 결제 정보 조회(예약 내역) -->
     <select id="getOrder">
-    	select * from cid_order_info where buyer_name = #{m_id}
+    	select * from c_order_info where buyer_name = #{m_id}
     </select>
     
 </mapper>
