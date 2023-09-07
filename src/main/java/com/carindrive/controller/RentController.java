@@ -23,7 +23,7 @@ import com.carindrive.service.RentService;
 import com.carindrive.vo.CarVO;
 import com.carindrive.vo.MemberVO;
 import com.carindrive.vo.RentalVO;
-
+//test
 @Controller //스프링 MVC 게시판 컨트롤러 클래스
 @RequestMapping("/rent/*")
 public class RentController {
