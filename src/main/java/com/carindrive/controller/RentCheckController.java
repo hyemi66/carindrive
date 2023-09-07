@@ -53,7 +53,7 @@ import com.carindrive.vo.OrderVO;
 import com.carindrive.vo.RentalVO;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+//테스트확인
 @Controller
 @RequestMapping("/rent/*")
 public class RentCheckController {
