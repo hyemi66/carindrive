@@ -64,9 +64,7 @@ public class RentCheckController {
 
 	//렌탈 정보 저장
 	@RequestMapping("/rent_Check")//rentOK에서 넘어온 데이터
-	public ResponseEntity<Map<String, Object>> rent_Check(
-	        @RequestBody OrderVO order,
-	        HttpSession session) {
+	public ResponseEntity<Map<String, Object>> rent_Check(@RequestBody OrderVO order,HttpSession session) {
 		
 	    Map<String, Object> map = new HashMap<>();
 		 
@@ -82,8 +80,8 @@ public class RentCheckController {
 	        // 결제정보 getPayInfo 메서드에 주문번호를 넣고 OrderVO에 값들을 셋팅
 	        OrderVO orderInfo = getPayInfo(merchantId);
 	        
-			// 데이터베이스에 OrderVO 결제정보 저장
-	        this.orderService.saveOrder(order);
+			// 데이터베이스에 OrderVO 결제정보 저장	//setBuy_date만 저장해서 넣어야될수도있다.
+	        this.orderService.saveOrder(orderInfo);
 
 	        map.put("orderInfo", orderInfo);
 	        map.put("rental", rental);
@@ -250,9 +248,18 @@ public class RentCheckController {
 		// 형식 바꾸기
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		sdf.setTimeZone(TimeZone.getTimeZone("GMT+9")); // GMT(그리니치 표준시 +9 시가 한국의 표준시
-		String buy_date = sdf.format(date);
+		
+		String buy_date = sdf.format(date);	//paid_at를 이용해서 생성된 buy_date
 		log.info("++++++++++++++++++++++++++++++++++++import date: "+buy_date);
-
+		
+		System.out.println(paid_at);
+		System.out.println(buy_date);
+		System.out.println(paid_at);
+		System.out.println(buy_date);
+		System.out.println(paid_at);
+		System.out.println(buy_date);
+		
+		
 		OrderVO order_info = new OrderVO(-1L, buyer_name, buyer_phone, member_email, 
 				buyer_addr, buy_date, buy_product_name, buyer_buyid, buyer_merid, 
 				buyer_pay_price, buyer_card_num, buyer_pay_ok, -1);

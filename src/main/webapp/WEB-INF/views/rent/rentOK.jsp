@@ -70,8 +70,7 @@ function payMent(paymentType, rental_cr_mid, mem_m_phone, mem_m_name, car_c_name
         buyer_pay_ok: rsp.success,
         buyer_postcode: rsp.buyer_postcode,
         merchantId: rsp.merchant_uid,
-        buy_date: globalBuyDate,
-        paid_at: rsp.paid_at	//9월8일 마무리 코딩         
+        paid_at: globalBuyDate,		//결제일자를 paid_at 변수로 받음 paid_at를 컨트롤러로 가공해서 buy_date로 만들것임
     };
 
  // AJAX 요청
