@@ -37,5 +37,10 @@ VALUES (cr_seq.NEXTVAL, #{cr_mid}, #{cr_cname}, #{cr_rdate}, #{cr_sdate}, #{cr_e
     	update c_rental set cr_order = #{cr_order} where cr_num = #{cr_num}
     </update>
     
+    <!-- 주문번호를 기준으로 해당 렌탈내역을 가져옴 -->
+    <select id="getRentRefund" resultType="rental">
+    	select * from c_rental where cr_order = #{cr_order}
+    </select>
+    
 
 </mapper>

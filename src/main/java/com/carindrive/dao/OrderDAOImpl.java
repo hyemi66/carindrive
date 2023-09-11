@@ -29,6 +29,8 @@ public class OrderDAOImpl implements OrderDAO {
 		return this.sqlSession.selectOne("getOrder",num);
 	}//주문내역 가져오기
 
-
-	
+	@Override
+	public void refundOK(String order_number) {
+		this.sqlSession.update("refundOK",order_number);
+	}
 }

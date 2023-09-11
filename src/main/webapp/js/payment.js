@@ -1,5 +1,6 @@
 var globalBuyDate; // 전역 변수로 buy_date 선언
 function payMent(paymentType, rental_cr_mid, mem_m_phone, mem_m_name, car_c_name, car_c_color, car_c_year, total_price) {
+
 	IMP.init('imp87360186');
 
 	 var showName = car_c_year+'년식 ' + car_c_color + ' ' + car_c_name;
@@ -79,7 +80,15 @@ function payMent(paymentType, rental_cr_mid, mem_m_phone, mem_m_name, car_c_name
         }
     },
         error: function(error) {
+        console.error("Error:", error); //콘솔에 에러 로그 출력
             alert("결제 정보 처리 중 오류 발생 jsp두번째");
+            
+            // 에러 메시지를 사용자에게 보여주기
+	        if(error && error.responseText) {
+	            alert("오류 발생: " + error.responseText);
+	        } else {
+	            alert("결제 정보 처리 중 오류 발생 jsp두번째");
+	        }
             history.back(); //이전 페이지로 이동
         }
 	});

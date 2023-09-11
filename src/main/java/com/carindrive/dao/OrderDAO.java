@@ -12,6 +12,5 @@ public interface OrderDAO {
 
 	OrderVO getOrder(long num);
 
-	
-
+	void refundOK(String order_number);
 }

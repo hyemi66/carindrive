@@ -29,5 +29,11 @@ public class OrderServiceImpl implements OrderService {
 		return this.orderDAO.getOrder(num);
 	}//주문내역 가져오기
 
-
+	@Override
+	public void refundOK(String order_number) {
+		this.orderDAO.refundOK(order_number);
+	}//환불 완료시 주문번호 업데이트
+	
+	
+	
 }

@@ -56,7 +56,7 @@ public class RentController {
 			r.setCr_sdate(cr_sdate);	//공백처리한 날짜,시간 값을 다시 저장
 			r.setCr_edate(cr_edate);
 
-			/*렌트 신청일 구하기*/
+			// 렌트 신청일 구하기
 			// 현재 날짜 가져오기
 			Date d = new Date();
 			SimpleDateFormat s = new SimpleDateFormat("yyyy년 MM월 dd일 aa hh시 mm분");
@@ -67,7 +67,6 @@ public class RentController {
 			this.rentService.insertRental(r);			//모든 값들이 준비되었으면 데이터베이스에 저장
 
 			rttr.addFlashAttribute("msg", "success");			
-			//rttr.addFlashAttribute("m_id", r.getCr_mid());
 			return new ModelAndView("redirect:/rent/rentOK"); 	// 리다이렉트할 URL로 수정 (매핑주소(메서드)를 찾아감)
 		}else {
 			// 로그인 정보가 없을 경우 로그인 페이지로 이동 또는 처리
@@ -84,7 +83,7 @@ public class RentController {
 		try {
 			MemberVO loggedInUser = (MemberVO) session.getAttribute("loggedInUser"); //정상작동
 
-			/*해당 아이디의 렌트 정보를 가져옴*/
+			//해당 아이디의 렌트 정보를 가져옴
 			RentalVO rental = this.rentService.getRentOne(loggedInUser.getM_id());
 
 			//차 이름으로 해당 차량 정보 가져옴 (렌트 내역에 필요)

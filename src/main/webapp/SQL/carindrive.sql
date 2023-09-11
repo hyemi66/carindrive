@@ -18,7 +18,7 @@ select * from c_member order by m_name asc; -- 사용자 확인
 select * from c_car order by c_name desc; --차량 확인
 select * from c_rental order by cr_num desc; --렌트 확인
 select * from c_order_info order by id desc; --결제 정보 확인
-
+select * from c_rental where cr_order = 'merchant_1694430815754';
  
 delete from c_member;
 delete from c_car;

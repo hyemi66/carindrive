@@ -23,4 +23,6 @@ public interface RentalDAO {
 
 	void insertMerchantId(String merchantId, int cr_num);
 
+	RentalVO getRentRefund(String cr_order);
+
 }

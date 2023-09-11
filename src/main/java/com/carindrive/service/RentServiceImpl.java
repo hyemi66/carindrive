@@ -52,6 +52,11 @@ public class RentServiceImpl implements RentService {
 		this.rentalDao.insertMerchantId(merchantId, cr_num);
 	}//주문번호를 렌탈정보 데이터베이스에 추가
 
+	@Override
+	public RentalVO getRentRefund(String cr_order) {
+		return this.rentalDao.getRentRefund(cr_order);
+	}
+
 
 
 }

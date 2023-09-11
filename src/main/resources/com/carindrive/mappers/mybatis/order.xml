@@ -65,6 +65,12 @@
 	    <result column="PAY_STATUS" property="buyer_pay_ok"/>
 	    <result column="POST_CODE" property="buyer_postcode"/>
 	</resultMap>
+	
+	
+	<!-- 환불 완료시 주문번호 업데이트 -->
+	<update id="refundOK">
+		update c_order_info set MERCHANT_ID = '환불' || MERCHANT_ID  where MERCHANT_ID = #{merchantId}
+	</update>
 
     
     

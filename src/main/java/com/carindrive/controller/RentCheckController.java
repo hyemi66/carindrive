@@ -3,6 +3,8 @@ package com.carindrive.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -45,6 +47,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.carindrive.service.OrderService;
 import com.carindrive.service.RentService;
+import com.carindrive.vo.CarVO;
 import com.carindrive.vo.MemberVO;
 import com.carindrive.vo.OrderVO;
 import com.carindrive.vo.RentalVO;
@@ -60,7 +63,7 @@ public class RentCheckController {
 	
 	@Autowired
 	private OrderService orderService;
-
+	
 	@Autowired
 	private static final Logger log = LoggerFactory.getLogger(RentCheckController.class);
 
@@ -107,11 +110,20 @@ public class RentCheckController {
 	    ModelAndView mav = new ModelAndView();
 	    MemberVO loggedInUser = (MemberVO) session.getAttribute("loggedInUser");    //로그인 정보를 가져옴
 
+	    try {
+	    	
 	    if (loggedInUser != null) {//로그인이 되었을 때
 
 	        // 렌트 정보 전체를 가져옴
-	        List<RentalVO> rental = this.rentService.getRentList(loggedInUser.getM_id());
-	        mav.addObject("rental", rental);
+	        List<RentalVO> rentals = this.rentService.getRentList(loggedInUser.getM_id());
+	        mav.addObject("rental", rentals);
+	        
+	        //해당 아이디의 렌트 정보를 가져옴
+	        RentalVO rental = this.rentService.getRentOne(loggedInUser.getM_id());
+	        
+	        //차 이름으로 해당 차량 정보 가져옴 (렌트 내역에 필요)
+			CarVO car = this.rentService.getCarInfo(rental.getCr_cname()); //정상작동
+			mav.addObject("car", car);
 	        
 	        //해당고객의 예약번호를 가져오는 메서드 (OrderVO에 바인딩)
 	        List<OrderVO> orders = this.orderService.getId(loggedInUser.getM_id());
@@ -120,14 +132,14 @@ public class RentCheckController {
 	        List<OrderVO> orderInfos = new ArrayList<>();
 
 	        for(OrderVO order : orders) {
-	            //리스트에 있는 예약들을 분류함
+	            //리스트에 있는 예약들을 반복해서 꺼냄
 	            OrderVO orderInfo = orderService.getOrder(order.getId());
 	            
-	            //분류된 리스트들을 정리해서 orderInfos에 추가
+	            //꺼낸 리스트들을 orderInfos에 추가
 	            orderInfos.add(orderInfo);
 	        }
 
-	        //orderInfos를 buy_date 기준으로 내림차순 정렬 (최근에 예약한 목록이 맨위로 오게함)
+	        //orderInfos를 buy_date 기준으로 내림차순 정렬
 	        Collections.sort(orderInfos, new Comparator<OrderVO>() {
 	            @Override
 	            public int compare(OrderVO o1, OrderVO o2) {
@@ -146,8 +158,12 @@ public class RentCheckController {
 
 	    mav.setViewName("/rent/rent_Check_List");
 	    return mav;
+	}catch (Exception e) {
+		e.printStackTrace();
+		mav.setViewName("/rent/rent_Check_List_Null");
+		return mav;
 	}
-
+}
 	
 	//환불 관련 메서드
 
@@ -274,46 +290,93 @@ public class RentCheckController {
 	//환불하기 기능
 	@PostMapping("/refund")
 	public void refund(@RequestParam String order_index, @RequestParam String order_number,
-			HttpServletResponse response) throws Exception {
-		response.setContentType("text/html;charset=UTF-8");
-		PrintWriter out = response.getWriter();
-		long order_index2 = Long.parseLong(order_index);
+			HttpServletResponse response, HttpSession session) throws Exception {
+			response.setContentType("text/html;charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			long order_index2 = Long.parseLong(order_index);	//order_index = 예약번호(시퀀스)
+			
+			// 주문의 대여일을 가져오는 코드 (이 부분은 주문 시스템에 따라 다를 수 있습니다.)
+			
+			//로그인 고객정보 가져오기
+			MemberVO loggedInUser = (MemberVO) session.getAttribute("loggedInUser");
+	        //해당 아이디의 렌트 정보를 가져옴
+			RentalVO rental = this.rentService.getRentOne(loggedInUser.getM_id());
+			//그 중의 주문번호를 비교해서 해당 예약내역을 가져옴
+			RentalVO rentalRefund = this.rentService.getRentRefund(rental.getCr_order());
+	        
+			// String 날짜를 LocalDateTime으로 변환
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+			LocalDateTime rentalDateTime = LocalDateTime.parse(rentalRefund.getCr_sdate(), formatter);
 
+			// 하루 전 및 이틀 전 날짜 계산
+			LocalDateTime oneDayBeforeRental = rentalDateTime.minusDays(1);
+			LocalDateTime twoDaysBeforeRental = rentalDateTime.minusDays(2);
+
+			// 현재 날짜와 시간
+			LocalDateTime now = LocalDateTime.now();
+	        
 		String token = getImportToken();
 		
 		if (token == null || token.isEmpty()) {
 			out.println("<script>");
-			out.println("alert('환불도중 문제가 발생되었습니다! 다시 시도해주세요!');");
+			out.println("alert('인증 정보에 문제가 발생했습니다 다시 시도해주세요!');");
 			out.println("location.href='/';");
 			out.println("</script>");
 		}
-
-		int result_delete = cancelPay(token, order_number);
-
-		if(result_delete == -1) {
-			out.println("<script>");
-			out.println("alert('환불에 실패 했습니다 다시 시도해주세요!');");
-			out.println("location.href='/';");
-			out.println("</script>");
-
-		} else {
-			out.println("<script>");
-			out.println("alert('환불이 완료 되었습니다!');");
-			out.println("location.href='/';");
-			out.println("</script>");
+		
+		double refundAmount;
+		
+		//환불 API호출
+		 if (now.isAfter(oneDayBeforeRental)) {//하루전 환불 불가능
+		        out.println("<script>");
+		        out.println("alert('환불이 불가능한 시간입니다.');");
+		        out.println("location.href='/';");
+		        out.println("</script>");
+		        
+		    } else if (now.isAfter(twoDaysBeforeRental)) {	//이틀전 환불
+		        refundAmount = rental.getCr_price() * 0.5;	//기존 금액의 50%
+		        int result_delete = cancelPay(token, order_number, refundAmount); 
+		        if (result_delete == -1) {
+		            out.println("<script>");
+		            out.println("alert('환불에 실패 했습니다 다시 시도해주세요!');");
+		            out.println("location.href='/';");
+		            out.println("</script>");
+		        } else {
+		            out.println("<script>");
+		            out.println("alert('환불 처리 되었으나, 환불 금액은 50%입니다.');");
+		            this.orderService.refundOK(order_number);//환불 완료시 주문번호 업데이트
+		            out.println("location.href='/';");
+		            out.println("</script>");
+		        }
+		        
+		    } else {//그 외 환불금액 100% 가능
+		        refundAmount = rental.getCr_price();
+		        int result_delete = cancelPay(token, order_number, refundAmount); 
+		        if (result_delete == -1) {
+		            out.println("<script>");
+		            out.println("alert('환불에 실패 했습니다 다시 시도해주세요!');");
+		            out.println("location.href='/';");
+		            out.println("</script>");
+		        } else {
+		            out.println("<script>");
+		            out.println("alert('환불이 완료 되었습니다!');");
+		            this.orderService.refundOK(order_number);//환불 완료시 주문번호 업데이트
+		            out.println("location.href='/';");
+		            out.println("</script>");
+		        }
+		    }
 		}
-	}
 
-
+	//환불 API 구현
 	public static final String IMPORT_CANCEL_URL = "https://api.iamport.kr/payments/cancel"; 
 
-	//환불 메서드
-	public int cancelPay(String token, String mid) { 
+	public int cancelPay(String token, String mid, double refundAmount) { 
 		CloseableHttpClient client = HttpClientBuilder.create().build();
 		HttpPost post = new HttpPost(IMPORT_CANCEL_URL); 
 		Map<String, String> map = new HashMap<String, String>(); 
 		post.setHeader("Authorization", token); 
-		map.put("merchant_uid", mid); 
+		map.put("merchant_uid", mid);
+		map.put("amount", String.valueOf(refundAmount));	//환불금액 정보 추가
 
 		try { 
 			post.setEntity(new UrlEncodedFormEntity(convertParameter(map), "UTF-8")); 
@@ -349,7 +412,6 @@ public class RentCheckController {
 		}
 	}
 
-
 	private List<NameValuePair> convertParameter(Map<String, String> params) {
 		List<NameValuePair> paramList = new ArrayList<>();
 		for (Map.Entry<String, String> entry : params.entrySet()) {
@@ -357,7 +419,4 @@ public class RentCheckController {
 		}
 		return paramList;
 	}
-
-
-
 }

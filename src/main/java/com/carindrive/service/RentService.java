@@ -29,4 +29,7 @@ public interface RentService {
 
 	//주문번호를 렌탈정보 데이터베이스에 추가
 	void insertMerchantId(String merchantId, int cr_num);
+
+	//주문번호를 기준으로 해당 예약내역을 선택
+	RentalVO getRentRefund(String cr_order);
 }
