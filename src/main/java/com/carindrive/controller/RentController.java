@@ -88,7 +88,7 @@ public class RentController {
 			RentalVO rental = this.rentService.getRentOne(loggedInUser.getM_id());
 
 			//차 이름으로 해당 차량 정보 가져옴 (렌트 내역에 필요)
-			CarVO car = this.rentService.getCarInfo(rental.getCr_cid()); //정상작동
+			CarVO car = this.rentService.getCarInfo(rental.getCr_cname()); //정상작동
 
 			//고객 정보 가져오기 (렌트 내역에 필요)
 			MemberVO mem = this.memberService.getMemberInfo(loggedInUser.getM_id());

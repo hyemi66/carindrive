@@ -8,8 +8,6 @@
 <title>예약 확인</title>
 <link href="${path}/css/rent_Check.css" rel="stylesheet" />
 <script src="${path}/js/jquery.js"></script>
-
-
 </head>
 <body>
 <jsp:include page="../include/header.jsp"/>
@@ -17,61 +15,48 @@
 
 <div id="bigbox">
   <p id="bar">예약 내역</p>
-  <div id="box">
-      <div id="img">
-        <img alt="레이" src="${path}/images/ray.jpg">
-      </div>
-       
-      <!-- 로그인 정보가 있는 경우 -->
-    <c:if test="${not empty rental}">
-        <h1>렌탈 정보</h1>
-        <!-- 렌탈 정보 표시 -->
-        <p>렌탈비용: ${rental_cost_total}</p>
-        <!-- 추가적인 렌탈 정보를 여기에 표시할 수 있습니다. -->
-        
-        <h2>주문 내역</h2>
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>BUYER_NAME</th>
-                    <th>BUYER_PHONE</th>
-                    <!-- 다른 필드들도 여기에 추가 -->
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach var="orderItem" items="${order}">
-                    <tr>
-                        <td>${orderItem.id}</td>
-                        <td>${orderItem.buyer_name}</td>
-                        <td>${orderItem.buyer_phone}</td>
-                        <!-- 다른 필드들의 값도 여기에 추가 -->
-                    </tr>
-                </c:forEach>
-            </tbody>
-        </table>
-        
-    </c:if>
-    
-    <!-- 로그인 정보가 없는 경우 -->
-    <c:if test="${empty rental}">
-        <h1>예약 내역이 없습니다.</h1>
-        <!-- 다른 메시지 또는 이미지를 추가할 수 있습니다. -->
-    </c:if>
-     <form action="/rent/refund" method="post">
-    <!-- 주문 번호를 함께 전송합니다. 이 값이 환불 로직에서 사용됩니다. -->
-    <input type="hidden" name="order_index" value="${orderInfo.id}">
-    <input type="hidden" name="order_number" value="${orderInfo.merchantId}">
-    <button type="submit">환불하기</button>
-	</form>
-	</div>
+
+<c:forEach var="orderItem" items="${orderInfos}" varStatus="status">
+    <div id="box">
+        <div id="img">
+          <img alt="레이" src="${path}/images/ray.jpg">
+        </div>
+
+        <div id="member">
+          <c:choose>
+            <c:when test="${status.index == 0}"> <!-- 첫 번째 아이템일 경우 -->
+              <h2>&nbsp;방금 결제하신 정보</h2>
+            </c:when>
+            <c:otherwise>
+              <h2>&nbsp;예약 내역</h2>
+            </c:otherwise>
+          </c:choose>
+          예약자 성함: <span>${orderItem.buyer_name}</span><br>
+          예약자 연락처: <span>${orderItem.buyer_phone}</span><hr>
+          예약한 차량: <span>${orderItem.buy_product_name}</span><br>
+          결제일자: <span>${orderItem.buy_date}</span><br>
+          실제 대여일자: <span>${rental[status.index].cr_sdate} 부터</span><br>
+          반납일자: <span>${rental[status.index].cr_edate} 까지</span><br>
+          렌트 비용: <span>${orderItem.amount}원</span><br>
+          주문 번호: <span>${orderItem.merchantId}</span><br>
+          <form action="/rent/refund" method="post">
+            <!-- 주문 번호를 함께 전송합니다. 이 값이 환불 로직에서 사용됩니다. -->
+            <input type="hidden" name="order_index" value="${orderItem.id}">
+            <input type="hidden" name="order_number" value="${orderItem.merchantId}">
+            <button type="submit">환불하기</button>
+          </form>
+        </div>
+    </div>
+</c:forEach>
+
+
 </div>
 
 <%--URL 안보이게 하기 --%>
 <script type="text/javascript"> 
   history.replaceState({}, null, location.pathname); 
 </script> 
- 
+
 <jsp:include page="../include/footer.jsp"/>
 </body>
 </html>

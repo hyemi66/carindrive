@@ -23,11 +23,4 @@ public interface RentalDAO {
 
 	void insertMerchantId(String merchantId, int cr_num);
 
-	void saveOrder(OrderVO order);
-
-	List<OrderVO> getOrder(String buyer_name);
-
-
-	
-
 }

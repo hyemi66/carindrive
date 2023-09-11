@@ -67,7 +67,7 @@
 	<label for="tab06">전기차</label>
 	
 		<!-- 임시 코드 -->
-        <input type="hidden" name="cr_cid" id="cr_cid" value="ray">
+        <input type="hidden" name="cr_cname" id="cr_cname" value="ray">
 
 	
 	<div class="conbox con1"> <!-- 전체 -->

@@ -6,10 +6,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="rental">
 
-	<!-- 렌트정보 저장 -->
+	<!-- 차량 예약 정보 저장 -->
 <insert id="rental_in" parameterType="rental">
-  INSERT INTO c_rental (cr_num, cr_mid, cr_cid, cr_rdate, cr_sdate, cr_edate, cr_price)
-VALUES (cr_seq.NEXTVAL, #{cr_mid}, #{cr_cid}, #{cr_rdate}, #{cr_sdate}, #{cr_edate}, #{cr_price})
+  INSERT INTO c_rental (cr_num, cr_mid, cr_cname, cr_rdate, cr_sdate, cr_edate, cr_price)
+VALUES (cr_seq.NEXTVAL, #{cr_mid}, #{cr_cname}, #{cr_rdate}, #{cr_sdate}, #{cr_edate}, #{cr_price})
 </insert>
 
 	<!-- 방금 렌트신청한것 가져오기 -->
@@ -17,22 +17,22 @@ VALUES (cr_seq.NEXTVAL, #{cr_mid}, #{cr_cid}, #{cr_rdate}, #{cr_sdate}, #{cr_eda
     	SELECT * FROM c_rental WHERE cr_mid = #{cr_mid} ORDER BY cr_rdate DESC FETCH FIRST 1 ROW ONLY
 	</select>
 	
-	<!-- 차량 정보 조회 -->
+	<!-- 해당 차 정보 가져오기 -->
 	<select id="c_list" resultType="car" parameterType="car">
 	    SELECT * FROM c_car WHERE c_name = #{c_name}
 	</select>
 	
-    <!-- 렌트 모든 내역 가져오기 -->
+    <!-- 해당 고객의 모든차량 렌트 내역 확인 -->
     <select id="get_rlist" resultType="rental" parameterType="rental">
     	select * from c_rental where cr_mid = #{cr_mid} order by cr_sdate desc
     </select>
     
-    <!-- cid_rentals 테이블에 렌트비용 추가  (환불할때 용이)-->
+    <!-- 렌트 비용을 렌탈정보 데이터베이스에 추가  (환불할때 용이)-->
     <update id="cost_in">
     	update c_rental set cr_price = #{cr_price} where cr_num = #{cr_num}
     </update>
     
-    <!-- cid_rentals 테이블에 주문번호 추가  (환불할때 용이)-->
+    <!-- 주문번호를 렌탈정보 데이터베이스에 추가  (환불할때 용이)-->
     <update id="insertMerchantId">
     	update c_rental set cr_order = #{cr_order} where cr_num = #{cr_num}
     </update>

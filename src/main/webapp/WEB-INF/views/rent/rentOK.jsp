@@ -13,60 +13,26 @@
 <link href="${path}/css/rent.css" rel="stylesheet"/>
 <link href="${path}/css/rent_Check.css" rel="stylesheet" />
 <script>
-function cardPay(rental_cr_mid, mem_m_phone, mem_m_name, car_c_name, car_c_color, car_c_year, total_price) {
-    IMP.init('imp87360186'); //iamport 대신 자신의 "가맹점 식별코드"를 사용
-    
-    var showName = car_c_year+'년식 ' + car_c_color + ' ' + car_c_name;
-    IMP.request_pay({
-      pg: "html5_inicis",
-      pay_method: "card",
-      merchant_uid : 'merchant_'+new Date().getTime(),
-      name : showName,
-      amount : total_price,
-      buyer_name : rental_cr_mid,
-      buyer_tel : mem_m_phone,
-    }, function (rsp) { // callback
-        if (rsp.success) {
-        	alert("결제가 완료되었습니다 !");
-        	// Ajax로 서버에 결제 정보 전송
-            $.ajax({
-                url: "/rent/savePaymentInfo", // 서버의 URL
-                method: "POST",
-                data: {
-                    merchant_uid: rsp.merchant_uid,
-                    amount: rsp.amount,
-                    buyer_name: rsp.buyer_name,
-                    buyer_tel: rsp.buyer_tel,
-                    item_name: rsp.item_name
-                },
-                success: function(response) {
-                    if (response.success) {
-                        alert("결제 정보가 저장되었습니다.");
-                        localStorage.setItem('payment_tid', rsp.imp_uid);
-
-                    } else {
-                        alert("결제 정보 저장에 실패했습니다.");
-                    }
-                }
-            });
-         	 location.href='/rent/rent_Check?cr_mid=${rental.cr_mid}';
-        } else {
-          alert("결제에 실패했습니다.");
-        }
-    });
-}
-function kakaoPay(rental_cr_mid, mem_m_phone, mem_m_name, car_c_name, car_c_color, car_c_year, total_price) {
+function payMent(paymentType, rental_cr_mid, mem_m_phone, mem_m_name, car_c_name, car_c_color, car_c_year, total_price) {
 	IMP.init('imp87360186');
 
 	 var showName = car_c_year+'년식 ' + car_c_color + ' ' + car_c_name;
+	 var pgValue;
+
+	    if (paymentType === "card") {
+	        pgValue = "html5_inicis";
+	    } else if (paymentType === "kakao") {
+	        pgValue = "kakaopay";
+	    }
 	IMP.request_pay({
-	    pg : 'kakaopay',
+	    pg : pgValue,
 	    pay_method : 'card', //카드결제
 	    merchant_uid : 'merchant_' + new Date().getTime(),
 	    name : showName,
 	    amount : total_price *1000, //판매가격
 	    buyer_name : rental_cr_mid,
 	    buyer_tel : mem_m_phone,
+	    buy_date : new Date().getTime(),
 	}, function(rsp) {
 	    if ( rsp.success ) {
 		var msg = '결제가 완료되었습니다.';
@@ -78,96 +44,56 @@ function kakaoPay(rental_cr_mid, mem_m_phone, mem_m_name, car_c_name, car_c_colo
 		pay_info(rsp);
 		
 	    } else {
-		var msg = '결제에 실패하였습니다.';
-		msg += '에러내용 : ' + rsp.error_msg;
-		
-		location.href="goods_pay_fail.do?error_msg="+rsp.error_msg;
+	        var errorMsg = '결제가 취소되었습니다.';
+	        alert(errorMsg);
+	        history.back();	//이전 페이지로 돌아가기
 	    }
-
 	});
 }
-	//비공개 방식으로 서버로 결제정보 전달
-	function pay_info(rsp){
-	      var form = document.createElement('form');
-	      var objs;
-	 
-	      objs = document.createElement('input');
-	      objs.setAttribute('type', 'hidden');
-	      objs.setAttribute('name', 'buyer_name');
-	      objs.setAttribute('value', rsp.buyer_name);
-	      form.appendChild(objs);
-	 
-	      objs = document.createElement('input');
-	      objs.setAttribute('type', 'hidden');
-	      objs.setAttribute('name', 'buyer_phone');
-	      objs.setAttribute('value', rsp.buyer_tel);
-	      form.appendChild(objs);
-	      
-	      objs = document.createElement('input');
-	      objs.setAttribute('type', 'hidden');
-	      objs.setAttribute('name', 'member_email');
-	      objs.setAttribute('value', rsp.buyer_email);
-	      form.appendChild(objs);
-	      
-	      objs = document.createElement('input');
-	      objs.setAttribute('type', 'hidden');
-	      objs.setAttribute('name', 'buy_addr');
-	      objs.setAttribute('value', rsp.buyer_addr);
-	      form.appendChild(objs);
-	      
-	      objs = document.createElement('input');
-	      objs.setAttribute('type', 'hidden');
-	      objs.setAttribute('name', 'buy_product_name');
-	      objs.setAttribute('value', rsp.name);
-	      form.appendChild(objs);
-	      
-	      objs = document.createElement('input');
-	      objs.setAttribute('type', 'hidden');
-	      objs.setAttribute('name', 'buyer_buyid');
-	      objs.setAttribute('value', rsp.imp_uid);
-	      form.appendChild(objs);
-	      
-	      /*objs = document.createElement('input');
-	      objs.setAttribute('type', 'hidden');
-	      objs.setAttribute('name', 'buyer_merid');
-	      objs.setAttribute('value', rsp.merchant_uid); //삭제하거나 수정예정
-	      form.appendChild(objs);*/
-	      
-	      objs = document.createElement('input');
-	      objs.setAttribute('type', 'hidden');
-	      objs.setAttribute('name', 'amount');
-	      objs.setAttribute('value', rsp.paid_amount);
-	      form.appendChild(objs);
-	      
-	      objs = document.createElement('input');
-	      objs.setAttribute('type', 'hidden');
-	      objs.setAttribute('name', 'buyer_card_num');
-	      objs.setAttribute('value', rsp.apply_num);
-	      form.appendChild(objs);
-	      
-	      objs = document.createElement('input');
-	      objs.setAttribute('type', 'hidden');
-	      objs.setAttribute('name', 'buyer_pay_ok');
-	      objs.setAttribute('value', rsp.success);
-	      form.appendChild(objs);
-	      
-	      objs = document.createElement('input');
-	      objs.setAttribute('type', 'hidden');
-	      objs.setAttribute('name', 'buyer_postcode');
-	      objs.setAttribute('value', rsp.buyer_postcode);
-	      form.appendChild(objs);
-	      
-	      objs = document.createElement('input');	//삭제하거나 수정 예정
-	      objs.setAttribute('type', 'hidden');
-	      objs.setAttribute('name', 'merchantId');  // 폼의 필드 이름을 'merchantId'로 설정
-	      objs.setAttribute('value', rsp.merchant_uid);  // 결제 응답에서 merchant_uid 값을 가져옵니다.
-	      form.appendChild(objs);
+//데이터 담아서 비동기식으로 JSON타입으로 데이터 전송
+	function pay_info(rsp) {
+    var orderData = {
+        buyer_name: rsp.buyer_name,
+        buyer_phone: rsp.buyer_tel,
+        member_email: rsp.buyer_email,
+        buy_addr: rsp.buyer_addr,
+        buy_product_name: rsp.name,
+        buyer_buyid: rsp.imp_uid,
+        amount: rsp.paid_amount,
+        buyer_card_num: rsp.apply_num,
+        buyer_pay_ok: rsp.success,
+        buyer_postcode: rsp.buyer_postcode,
+        merchantId: rsp.merchant_uid,
+        paid_at: rsp.paid_at	//9월8일 마무리 코딩         
+    };
 
-	      form.setAttribute('method', 'post');
-	      form.setAttribute('action', "/rent/rent_Check");	// /rent/rent_Check_List() 메서드 동작
-	      document.body.appendChild(form);
-	      form.submit();
-	}
+ // AJAX 요청
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: "/rent/rent_Check",
+        data: JSON.stringify(orderData),
+        dataType: "json",
+        success: function(map) {
+            console.log(map); 
+            console.log("Success value:", map.success);
+            
+            if(map.success) {
+            	const orderInfo = map.orderInfo;
+                const rental = map.rental;
+                location.href = map.redirectUrl	 // 서버에서 지정한 URL로 리디렉트
+
+        }else {
+                alert("결제 정보 처리 중 오류 발생 jsp첫번째");
+                history.back(); //이전 페이지로 이동
+        }
+    },
+        error: function(error) {
+            alert("결제 정보 처리 중 오류 발생 jsp두번째");
+            history.back(); //이전 페이지로 이동
+        }
+	});
+}
 
 </script>
 </head>
@@ -245,12 +171,9 @@ function kakaoPay(rental_cr_mid, mem_m_phone, mem_m_name, car_c_name, car_c_colo
 					<h2>&nbsp;렌트 정보</h2>
 					예약일자: <span>${rental.cr_rdate}</span><br> 실제 대여일자: <span>${rental.cr_sdate}부터</span><br>
 					반납일자: <span>${rental.cr_edate}까지</span><br> 렌트 비용: <span>${total_price}원</span><br>
-					<button
-						onclick="cardPay('${rental.cr_mid}', '${mem.m_phone}', '${mem.m_name}', '${car.c_name}', '${car.c_color}', '${car.c_year}', ${total_price})">카드
-						결제</button>
-					<button
-						onclick="kakaoPay('${rental.cr_mid}', '${mem.m_phone}', '${mem.m_name}', '${car.c_name}',  '${car.c_color}', '${car.c_year}', ${total_price})">카카오페이
-						결제</button>
+<button onclick="payMent('card', '${rental.cr_mid}', '${mem.m_phone}', '${mem.m_name}', '${car.c_name}', '${car.c_color}', '${car.c_year}', ${total_price})">카드 결제</button>
+<button onclick="payMent('kakao', '${rental.cr_mid}', '${mem.m_phone}', '${mem.m_name}', '${car.c_name}', '${car.c_color}', '${car.c_year}', ${total_price})">카카오페이 결제</button>
+
 					</div>
 				</div>
 			</div>

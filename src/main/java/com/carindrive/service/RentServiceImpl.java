@@ -20,49 +20,37 @@ public class RentServiceImpl implements RentService {
 	@Override
 	public void insertRental(RentalVO r) {
 		this.rentalDao.insertRental(r);
-	}
+	}//차량 예약 정보 저장
 
 	@Override
 	public List<RentalVO> getRentList(String m_id) {
 		return rentalDao.getRentList(m_id);
-	}
+	}//해당 고객의 모든차량 렌트 내역 확인
 	
 	@Override
-	public RentalVO getRentOne(String cr_mid) {
-		return this.rentalDao.getRentOne(cr_mid);
-	}
+	public RentalVO getRentOne(String m_id) {
+		return this.rentalDao.getRentOne(m_id);
+	}//방금 예약한목록 가져오기
 
 	@Override
 	public void getMemberList(MemberVO m) {
 		this.rentalDao.getMemberList(m);
-	}
+	}//회원 정보 확인(가져오기)
 
 	@Override
 	public CarVO getCarInfo(String cr_cid) {
 		return this.rentalDao.getCarInfo(cr_cid);
-	}
+	}//차 정보 가져오기
 
 	@Override
 	public void insertCost(int cr_num, double one_price) {
 	    this.rentalDao.insertCost(cr_num, one_price);
-	}
+	}//렌트 비용을 데이터베이스에 추가
 
 	@Override
 	public void insertMerchantId(String merchantId, int cr_num) {
 		this.rentalDao.insertMerchantId(merchantId, cr_num);
-	}
-
-	@Override
-	public void saveOrder(OrderVO order) {
-		this.rentalDao.saveOrder(order);
-	}
-
-	@Override
-	public List<OrderVO> getOrder(String buyer_name) {
-		return this.rentalDao.getOrder(buyer_name);
-	}
-
-
+	}//주문번호를 렌탈정보 데이터베이스에 추가
 
 
 
