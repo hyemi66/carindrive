@@ -47,7 +47,7 @@
     
     <!-- 결제 정보 조회(예약 내역) -->
     <select id="getOrder" resultMap="orderMap">
-    	select * from c_order_info where id = #{id} order by id desc
+    	select * from c_order_info where id = #{id}
     </select>
     
 	<resultMap id="orderMap" type="order">

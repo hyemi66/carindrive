@@ -21,7 +21,7 @@
         <div id="img">
           <img alt="레이" src="${path}/images/ray.jpg">
         </div>
-
+                             
         <div id="member">
           <c:choose>
             <c:when test="${status.index == 0}"> <!-- 첫 번째 아이템일 경우 -->

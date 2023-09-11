@@ -4,6 +4,8 @@ insert into c_member (m_id, m_pwd, m_name, m_phone)values('z','1','홍길동','0
 INSERT INTO c_car (c_num, c_name, c_brand, c_year, c_color, c_type, c_oil, c_price, c_ok, c_img) --차량추가
 VALUES (car_seq.nextval, 'ray', '기아', '2023', '흰색', '경차', '가솔린', 500, 0, 'ray.jpg');
 update c_car set c_num = '1';
+update c_rental set cr_num = '1';
+update c_order_info set id ='1';
 
 SELECT TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS') AS current_datetime FROM DUAL;
 
