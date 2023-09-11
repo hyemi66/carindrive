@@ -13,17 +13,24 @@
 <link href="${path}/css/rent.css" rel="stylesheet"/>
 <link href="${path}/css/rent_Check.css" rel="stylesheet" />
 <script>
+
+var globalBuyDate; // 전역 변수로 buy_date 선언
 function payMent(paymentType, rental_cr_mid, mem_m_phone, mem_m_name, car_c_name, car_c_color, car_c_year, total_price) {
 	IMP.init('imp87360186');
 
 	 var showName = car_c_year+'년식 ' + car_c_color + ' ' + car_c_name;
 	 var pgValue;
+	 globalBuyDate = new Date().getTime();	// 날짜 값을 전역 변수에 저장
 
 	    if (paymentType === "card") {
 	        pgValue = "html5_inicis";
 	    } else if (paymentType === "kakao") {
 	        pgValue = "kakaopay";
 	    }
+	 //IMP.request_pay() 함수는 내부적으로 정의된 파라미터만 처리하므로, buy_date와 같은 '사용자 정의 파라미터는 무시'된다.
+	 //그렇기 때문에 결제 후 콜백 함수 내부에서 rsp.buy_date를 참조하려고 하면 값이 없어서 null이 된다.
+	 //buy_date를 '전역 변수로 설정'하여 payMent 함수에서 값을 할당하고, 콜백 함수 내에서 이 값을 사용하는 방식으로 수정
+	 
 	IMP.request_pay({
 	    pg : pgValue,
 	    pay_method : 'card', //카드결제
@@ -32,7 +39,6 @@ function payMent(paymentType, rental_cr_mid, mem_m_phone, mem_m_name, car_c_name
 	    amount : total_price *1000, //판매가격
 	    buyer_name : rental_cr_mid,
 	    buyer_tel : mem_m_phone,
-	    buy_date : new Date().getTime(),
 	}, function(rsp) {
 	    if ( rsp.success ) {
 		var msg = '결제가 완료되었습니다.';
@@ -64,6 +70,7 @@ function payMent(paymentType, rental_cr_mid, mem_m_phone, mem_m_name, car_c_name
         buyer_pay_ok: rsp.success,
         buyer_postcode: rsp.buyer_postcode,
         merchantId: rsp.merchant_uid,
+        buy_date: globalBuyDate,
         paid_at: rsp.paid_at	//9월8일 마무리 코딩         
     };
 
@@ -94,6 +101,8 @@ function payMent(paymentType, rental_cr_mid, mem_m_phone, mem_m_name, car_c_name
         }
 	});
 }
+
+
 
 </script>
 </head>

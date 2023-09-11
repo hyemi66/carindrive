@@ -79,21 +79,11 @@ public class RentCheckController {
 	        String merchantId = order.getMerchantId();  // Assuming merchantId is part of OrderVO
 	        this.rentService.insertMerchantId(merchantId, rental.getCr_num());
 	        
+	        // 결제정보 getPayInfo 메서드에 주문번호를 넣고 OrderVO에 값들을 셋팅
+	        OrderVO orderInfo = getPayInfo(merchantId);
+	        
 			// 데이터베이스에 OrderVO 결제정보 저장
 	        this.orderService.saveOrder(order);
-	        System.out.println(order.getBuy_date());
-	        System.out.println(order.getBuy_date());
-	        System.out.println(order.getBuy_date());
-	        System.out.println(order.getBuy_date());
-	        System.out.println(order.getBuy_date());
-	        System.out.println(order.getBuy_date());
-	        System.out.println(order.getAmount());
-	        System.out.println(order.getBuy_product_name());
-	        System.out.println(order.getBuyer_buyid());
-	        System.out.println(order.getBuyer_phone());
-	        
-	        // 결제정보 getPayInfo 메서드에 주문번호를 넣고
-	        OrderVO orderInfo = getPayInfo(merchantId);
 
 	        map.put("orderInfo", orderInfo);
 	        map.put("rental", rental);
@@ -195,6 +185,7 @@ public class RentCheckController {
 		String buyer_addrStr = "";
 		String buyer_postcode = "";
 		String buyer_addr = "";
+		//String buy_date = "";		//buy_date를 받는곳
 		String paid_at = "";
 		String buy_product_name = "";
 		String buyer_buyid = "";
@@ -238,6 +229,7 @@ public class RentCheckController {
 			amount = resNode.get("amount").asText();
 			buyer_card_num = resNode.get("apply_num").asText(); 
 			buyer_pay_ok = resNode.get("status").asText(); 
+			//buy_date = resNode.get("buy_date").asText(); 
 
 
 
@@ -250,7 +242,7 @@ public class RentCheckController {
 
 		buyer_pay_price = Long.parseLong(amount);
 
-		// 카드 결제 시간 - 형식 바꾸기
+		// 결제 시간 - 형식 바꾸기
 		paid_atLong = Long.parseLong(paid_at);
 		unixTime = paid_atLong * 1000;
 		date = new Date(unixTime);
