@@ -2,54 +2,76 @@
     width: 1300px;
     padding: 20px;
     margin: auto;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px #aaa;
 }
 
 #bar {
-    background-color: #333;
+    background-color: #555;
     color: white;
     font-size: 40px;
     text-align: center;
     height: 80px;
-    display: flex; /* 부모 요소를 flex 컨테이너로 설정 */
-    justify-content: center; /* 가로 중앙 정렬 */
-    align-items: center; /* 세로 중앙 정렬 */
-}
-
-div #member {
-    width: 30%;
-    margin: 20px;
-    border: 1px solid black;
-    background-color: #FAF4C0;
-}
-
-div #car {
-    width: 45%;
-    margin: 20px;
-    border: 1px solid black;
-    background-color: #d1e2a6;
-}
-
-div #box {
     display: flex;
-    border: 1px solid black;
+    justify-content: center;
+    align-items: center;
+    border-radius: 7px;
+    margin-bottom: 15px;
+}
+
+#toggleHistory {
     margin-bottom: 20px;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold;
 }
 
-#box #img {
+#toggleHistory:hover {
+    background-color: #0056b3;
+}
+
+.box {
+    display: flex;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    background-color: #ffffff;
+    border-radius: 7px;
+    padding: 10px;
+    transition: background-color 0.3s;
+}
+
+.box:hover {
+    background-color: #f8f8f8;
+}
+
+.img {
     width: 25%;
-    border: 1px solid black;
+    border-right: 1px solid #ddd;
     padding: 5px;
-    display: flex; /* 부모 요소를 flex 컨테이너로 설정 */
-    justify-content: center; /* 가로 중앙 정렬 */
-    align-items: center; /* 세로 중앙 정렬 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-#box #img img {
-    max-width: 100%; /* 이미지 최대 너비 100% */
-    max-height: 100%; /* 이미지 최대 높이 100% */
-    object-fit: cover; /* 이미지가 비율 유지하면서 요소를 꽉 채우도록 설정 */
+.img img {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 5px;
 }
 
-div span {
-    font-size: 20px;
+.member h2 {
+    color: #007bff;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.member p span {
+    color: #555;
+    font-weight: bold;
 }
