@@ -127,7 +127,7 @@ public class RentCheckController {
 	            orderInfos.add(orderInfo);
 	        }
 
-	        //orderInfos를 buy_date 기준으로 정렬
+	        //orderInfos를 buy_date 기준으로 내림차순 정렬 (최근에 예약한 목록이 맨위로 오게함)
 	        Collections.sort(orderInfos, new Comparator<OrderVO>() {
 	            @Override
 	            public int compare(OrderVO o1, OrderVO o2) {
@@ -148,44 +148,6 @@ public class RentCheckController {
 	    return mav;
 	}
 
-	/*
-	@RequestMapping(value = "/rent_Check_List")
-	public ModelAndView rent_Check_List(HttpSession session, RedirectAttributes rttr) {
-	    ModelAndView mav = new ModelAndView();
-	    MemberVO loggedInUser = (MemberVO) session.getAttribute("loggedInUser");    //로그인 정보를 가져옴
-
-	    if (loggedInUser != null) {//로그인이 되었을 때
-
-	        // 렌트 정보 전체를 가져옴
-	        List<RentalVO> rental = this.rentService.getRentList(loggedInUser.getM_id());
-	        mav.addObject("rental", rental);
-	        
-	        //해당고객의 예약번호를 가져오는 메서드 (OrderVO에 바인딩)
-	        List<OrderVO> orders = this.orderService.getId(loggedInUser.getM_id());
-	        
-	        //예약정보가 여러가지 일수도 있으므로 리스트 제작
-	        List<OrderVO> orderInfos = new ArrayList<>();
-
-	        for(OrderVO order : orders) {
-	        	//리스트에 있는 예약들을 분류함
-	            OrderVO orderInfo = orderService.getOrder(order.getId());
-	            
-	            //분류된 리스트들을 정리해서 orderInfos에 추가
-	            orderInfos.add(orderInfo);
-	        }
-
-	        mav.addObject("orderInfos", orderInfos);
-
-	    } else {
-	        // 로그인 정보가 없을 경우 로그인 페이지로 이동 또는 처리
-	        rttr.addFlashAttribute("LoginNull", "alert('로그인 이후 이용 가능합니다!');");
-	        mav.setViewName("redirect:/member/memberLogin");
-	        return mav;
-	    }
-
-	    mav.setViewName("/rent/rent_Check_List");
-	    return mav;
-	}*/
 	
 	//환불 관련 메서드
 
