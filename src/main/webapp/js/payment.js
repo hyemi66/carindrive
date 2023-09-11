@@ -75,21 +75,14 @@ function payMent(paymentType, rental_cr_mid, mem_m_phone, mem_m_name, car_c_name
                 location.href = map.redirectUrl	 // 서버에서 지정한 URL로 리디렉트
 
         }else {
-                alert("결제 정보 처리 중 오류 발생 jsp첫번째");
+                alert("결제 정보 처리 중 오류 발생 다시 시도해주세요");
                 history.back(); //이전 페이지로 이동
         }
     },
         error: function(error) {
         console.error("Error:", error); //콘솔에 에러 로그 출력
-            alert("결제 정보 처리 중 오류 발생 jsp두번째");
-            
-            // 에러 메시지를 사용자에게 보여주기
-	        if(error && error.responseText) {
-	            alert("오류 발생: " + error.responseText);
-	        } else {
-	            alert("결제 정보 처리 중 오류 발생 jsp두번째");
-	        }
-            history.back(); //이전 페이지로 이동
+            alert("오류로 인해서 결제가 취소되었습니다. 다시 시도해주세요");
+            location.href = "/rent/rent";
         }
 	});
 }

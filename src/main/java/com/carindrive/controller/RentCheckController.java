@@ -68,7 +68,7 @@ public class RentCheckController {
 	private static final Logger log = LoggerFactory.getLogger(RentCheckController.class);
 
 	//렌탈 정보 저장
-	@RequestMapping("/rent_Check")//rentOK에서 넘어온 데이터
+	@RequestMapping("/rent_Check")//rentOK.jsp에서 넘어온 데이터
 	public ResponseEntity<Map<String, Object>> rent_Check(@RequestBody OrderVO order,HttpSession session) {
 		
 	    Map<String, Object> map = new HashMap<>();
@@ -79,7 +79,7 @@ public class RentCheckController {
 			// 해당 고객의 렌탈 정보 가져오기
 			RentalVO rental = this.rentService.getRentOne(loggedInUser.getM_id());
 			// 해당 렌탈정보에 예약번호에 맞는 주문번호 추가
-	        String merchantId = order.getMerchantId();  // Assuming merchantId is part of OrderVO
+	        String merchantId = order.getMerchantId();
 	        this.rentService.insertMerchantId(merchantId, rental.getCr_num());
 	        
 	        // 결제정보 getPayInfo 메서드에 주문번호를 넣고 OrderVO에 값들을 셋팅
@@ -96,12 +96,35 @@ public class RentCheckController {
 	        
 	        return new ResponseEntity<>(map, HttpStatus.OK);
 	        
-	    } catch (Exception e) {
-	    	map.put("success", false);
-	    	map.put("message", "결제 정보 처리 중 오류 발생 컨트롤러");
-	        log.error("결제 정보 가져오기 오류: ", e);
-	        return new ResponseEntity<>(map, HttpStatus.INTERNAL_SERVER_ERROR);
-	    }
+		} catch (Exception e) {
+		    try {
+		        // 환불 처리 시작
+		        String token = getImportToken();
+		        
+		        if (token == null || token.isEmpty()) {
+		            log.error("인증 정보에 문제가 발생했습니다. 환불 처리를 위해 다시 시도해주세요.");
+		        } else {
+		            double refundAmount = order.getAmount(); // 주문에서 환불 금액을 가져옴
+		            int result_delete = cancelPay(token, order.getMerchantId(), refundAmount); 
+		            
+		            if (result_delete == -1) {
+		                log.error("환불에 실패했습니다. 다시 시도해주세요.");
+		            } else {
+		                this.orderService.refundOK(order.getMerchantId()); // 환불 완료시 주문번호 업데이트
+		                log.info("환불이 완료되었습니다.");
+		            }
+		        }// 환불 처리 종료
+		        
+		    } catch (Exception refundException) {
+		        log.error("환불 처리 중 오류 발생: ", refundException);
+		        // 환불도 실패한 경우 추가적인 처리가 필요합니다. (예: 관리자에게 알림 전송)
+		    }
+		    
+		    map.put("success", false);
+		    map.put("message", "결제 정보 처리 중 오류 발생 컨트롤러");
+		    log.error("결제 정보 가져오기 오류: ", e);
+		    return new ResponseEntity<>(map, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	//예약 확인
