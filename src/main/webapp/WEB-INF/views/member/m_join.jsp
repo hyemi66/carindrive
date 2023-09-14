@@ -6,8 +6,8 @@
 <head>
 <meta charset="UTF-8">
 <title>carindrive : 회원가입 페이지</title>
-<link rel="stylesheet" type="text/css" href="${path}/css/m_join.css">
-<script type="text/javascript" src="${path}/js/join.js"></script>
+<link rel="stylesheet" type="text/css" href="${path}/css/member/m_join.css">
+<script type="text/javascript" src="${path}/js/member/join.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap" rel="stylesheet">
@@ -16,7 +16,7 @@
 <body>
 <%-- include : main --%>
 <%@ include file="../include/header.jsp" %>
-<form method="post">
+<form action="member_join_ok" method="post">
 	<div id="logo">
 		<hr>
 		CARINDRIVE
@@ -28,10 +28,10 @@
 			<div id="idform">
 				<input id="m_id" name="m_id" placeholder="아이디"
 				onfocus="this.placeholder=''" onblur="this.placeholder='아이디'">
-				<span class="idck"></span>
+				<br><span id="idcheck"></span>
 			</div>
 			<div id="checkid">
-				<input type="button" id="ckidbtn" onclick="return checkid();" value="중복 확인">
+				<input type="button" id="ckidbtn" onclick="return id_check();" value="중복 확인">
 			</div>
 			<div id="pwdform">
 				<input type="password" id="m_pwd" name="m_pwd" placeholder="비밀번호"
@@ -58,13 +58,21 @@
 			<div id="emailform">
 				<input id="m_email" name="m_email" placeholder="이메일"
 				onfocus="this.placeholder=''" onblur="this.placeholder='이메일'">
+			</div>
+			<div id="email_select_form">	
+				<select id="m_email_se" name="m_email_se" class="select">
+		    		<option value="">이메일 선택</option>
+		    		<option value="naver">naver.com</option>
+		    		<option value="gmail">gmail.com</option>
+		    		<option value="daum">daum.net</option>
+				</select>
 				<span class="emailck"></span>
 			</div>
 			<div id="telform">
-				<select id="user_hp_type" name="user_hp_type" class="select">
+				<select id="m_tel" name="m_tel" class="select">
 		    		<option value="">통신사 선택</option>
 		    		<option value="SK">SK</option>
-		    		<option value="KTF">KT</option>
+		    		<option value="KT">KT</option>
 		    		<option value="LG">LGU+</option>
 		    		<option value="알뜰">알뜰폰</option>
 				</select>
@@ -78,9 +86,9 @@
 			<span id="text"></span>
 			<!-- 버튼 -->
 			<div id="form3">
-				  <input type="submit" value="가입하기">
-				<input type="reset" value="취소">
-				<button type="button" value="Y" name="Y" id="btn1" onclick=" return joinCheck()" >가입하기</button>
+				  <input type="submit"  name="Y" id="btn1"  value="가입하기" onclick=" return joinCheck();">
+				<!-- <input type="reset" value="취소"> -->
+				<!--<button type="submit" value="Y" name="Y" id="btn1" onclick=" return joinCheck()" >가입하기</button>-->
 			</div>
 		</div><%--form1 end --%>
 	</div> <%-- wrap end --%>

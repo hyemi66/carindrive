@@ -43,9 +43,9 @@ public class RentController {
 	public ModelAndView rent(RentalVO r, HttpSession session, RedirectAttributes rttr, HttpServletRequest request) {
 		// rentalVO 객체는 form에서 전송된 데이터를 자동으로 바인딩 받게 됩니다.
 
-		MemberVO loggedInUser = (MemberVO) session.getAttribute("loggedInUser");
+		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
 
-		if (loggedInUser != null) {//로그인이 되었을 때
+		if (memberInfo != null) {//로그인이 되었을 때
 			/*렌트빌리는 날짜, 반납하는 날짜 기능*/
 			String cr_sdate = r.getCr_sdate();		//VO에 들어있는 날짜,시간 값들을 가져옴
 			String cr_edate = r.getCr_edate();
@@ -72,7 +72,7 @@ public class RentController {
 			// 로그인 정보가 없을 경우 로그인 페이지로 이동 또는 처리
 			session.setAttribute("prevPage", request.getHeader("Referer"));	//로그인후 다시 원래 페이지로 돌아가게 해주는 코드 
 			rttr.addFlashAttribute("LoginNull", "alert('로그인 이후 이용 가능합니다!');");
-			return new ModelAndView("redirect:/member/memberLogin");
+			return new ModelAndView("redirect:/member/m_login");
 		}
 	}
 
@@ -81,16 +81,17 @@ public class RentController {
 	public String rentOK(Model model, HttpSession session, RedirectAttributes rttr) {
 
 		try {
-			MemberVO loggedInUser = (MemberVO) session.getAttribute("loggedInUser"); //정상작동
+			//로그인된 아이디를 기준으로 해당 고객의 정보를 불러옴
+			MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
 
-			//해당 아이디의 렌트 정보를 가져옴
-			RentalVO rental = this.rentService.getRentOne(loggedInUser.getM_id());
+			//해당 고객의 아이디를 기준으로 렌트정보를 가져옴
+			RentalVO rental = this.rentService.getRentOne(memberInfo.getM_id());
 
 			//차 이름으로 해당 차량 정보 가져옴 (렌트 내역에 필요)
 			CarVO car = this.rentService.getCarInfo(rental.getCr_cname()); //정상작동
 
 			//고객 정보 가져오기 (렌트 내역에 필요)
-			MemberVO mem = this.memberService.getMemberInfo(loggedInUser.getM_id());
+			MemberVO mem = this.memberService.getMemberInfo(memberInfo.getM_id());
 
 			// 렌트 기간 계산
 			//DateTimeFormatter를 이용하여 날짜와 시간 문자열을 파싱하여 LocalDateTime 객체로 변환

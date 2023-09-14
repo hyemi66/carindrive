@@ -9,8 +9,8 @@ public interface OrderService {
 	//주문내역(결제정보) 저장
 	void saveOrder(OrderVO order);
 	
-	//예약번호 가져오기
-	List<OrderVO> getId(String m_id);
+	//아이디를 이용해서 결제정보 가져오기
+	List<OrderVO> getCashInfo(String m_id);
 
 	//주문내역 전체 가져오기
 	OrderVO getOrder(long num);

@@ -2,29 +2,53 @@
 insert into c_member (m_id, m_pwd, m_name, m_phone)values('z','1','홍길동','010-1111-2222'); --아이디 z 비밀번호 1
 
 INSERT INTO c_car (c_num, c_name, c_brand, c_year, c_color, c_type, c_oil, c_price, c_ok, c_img) --차량추가
-VALUES (car_seq.nextval, 'ray', '기아', '2023', '흰색', '경차', '가솔린', 500, 0, 'ray.jpg');
+VALUES (car_seq.nextval, '레이', '기아', '2023', '흰색', '경차', '가솔린', 500, 0, 'Gcar01.png');
+INSERT INTO c_car (c_num, c_name, c_brand, c_year, c_color, c_type, c_oil, c_price, c_ok, c_img) --차량추가
+VALUES (car_seq.nextval, '모닝', '기아', '2023', '검정색', '경차', '가솔린', 500, 0, 'Gcar02.png');
 update c_car set c_num = '1';
 update c_rental set cr_num = '1';
 update c_order_info set id ='1';
 
 SELECT TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS') AS current_datetime FROM DUAL;
 
-
+select * from c_rental where cr_mid = 'zzzz';
 
 commit; -- 설정 후 반드시 커밋하고 테스트 할 것
+SELECT * FROM c_rental WHERE cr_mid = 'zzzz';
+SELECT * FROM c_rental WHERE cr_cname = 'ray';
 
+select * from c_car;
 --ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 select * from c_member order by m_name asc; -- 사용자 확인
 select * from c_car order by c_name desc; --차량 확인
 select * from c_rental order by cr_num desc; --렌트 확인
 select * from c_order_info order by id desc; --결제 정보 확인
 select * from c_rental where cr_order = 'merchant_1694430815754';
+
+select * from c_member where m_id = 'zzzz';
+select * from c_rental where cr_mid ='zzzz';
+SELECT *FROM c_rental WHERE cr_mid = 'zzzz' AND cr_num = (
+    SELECT MAX(cr_num)
+    FROM c_rental
+    WHERE cr_mid = 'zzzz'
+);
+SELECT * FROM c_rental WHERE cr_mid = #{cr_mid} ORDER BY cr_rdate DESC FETCH FIRST 1 ROW ONLY;
+SELECT *FROM c_rental WHERE cr_mid = 'zzzz' AND cr_num = (SELECT MAX(cr_num) FROM c_rental WHERE cr_mid = 'zzzz');
+
+select * from c_rental where cr_order = 'merchant_1694684830756';
  
 delete from c_member;
 delete from c_car;
 delete from c_rental; --차량 렌트 기록 삭제 --렌트기록은 0, 1로 결제 처리를 했는지 여부를 판단하고 차량과 연결지어서 예약 가능 불가능으로 나눠야함
 delete from c_order_info; --결제 정보 삭제
---삭제후 커밋해야 웹에 적용됨
+commit;--삭제후 커밋해야 웹에 적용됨
+
+
+select * from c_order_info where buyer_name = 'zzzz';
+
+
+
+
 
 select * from c_order_info where buyer_name = 'z';
 --ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
@@ -45,19 +69,21 @@ drop table c_service;
 drop table c_qna;
 drop table c_member;
 
+commit;
+
 
 --ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 --유저 정보 테이블
 CREATE TABLE c_member (
     m_id VARCHAR2(30) PRIMARY KEY,
-    m_pwd VARCHAR2(30),
-    m_brith VARCHAR2(30),
+    m_pwd VARCHAR2(200),        --30에서 200으로 확장
+    m_birth VARCHAR2(30),
     m_name VARCHAR2(30),
-    m_email VARCHAR2(30),
+    m_email VARCHAR2(200),      --30에서 200으로 확장
     m_tel VARCHAR2(30),
     m_phone VARCHAR2(30),
     m_state NUMBER,
-    m_regdate DATE
+    regdate DATE
 );
 
 

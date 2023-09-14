@@ -8,7 +8,7 @@ public interface OrderDAO {
 	
 	void saveOrder(OrderVO order);
 	
-	List<OrderVO> getId(String m_id);
+	List<OrderVO> getCashInfo(String m_id);
 
 	OrderVO getOrder(long num);
 

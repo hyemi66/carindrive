@@ -25,4 +25,6 @@ public interface RentalDAO {
 
 	RentalVO getRentRefund(String cr_order);
 
+	List<CarVO> findAllCar();
+
 }

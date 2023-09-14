@@ -63,5 +63,10 @@ public class RentalDAOImpl implements RentalDAO {
 		return this.sqlSession.selectOne("getRentRefund",cr_order);
 	}//주문번호를 기준으로 렌트내역을 가져옴
 
+	@Override
+	public List<CarVO> findAllCar() {
+		return this.sqlSession.selectList("findAllCar");
+	}
+
 
 }

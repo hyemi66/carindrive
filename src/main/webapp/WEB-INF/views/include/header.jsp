@@ -21,7 +21,7 @@
         <li><a href="${path}/rent/rent">차량예약</a></li>
         <li><a href="${path}/rent/rent_Check_List">예약확인</a></li>
         <li><a href="${path}/guide/guide">이용안내</a></li>
-        <li><a href="#">보험안내</a></li>
+        <li><a href="${path}/insurance/insurance">보험안내</a></li>
         <li><a href="#">이벤트</a></li>
           <li><a href="${path}/service/service_center">고객센터</a></li>
         <li><a href="#">내정보</a></li>
@@ -29,7 +29,22 @@
     </nav>
     
     <div class="login">
-    	<b><a href="${path}/member/m_login">로그인</a></b> | <b><a href="${path}/member/m_join">회원가입</a></b>
+ 
+	<%-- 일반, 관리자 로그인 분리 임시 --%>    	
+	<c:choose>  
+		<c:when test="${id eq 'admin01'}"> 
+			 <b><span style="color: white;">${id}님</span><a href="${path}/"> 관리자페이지</a></b> | <b><a href="${path}/member/m_logout">로그아웃</a></b> 
+		</c:when> 
+		
+		<c:when test="${!empty id}">
+			<b><span style="color: white;">${id}님</span><a href="${path}/"> 마이페이지</a></b> | <b><a href="${path}/member/m_logout">로그아웃</a></b> 
+		</c:when>
+		
+		<c:otherwise>
+			<b><a href="${path}/member/m_login">로그인</a></b> | <b><a href="${path}/member/m_join">회원가입</a></b>
+		</c:otherwise>
+	</c:choose>
+
     </div>
   </header>
   

@@ -57,6 +57,11 @@ public class RentServiceImpl implements RentService {
 		return this.rentalDao.getRentRefund(cr_order);
 	}
 
+	@Override
+	public List<CarVO> findAllCar() {
+		return this.rentalDao.findAllCar();
+	}
+
 
 
 }

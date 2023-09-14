@@ -20,8 +20,8 @@ public class OrderServiceImpl implements OrderService {
 	}//주문내역(결제정보) 저장
 	
     @Override
-    public List<OrderVO> getId(String m_id) {
-        return orderDAO.getId(m_id);
+    public List<OrderVO> getCashInfo(String m_id) {
+        return orderDAO.getCashInfo(m_id);
     }//예약번호 가져오기
 
 	@Override

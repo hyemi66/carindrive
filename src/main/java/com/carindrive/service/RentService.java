@@ -21,7 +21,7 @@ public interface RentService {
 	//회원 정보 확인(가져오기)
 	void getMemberList(MemberVO m);
 
-	//차 정보 가져오기
+	//선택된 차 정보 가져오기
 	CarVO getCarInfo(String cr_cid);
 
 	//렌트 비용을 데이터베이스에 추가
@@ -32,4 +32,7 @@ public interface RentService {
 
 	//주문번호를 기준으로 해당 예약내역을 선택
 	RentalVO getRentRefund(String cr_order);
+
+	//모든 차 정보를 가져오기
+	List<CarVO> findAllCar();
 }

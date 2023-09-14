@@ -16,7 +16,7 @@
   <div class="clear"></div>
 <form method="post">
 <!-- 로그인 아이디 값을 히든으로 넘김 -->
-<input type="hidden" name="cr_mid" id="cr_mid" value="${loggedInUser.m_id}" required><br>
+<input type="hidden" name="cr_mid" id="cr_mid" value="${memberInfo.m_id}" required><br>
 <%-- 예약 선택 메뉴 --%>
 <div class="mainmenu">
 <div id="menu01">
@@ -67,7 +67,7 @@
 	<label for="tab06">전기차</label>
 	
 		<!-- 임시 코드 -->
-        <input type="hidden" name="cr_cname" id="cr_cname" value="ray">
+        <input type="hidden" name="cr_cname" id="cr_cname" value="모닝">
 
 	
 	<div class="conbox con1"> <!-- 전체 -->

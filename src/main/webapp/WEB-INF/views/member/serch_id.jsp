@@ -6,9 +6,9 @@
 <head>
 <meta charset="UTF-8">
 <title>아이디 찾기 페이지</title>
-<link rel="stylesheet" type="text/css" href="${path}/css/serch_id.css">
+<link rel="stylesheet" type="text/css" href="${path}/css/member/serch_id.css">
 <script src="${path}/js/jquery.js"></script>
-<script src="${path}/js/s_id.js"></script>
+<script src="${path}/js/member/s_id.js"></script>
 </head>
 <body>
 <%-- include : main --%>
