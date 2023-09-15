@@ -21,7 +21,7 @@
         <c:forEach var="orderInfo" items="${orderInfos}" varStatus="status">
             <div class="box ${status.index > 1 ? 'hidden-history' : ''}">
                 <div class="img">
-				<img alt="${orderCarList[status.index].buyProductName}" src="${path}/images/car/${orderCarList[status.index].c_img}">
+				<img alt="${carInfos[status.index].c_name}" src="${path}/images/car/${carInfos[status.index].c_img}">
 					                
 
                 </div>
@@ -34,9 +34,9 @@
                     <p>결제일자: <span>${orderInfo.buy_date}</span></p>
                     <p>렌트 비용: <span>${orderInfo.amount}원</span></p>
                     <p>주문 번호: <span>${orderInfo.merchantId}</span></p>
-                    <p>주문한 차량 모델: <span>${orderCarDTO.buyProductName}</span></p>
-    <p>차량 			<p>차량년식: <span>${orderCarDTO.carYear}</span></p>
-    <p>차량 			<p>차량 색상: <span>${orderCarDTO.carColor}</span></p>
+                    <p>주문한 차량 모델: <span>${carInfos[status.index].c_name}</span></p>
+     				<p>차량년식: <span>${carInfos[status.index].c_year}년식</span></p>
+     				<p>차량 색상: <span>${carInfos[status.index].c_color}색</span></p>
                     <c:if test="${!fn:contains(orderInfo.merchantId, '환불')}">
                         <form action="/rent/refund" method="post">
                             <input type="hidden" name="order_number" value="${orderInfo.merchantId}">

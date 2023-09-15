@@ -22,7 +22,7 @@ public interface RentService {
 	void getMemberList(MemberVO m);
 
 	//선택된 차 정보 가져오기
-	CarVO getCarInfo(String cr_cid);
+	CarVO getCarInfo(String cr_cname);
 
 	//렌트 비용을 데이터베이스에 추가
 	void insertCost(int cr_num, double one_price);

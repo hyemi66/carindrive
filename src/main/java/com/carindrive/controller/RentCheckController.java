@@ -49,7 +49,6 @@ import com.carindrive.service.OrderService;
 import com.carindrive.service.RentService;
 import com.carindrive.vo.CarVO;
 import com.carindrive.vo.MemberVO;
-import com.carindrive.vo.OrderCarDTO;
 import com.carindrive.vo.OrderVO;
 import com.carindrive.vo.RentalVO;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -140,11 +139,11 @@ public class RentCheckController {
 	    MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
 
 	    try {
-	        if (memberInfo != null) {
-	            List<RentalVO> rentals = this.rentService.getRentList(memberInfo.getM_id());
-	            Map<String, RentalVO> rentalMap = new HashMap<>();
-	            for (RentalVO rental : rentals) {
-	                rentalMap.put(rental.getCr_order(), rental);
+	        if (memberInfo != null) {//로그인시
+	            List<RentalVO> rentals = this.rentService.getRentList(memberInfo.getM_id());//아이디를 기준으로 렌트정보를 다가져옴
+	            Map<String, RentalVO> rentalMap = new HashMap<>(); 	//키,값으로 담기위해 map 생성
+	            for (RentalVO rental : rentals) {					//(RentalVO)rentals를 rental로 한개씩 뽑아서 키,값으로 저장
+	                rentalMap.put(rental.getCr_order(), rental);	//주문번호, 렌탈정보로 저장시킴 주문번호 호출시 렌탈정보 전체가 호출됨
 	            }
 
 	            mav.addObject("rentalMap", rentalMap);
@@ -153,42 +152,32 @@ public class RentCheckController {
 	            List<OrderVO> orders = this.orderService.getCashInfo(memberInfo.getM_id());
 	            List<OrderVO> orderInfos = new ArrayList<>();
 
+	            List<CarVO> carInfos = new ArrayList<>(); 
+	            
+	            		
 	            for (OrderVO order : orders) {
 	                OrderVO orderInfo = orderService.getOrder(order.getId());
 	                orderInfos.add(orderInfo);
-	            }
-
-	            Collections.sort(orderInfos, Comparator.comparing(OrderVO::getBuy_date).reversed());
-
-	            List<CarVO> cars = rentService.findAllCar();
-	            Map<String, CarVO> carMap = new HashMap<>();
-	            for (CarVO carVO : cars) {
-	                String key = (carVO.getC_year() + carVO.getC_color() + carVO.getC_name()).replaceAll("\\s", "").toLowerCase();
-	                carMap.put(key, carVO);
-	            }
-
-	            // 주문 정보와 차량 정보를 매핑
-	            List<OrderCarDTO> orderCarList = new ArrayList<>();
-	            for (OrderVO order : orderInfos) {
-	                String productName = order.getBuy_product_name().replaceAll("\\s", "").toLowerCase();
-	                CarVO matchedCar = carMap.get(productName);
-
-	                if (matchedCar != null) {
-	                    // 매핑된 차량 정보가 있을 경우, DTO에 저장
-	                    OrderCarDTO orderCarDTO = new OrderCarDTO();
-	                    orderCarDTO.setBuyerName(order.getBuyer_name());
-	                    orderCarDTO.setBuyProductName(matchedCar.getC_name());
-	                    orderCarDTO.setCarYear(matchedCar.getC_year());
-	                    orderCarDTO.setCarColor(matchedCar.getC_color());
-	                    orderCarList.add(orderCarDTO);
-	                    System.out.println("Matched car for Buyer Buy ID " + order.getBuy_product_name() + ": " + matchedCar);
-	                    System.out.println("Image Path: " + "${path}/images/car/" + matchedCar.getC_img());
-	                }else {
-	                    System.out.println("No matching car for Buyer Buy ID " + order.getBuy_product_name());
+	                
 	                }
-	            }
+
+	            //정렬
+	           Collections.sort(orderInfos, Comparator.comparing(OrderVO::getBuy_date).reversed());
+	           
+	           for (OrderVO order : orderInfos) {
+	                CarVO carInfo = null;
+	                //차량 정보를 불러오는 mybatis문 orders에 들어있는 차량이름으로 검색
+	                
+	                String[] parts = order.getBuy_product_name().split(" ");
+	                String carName = parts[parts.length - 1];
+	                
+	                carInfo = this.rentService.getCarInfo(carName);
+	                carInfos.add(carInfo);
+	                }
+
+	            
+	            mav.addObject("carInfos", carInfos);
 	            mav.addObject("orderInfos", orderInfos);
-	            mav.addObject("orderCarList", orderCarList);
 	        } else {
 	            rttr.addFlashAttribute("LoginNull", "로그인 이후 이용 가능합니다!");
 	            mav.setViewName("redirect:/member/m_login");

@@ -17,7 +17,7 @@ public interface RentalDAO {
 
 	void getMemberList(MemberVO m);
 
-	CarVO getCarInfo(String cr_cid);
+	CarVO getCarInfo(String cr_cname);
 
 	void insertCost(int cr_num, double one_price);
 

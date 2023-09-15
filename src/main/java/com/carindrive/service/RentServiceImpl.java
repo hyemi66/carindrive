@@ -38,8 +38,8 @@ public class RentServiceImpl implements RentService {
 	}//회원 정보 확인(가져오기)
 
 	@Override
-	public CarVO getCarInfo(String cr_cid) {
-		return this.rentalDao.getCarInfo(cr_cid);
+	public CarVO getCarInfo(String cr_cname) {
+		return this.rentalDao.getCarInfo(cr_cname);
 	}//차 정보 가져오기
 
 	@Override

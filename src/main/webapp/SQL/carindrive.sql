@@ -17,10 +17,14 @@ commit; -- 설정 후 반드시 커밋하고 테스트 할 것
 SELECT * FROM c_rental WHERE cr_mid = 'zzzz';
 SELECT * FROM c_rental WHERE cr_cname = 'ray';
 
-select * from c_car;
+select * from c_car where c_name = '모닝';
+SELECT * FROM c_car
+WHERE c_name LIKE '%모닝%';
+
+select * from c_car where c_name =
 --ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 select * from c_member order by m_name asc; -- 사용자 확인
-select * from c_car order by c_name desc; --차량 확인
+select * from c_car order by c_num asc; --차량 확인
 select * from c_rental order by cr_num desc; --렌트 확인
 select * from c_order_info order by id desc; --결제 정보 확인
 select * from c_rental where cr_order = 'merchant_1694430815754';
@@ -162,4 +166,5 @@ CREATE TABLE c_order_info (
     PAY_STATUS VARCHAR2(50),
     POST_CODE NUMBER
 );
+
 
