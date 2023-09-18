@@ -80,3 +80,20 @@
     display: none;
 }
 
+/* CSS */
+.member, .car {
+    margin-bottom: 20px; /* 각 정보 블럭의 아래쪽에 간격을 추가합니다. */
+    padding: 10px; /* 정보 블럭 내부에 간격을 추가합니다. */
+    border: 1px solid #e0e0e0; /* 경계선 추가 */
+    background-color: #f9f9f9; /* 배경색 추가 */
+}
+
+h2 {
+    margin-top: 0; /* h2 태그 상단 간격 제거 */
+}
+
+button {
+    margin-right: 10px; /* 버튼 간의 간격 추가 */
+}
+
+

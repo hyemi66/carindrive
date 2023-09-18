@@ -2,8 +2,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
 <c:set var="path" value="${pageContext.request.contextPath}"/>
+<c:set var="phone" value="${memberInfo.m_phone}" />
+<c:set var="formattedPhone" value="${fn:substring(phone, 0, 3)}-${fn:substring(phone, 3, 7)}-${fn:substring(phone, 7, 11)}" />
+<%--전화번호를 01011112222 형식을 010-1111-2222 형식으로 수정  --%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,9 +36,9 @@
                 </div>
                 <div class="member">
                     <h2>${status.index == 0 ? '최근에 예약한 차량' : '예약 내역'}</h2>
-                    <p>렌탈 대여일자 :<span>${rentalMap[orderInfo.merchantId].cr_sdate} - ${rentalMap[orderInfo.merchantId].cr_edate}</span></p>
-                    <p>예약자 성함: <span>${orderInfo.buyer_name}</span></p>
-                    <p>예약자 연락처: <span>${orderInfo.buyer_phone}</span></p>
+                    <p>렌탈 대여/반납 일시 :<span>${rentalMap[orderInfo.merchantId].cr_sdate} - ${rentalMap[orderInfo.merchantId].cr_edate}</span></p>
+                    <p>예약자 성함: <span>${memberInfo.m_name}</span></p>
+                    <p>예약자 연락처: <span>${formattedPhone}</span></p>
                     <p>예약한 차량: <span>${orderInfo.buy_product_name}</span></p>
                     <p>결제일자: <span>${orderInfo.buy_date}</span></p>
                     <p>렌트 비용: <span><fmt:formatNumber value="${orderInfo.amount}" type="number" pattern="#,###"/>원</span></p>

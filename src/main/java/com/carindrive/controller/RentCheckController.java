@@ -175,7 +175,7 @@ public class RentCheckController {
 	                carInfos.add(carInfo);
 	                }
 
-	            
+	            mav.addObject("memberInfo", memberInfo);
 	            mav.addObject("carInfos", carInfos);
 	            mav.addObject("orderInfos", orderInfos);
 	        } else {
