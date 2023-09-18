@@ -44,6 +44,47 @@
     border-bottom: 1px solid #e9ecef;
 }
 
+/*예약자 정보 제목*/
+#carpay .member .title{
+	color: orange;
+}
+/*예약자 정보 소제목*/
+#carpay .member .mtitle{
+	color: pink;
+}
+/*예약자 정보 내용*/
+#carpay .member > span{
+	color : orange;
+}
+
+/*차량 정보 제목*/
+#carpay .car .title{
+	color:red;
+}
+/*차량 정보 소제목*/
+#carpay .car .mtitle{
+	color:black;
+}
+/*차량 정보 내용*/
+#carpay .car{
+	color:green;
+}
+
+/*차량 정보 제목*/
+#carpay .rent .title{
+	color:red;
+}
+/*차량 정보 소제목*/
+#carpay .rent .mtitle{
+	color:black;
+}
+/*차량 정보 내용*/
+#carpay .rent >span{
+	color:green;
+}
+
+
+
 #carpay .rent {
     border-bottom: none; /* 마지막 항목이므로 테두리 제거 */
 }

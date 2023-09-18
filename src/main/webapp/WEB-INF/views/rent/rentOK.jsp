@@ -80,23 +80,23 @@
 			<div id="bar"><h3>결제 정보 확인</h3></div>
 			    <div class="box">
 			        <div class="member">
-			            <h2>&nbsp;예약자 정보</h2>
-			            아이디: <span>${rental.cr_mid}</span><br>
-			            연락처: <span>${formattedPhone}</span><br>
-			            이름: <span>${mem.m_name}</span>
+			            <h2 class ="title">&nbsp;예약자 정보</h2>
+			            <span class = "mtitle">아이디:</span> <span>${rental.cr_mid}</span><br>
+			            <span class = "mtitle">연락처:</span> <span>${formattedPhone}</span><br>
+			            <span class = "mtitle">이름:</span> <span>${mem.m_name}</span>
 			            <hr>
 			        <div class="car">
 			            <h2>&nbsp;차량 정보</h2>
-			            차종: <span>${car.c_name}</span><br>
-			            차량색상: <span>${car.c_color}</span><br>
-			            연식: <span>${car.c_year}년식</span><br>
+			            <span class = "mtitle">차종:</span> <span>${car.c_name}</span><br>
+			            <span class = "mtitle">차량색상:</span> <span>${car.c_color}</span><br>
+			            <span class = "mtitle">연식:</span> <span>${car.c_year}년식</span><br>
 			        </div>
 			        <div class="rent">
 			            <h2>&nbsp;렌트 정보</h2>
-			            예약일자: <span>${rental.cr_rdate}</span><br>
-			            실제 대여일자: <span>${rental.cr_sdate}부터</span><br>
-			            반납일자: <span>${rental.cr_edate}까지</span><br>
-			            렌트 비용: <span><fmt:formatNumber value="${total_price}" type="number" pattern="#,###"/>원</span><hr>
+			            <span class = "mtitle">예약일자:</span> <span>${rental.cr_rdate}</span><br>
+			            <span class = "mtitle">실제 대여일자:</span> <span>${rental.cr_sdate}부터</span><br>
+			            <span class = "mtitle">반납일자:</span> <span>${rental.cr_edate}까지</span><br>
+			            <span class = "mtitle">렌트 비용:</span> <span><fmt:formatNumber value="${total_price}" type="number" pattern="#,###"/>원</span><hr>
 					
 					
 <button onclick="payMent('card', '${rental.cr_mid}', '${mem.m_phone}', '${mem.m_name}', '${car.c_name}', '${car.c_color}', '${car.c_year}', ${total_price})">카드 결제</button>
