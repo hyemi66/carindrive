@@ -15,7 +15,7 @@ public interface OrderService {
 	//주문내역 전체 가져오기
 	OrderVO getOrder(long num);
 
-	//환불 완료시 주문번호에 환불이라고 업데이트
+	//환불 완료시 주문번호를 기준으로 refund에 '환불완료'라고 업데이트
 	void refundOK(String order_number);
 	
 }

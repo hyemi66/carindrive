@@ -21,7 +21,7 @@ function payMent(paymentType, rental_cr_mid, mem_m_phone, mem_m_name, car_c_name
 	    pay_method : 'card', //카드결제
 	    merchant_uid : 'merchant_' + new Date().getTime(),
 	    name : showName,
-	    amount : total_price *1000, //판매가격
+	    amount : total_price, //판매가격
 	    buyer_name : rental_cr_mid,
 	    buyer_tel : mem_m_phone,
 	}, function(rsp) {

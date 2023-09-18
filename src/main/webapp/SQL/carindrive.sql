@@ -21,6 +21,9 @@ select * from c_car where c_name = '모닝';
 SELECT * FROM c_car
 WHERE c_name LIKE '%모닝%';
 
+update c_order_info set refund = '환불완료' where merchant_Id = 'merchant_1694756834113';
+
+
 select * from c_car where c_name =
 --ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 select * from c_member order by m_name asc; -- 사용자 확인
@@ -51,7 +54,7 @@ commit;--삭제후 커밋해야 웹에 적용됨
 select * from c_order_info where buyer_name = 'zzzz';
 
 
-
+update c_order_info set refund = '환불완료'
 
 
 select * from c_order_info where buyer_name = 'z';
@@ -164,7 +167,8 @@ CREATE TABLE c_order_info (
     PAY_PRICE NUMBER,
     CARD_NUM VARCHAR2(255),
     PAY_STATUS VARCHAR2(50),
-    POST_CODE NUMBER
+    POST_CODE NUMBER,
+    refund varchar2(20)
 );
 
 

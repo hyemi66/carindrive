@@ -32,5 +32,5 @@ public class OrderDAOImpl implements OrderDAO {
 	@Override
 	public void refundOK(String order_number) {
 		this.sqlSession.update("refundOK",order_number);
-	}
+	}//환불 완료시 주문번호를 기준으로 refund에 '환불완료'라고 업데이트
 }

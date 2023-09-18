@@ -108,7 +108,7 @@ public class RentController {
 			double one_price = Math.ceil(minutes) * (car.getC_price() / 60.0);
 
 			//DecimalFormat 는 숫자의 출력형태를 변환한다.
-			DecimalFormat decimalFormat = new DecimalFormat("#,###");
+			DecimalFormat decimalFormat = new DecimalFormat("#");
 			String total_price = decimalFormat.format(one_price);
 			//total_price는 단지 jsp파일에서 1,000 단위로 보이게 하기위함
 

@@ -109,7 +109,7 @@ public class RentCheckController {
 					if (result_delete == -1) {
 						log.error("환불에 실패했습니다. 다시 시도해주세요.");
 					} else {
-						this.orderService.refundOK(order.getMerchantId()); // 환불 완료시 주문번호 업데이트
+						this.orderService.refundOK(order.getMerchantId()); // 환불 완료시 refund 업데이트
 						log.info("환불이 완료되었습니다.");
 					}
 				}// 환불 처리 종료
@@ -244,7 +244,6 @@ public class RentCheckController {
 		String buyer_addrStr = "";
 		String buyer_postcode = "";
 		String buyer_addr = "";
-		//String buy_date = "";		//buy_date를 받는곳
 		String paid_at = "";
 		String buy_product_name = "";
 		String buyer_buyid = "";
@@ -367,16 +366,28 @@ public class RentCheckController {
 		}
 
 		double refundAmount;
+		
+		System.out.println("하루전");
+		System.out.println(oneDayBeforeRental);
+		
+		System.out.println("이틀전");
+		System.out.println(twoDaysBeforeRental);
 
-		if (now.isAfter(oneDayBeforeRental)) { // 하루 전 환불 불가능
-			alertMessage(out, "환불이 불가능한 시간입니다.");
-		} else if (now.isAfter(twoDaysBeforeRental)) { // 이틀 전 환불
-			refundAmount = rentalRefund.getCr_price() * 0.5;
-			processRefund(token, order_number, refundAmount, out, "환불 처리 되었으나, 환불 금액은 50%입니다.");
-		} else { // 그 외 환불 금액 100% 가능
-			refundAmount = rentalRefund.getCr_price();
-			processRefund(token, order_number, refundAmount, out, "환불이 완료 되었습니다!");
+		// 하루 전 환불 불가능
+		if (now.isAfter(oneDayBeforeRental)) { 	//2023-09-14T14:39
+		    alertMessage(out, "환불이 불가능한 시간입니다.");
 		}
+		// 이틀 전 환불
+		else if (now.isAfter(twoDaysBeforeRental) && now.isBefore(oneDayBeforeRental)) {	//2023-09-13T14:39
+		    refundAmount = rentalRefund.getCr_price() * 0.5;
+		    processRefund(token, order_number, refundAmount, out, "환불 처리 되었으나, 환불 금액은 50%입니다.");
+		}
+		// 그 외 환불 금액 100% 가능
+		else {
+		    refundAmount = rentalRefund.getCr_price();
+		    processRefund(token, order_number, refundAmount, out, "환불이 완료 되었습니다!");
+		}
+
 
 		out.close();
 	}
@@ -395,7 +406,7 @@ public class RentCheckController {
 		if (result_delete == -1) {
 			alertMessage(out, "환불에 실패 했습니다 다시 시도해주세요!");
 		} else {
-			this.orderService.refundOK(order_number); // 환불 완료 시 주문번호 업데이트
+			this.orderService.refundOK(order_number); // 환불완료 시 refund에 '환불완료' 업데이트
 			alertMessage(out, successMessage);
 		}
 	}

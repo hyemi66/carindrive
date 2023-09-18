@@ -75,3 +75,8 @@
     color: #555;
     font-weight: bold;
 }
+
+.hidden-refunded {
+    display: none;
+}
+

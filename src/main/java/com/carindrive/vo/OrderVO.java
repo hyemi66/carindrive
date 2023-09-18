@@ -20,6 +20,7 @@ public class OrderVO {
     private String buyer_card_num;  // 수정된 이름
     private String buyer_pay_ok;    // 수정된 이름 (변수 타입은 String으로 유지)
     private Integer buyer_postcode; 
+    private String refund;	//환불여부
     
     public OrderVO() {}
 
@@ -35,7 +36,8 @@ public class OrderVO {
                       long amount, 
                       String buyer_card_num, 
                       String buyer_pay_ok, 
-                      Integer buyer_postcode) {
+                      Integer buyer_postcode
+    				  ) {
         this.id = id;
         this.buyer_name = buyer_name;
         this.buyer_phone = buyer_phone;

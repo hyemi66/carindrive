@@ -19,7 +19,8 @@
             PAY_PRICE,
             CARD_NUM,
             PAY_STATUS,
-            POST_CODE
+            POST_CODE,
+            refund
         ) 
         VALUES 
         (
@@ -35,7 +36,8 @@
             #{amount, jdbcType=DECIMAL}, 
             #{buyer_card_num, jdbcType=VARCHAR}, 
             #{buyer_pay_ok, jdbcType=VARCHAR}, 
-            #{buyer_postcode, jdbcType=INTEGER}
+            #{buyer_postcode, jdbcType=INTEGER},
+            '정상결제'
         )
     </insert>
     
@@ -64,12 +66,13 @@
 	    <result column="CARD_NUM" property="buyer_card_num"/>
 	    <result column="PAY_STATUS" property="buyer_pay_ok"/>
 	    <result column="POST_CODE" property="buyer_postcode"/>
+	    <result column="refund" property="refund"/>
 	</resultMap>
 	
 	
 	<!-- 환불 완료시 주문번호 업데이트 -->
 	<update id="refundOK">
-		update c_order_info set MERCHANT_ID = '환불완료_' || MERCHANT_ID  where MERCHANT_ID = #{merchantId}
+		update c_order_info set refund = '환불완료' where merchant_Id = #{merchantId}
 	</update>
 
     
