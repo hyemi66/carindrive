@@ -5,10 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.carindrive.dao.RentDAO;
 import com.carindrive.dao.RentalDAO;
 import com.carindrive.vo.CarVO;
 import com.carindrive.vo.MemberVO;
-import com.carindrive.vo.OrderVO;
 import com.carindrive.vo.RentalVO;
 
 @Service
@@ -16,6 +16,9 @@ public class RentServiceImpl implements RentService {
 
 	@Autowired
 	private RentalDAO rentalDao;
+	
+	@Autowired
+	private RentDAO rentDao;
 	
 	@Override
 	public void insertRental(RentalVO r) {
@@ -55,12 +58,17 @@ public class RentServiceImpl implements RentService {
 	@Override
 	public RentalVO getRentRefund(String cr_order) {
 		return this.rentalDao.getRentRefund(cr_order);
-	}
+	}//주문번호를 기준으로 렌트내역을 가져옴
 
 	@Override
 	public List<CarVO> findAllCar() {
 		return this.rentalDao.findAllCar();
-	}
+	}//모든 차 정보를 가져오기
+	
+	@Override
+	public List<CarVO> getCarList(CarVO cv) {
+		return this.rentDao.getCarList(cv);
+	}//모든 차 정보를 가져오기
 
 
 

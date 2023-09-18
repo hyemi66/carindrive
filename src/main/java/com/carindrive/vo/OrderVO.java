@@ -8,18 +8,18 @@ import lombok.Setter;
 public class OrderVO {
 
     private long id;
-    private String buyer_name;      // 수정된 이름
-    private String buyer_phone;     // 수정된 이름
-    private String member_email;    // 수정된 이름
-    private String buyer_addr;      // 수정된 이름
-    private String buy_date;        // 수정된 이름
-    private String buy_product_name; // 수정된 이름
-    private String buyer_buyid;     // 수정된 이름
-    private String merchantId;      // 유지
-    private long amount;            // 수정된 이름 (변수 타입은 long으로 유지)
-    private String buyer_card_num;  // 수정된 이름
-    private String buyer_pay_ok;    // 수정된 이름 (변수 타입은 String으로 유지)
-    private Integer buyer_postcode; 
+    private String buyer_name;      // 구매자아이디
+    private String buyer_phone;     // 구매자폰번호
+    private String member_email;    // 구매자이메일
+    private String buyer_addr;      // 구매자 주소 (수정예정)
+    private String buy_date;        // 결제일자
+    private String buy_product_name; // 결제한 물품
+    private String buyer_buyid;     // 결제번호
+    private String merchantId;      // 주문번호
+    private long amount;            // 물품가격 (변수 타입은 long으로 유지)
+    private String buyer_card_num;  // 카드번호
+    private String buyer_pay_ok;    // 결제정보
+    private Integer buyer_postcode; // (수정예정)
     private String refund;	//환불여부
     
     public OrderVO() {}

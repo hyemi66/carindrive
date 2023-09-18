@@ -35,4 +35,7 @@ public interface RentService {
 
 	//모든 차 정보를 가져오기
 	List<CarVO> findAllCar();
+	
+	// 차 리스트 가져오기
+	List<CarVO> getCarList(CarVO cv);
 }

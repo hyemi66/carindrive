@@ -1,5 +1,7 @@
 package com.carindrive.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,9 +22,9 @@ public class HomeController {
 	public ModelAndView home(CarVO cv) {
 		ModelAndView mm = new ModelAndView();
 		
-//		List<CarVO> ml = this.rentService.getCarList(cv);
-//		
-//		mm.addObject("ml", ml);
+		List<CarVO> ml = this.rentService.getCarList(cv); //겹치는 코드가있어서 나중에 수정예정
+		
+		mm.addObject("ml", ml);
 		mm.setViewName("main/index");
 		
 		return mm;

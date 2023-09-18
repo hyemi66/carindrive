@@ -14,7 +14,6 @@ public interface MemberService {
 
 }*/
 
-import javax.transaction.Transactional;
 
 
 import com.carindrive.vo.MemberVO;

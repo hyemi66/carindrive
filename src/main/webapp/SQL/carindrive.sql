@@ -5,6 +5,8 @@ INSERT INTO c_car (c_num, c_name, c_brand, c_year, c_color, c_type, c_oil, c_pri
 VALUES (car_seq.nextval, '레이', '기아', '2023', '흰색', '경차', '가솔린', 500, 0, 'Gcar01.png');
 INSERT INTO c_car (c_num, c_name, c_brand, c_year, c_color, c_type, c_oil, c_price, c_ok, c_img) --차량추가
 VALUES (car_seq.nextval, '모닝', '기아', '2023', '검정색', '경차', '가솔린', 500, 0, 'Gcar02.png');
+
+--시퀀스 1로 초기화
 update c_car set c_num = '1';
 update c_rental set cr_num = '1';
 update c_order_info set id ='1';
@@ -25,10 +27,7 @@ update c_order_info set refund = '환불완료' where merchant_Id = 'merchant_16
 
 
 --ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-select * from c_member order by m_name asc; -- 사용자 확인
-select * from c_car order by c_num asc; --차량 확인
-select * from c_rental order by cr_num desc; --렌트 확인
-select * from c_order_info order by id desc; --결제 정보 확인
+
 select * from c_rental where cr_order = 'merchant_1694430815754';
 
 select * from c_member where m_id = 'zzzz';
@@ -43,11 +42,8 @@ SELECT *FROM c_rental WHERE cr_mid = 'zzzz' AND cr_num = (SELECT MAX(cr_num) FRO
 
 select * from c_rental where cr_order = 'merchant_1694684830756';
  
-delete from c_member;
-delete from c_car;
-delete from c_rental; --차량 렌트 기록 삭제 --렌트기록은 0, 1로 결제 처리를 했는지 여부를 판단하고 차량과 연결지어서 예약 가능 불가능으로 나눠야함
-delete from c_order_info; --결제 정보 삭제
-commit;--삭제후 커밋해야 웹에 적용됨
+ 
+
 
 
 select * from c_order_info where buyer_name = 'zzzz';
@@ -58,6 +54,12 @@ update c_order_info set refund = '환불완료'
 
 select * from c_order_info where buyer_name = 'z';
 --ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+--확인 코드
+select * from c_member order by m_name asc; -- 사용자 확인
+select * from c_car order by c_num asc; --차량 확인
+select * from c_rental order by cr_num desc; --렌트 확인
+select * from c_order_info order by id desc; --결제 정보 확인
+
 --시퀀스 생성
 CREATE SEQUENCE cs_seq START WITH 1 INCREMENT BY 1 NOCACHE;  -- 공지사항 테이블 시퀀스
 CREATE SEQUENCE cq_seq START WITH 1 INCREMENT BY 1 NOCACHE;  -- Q&A 테이블 시퀀스
@@ -65,6 +67,13 @@ CREATE SEQUENCE car_seq START WITH 1 INCREMENT BY 1 NOCACHE; -- 차 정보 테�
 CREATE SEQUENCE cr_seq START WITH 1 INCREMENT BY 1 NOCACHE; -- 예약(렌탈) 테이블 시퀀스
 CREATE SEQUENCE co_seq START WITH 1 INCREMENT BY 1 NOCACHE; -- 결제 정보 테이블 시퀀스
 CREATE SEQUENCE cm_seq START WITH 1 INCREMENT BY 1 NOCACHE; -- 멤버 테이블 시퀀스 (테스트용)
+
+--시퀀스 삭제
+drop SEQUENCE cs_seq;
+drop SEQUENCE cq_seq;
+drop SEQUENCE car_seq;
+drop SEQUENCE cr_seq;
+drop SEQUENCE co_seq;
 
 
 --테이블 삭제
@@ -76,6 +85,13 @@ drop table c_qna;
 drop table c_member;
 
 commit;
+
+ --삭제 코드
+delete from c_member;
+delete from c_car;
+delete from c_rental; --차량 렌트 기록 삭제 --렌트기록은 0, 1로 결제 처리를 했는지 여부를 판단하고 차량과 연결지어서 예약 가능 불가능으로 나눠야함
+delete from c_order_info; --결제 정보 삭제
+commit;--삭제후 커밋해야 웹에 적용됨
 
 
 --ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
@@ -89,7 +105,7 @@ CREATE TABLE c_member (
     m_tel VARCHAR2(30),
     m_phone VARCHAR2(30),
     m_state NUMBER,
-    regdate DATE
+    m_regdate DATE
 );
 
 
@@ -99,7 +115,7 @@ CREATE TABLE c_service (
     cs_id VARCHAR2(20),
     cs_pwd VARCHAR2(400),
     cs_title VARCHAR2(200),
-    cs_cont VARCHAR2(3000),
+    cs_cont VARCHAR2(4000),
     cs_date DATE DEFAULT SYSDATE,
     cs_hit INT,
     FOREIGN KEY (cs_id) REFERENCES c_member(m_id)
@@ -109,29 +125,32 @@ CREATE TABLE c_service (
 
 --Q&A 테이블
 CREATE TABLE c_qna (
+    cq_no int,
     cq_id VARCHAR2(20),
     cq_pwd VARCHAR2(400),
     cq_title VARCHAR2(200),
-    cq_cont VARCHAR2(3000),
+    cq_cont VARCHAR2(4000),
     cq_date DATE DEFAULT SYSDATE,
     cq_ment VARCHAR2(3000),
+    cq_doc varchar2(400),
     FOREIGN KEY (cq_id) REFERENCES c_member(m_id)
 );
 
 
 
---차량 정보 테이블
-CREATE TABLE c_car (
-    c_num number PRIMARY KEY,         -- 차 코드번호
-    c_name VARCHAR2(200) UNIQUE, -- 차 이름
-    c_brand VARCHAR2(200),          -- 차 브랜드
-    c_year VARCHAR2(200),             -- 차 연식
-    c_color VARCHAR2(200),            -- 차 색상
-    c_type varchar2(200),                -- 차 타입 (경형, RV)
-    c_oil   varchar2(200),                  --연료 종류
-    c_price number,                            --차 1분당 렌트비용         --int를 number로 바꿈
-    c_ok number,                                --렌트 가능 여부
-    c_img VARCHAR2(200)             --차량 이미지파일
+-- 차 정보 테이블
+create table c_car(
+    c_num number not null, -- 차량 코드번호
+    c_name varchar2(200) primary key, -- 차량 이름
+    c_brand varchar2(200)not null, -- 차량 브랜드
+    c_year varchar2(200) not null, -- 차량 년식
+    c_color varchar2(200) not null, -- 차량 색상
+    c_type varchar2(200) not null, -- 차량 상세차종
+    c_type2 varchar2(200) not null, -- 차량 차종
+    c_oil varchar2(200) not null, -- 차량 기름
+    c_price number not null, -- 차량 가격
+    c_ok int default 0, -- 차량 가능 여부
+    c_img varchar2(200) not null -- 차량 이미지
 );
 drop table c_car;
 
@@ -153,21 +172,82 @@ drop table c_rental;
 
 
 --결제 정보 저장 테이블
-CREATE TABLE c_order_info (
-    ID NUMBER PRIMARY KEY,
-    BUYER_NAME VARCHAR2(255),
-    BUYER_PHONE VARCHAR2(20),
-    MEMBER_EMAIL VARCHAR2(255),
-    BUYER_ADDRESS VARCHAR2(500),
-    BUY_DATE VARCHAR2(20),
-    PRODUCT_NAME VARCHAR2(255),
-    BUY_ID VARCHAR2(255),
-    MERCHANT_ID VARCHAR2(255),
-    PAY_PRICE NUMBER,
-    CARD_NUM VARCHAR2(255),
-    PAY_STATUS VARCHAR2(50),
-    POST_CODE NUMBER,
+create table c_order_info (
+    id number primary key,
+    buyer_name varchar2(255),
+    buyer_phone varchar2(20),
+    member_email varchar2(255),
+    buyer_address varchar2(500),
+    buy_date varchar2(20),
+    product_name varchar2(255),
+    buy_id varchar2(255),
+    merchant_id varchar2(255),
+    pay_price number,
+    card_num varchar2(255),
+    pay_status varchar2(50),
+    post_code number,
     refund varchar2(20)
 );
 
+--차량추가
+
+-- 자동차 insert
+-- 경형
+insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
+values(car_seq.nextval, '레이', 'KIA', '경형 RV', '경형', '가솔린', '2023', 'WHITE', 100, 'Gcar01.png');
+
+insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
+values(car_seq.nextval, '모닝', 'KIA', '경형 해치백', '경형', '가솔린', '2023', 'WHITE', 100, 'Gcar02.png');
+
+insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
+values(car_seq.nextval, '캐스퍼', '현대', '경형 SUV', '경형', '가솔린', '2023', 'BLUE', 200, 'Gcar03.JPG');
+
+-- 소형
+insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
+values(car_seq.nextval, '해치백', 'MINI', '소형 해치백', '소형', '가솔린', '2024', 'RED', 200, 'Scar01.png');
+
+insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
+values(car_seq.nextval, '코나', '현대', '소형 SUV', '소형', '가솔린', '2023', 'GRAY', 200, 'Scar02.JPG');
+
+-- 중형 세단
+insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
+values(car_seq.nextval, 'K5', 'KIA', '중형 세단', '중형 세단', 'LPG, 가솔린', '2022', 'BLACK', 250, 'Jcar01.png');
+
+insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
+values(car_seq.nextval, '쏘나타', '현대', '중형 세단', '중형 세단', 'LPG, 가솔린', '2019', 'LIGHTGRAY', 250, 'Jcar02.JPG');
+
+insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
+values(car_seq.nextval, '3 시리즈', 'BMW', '중형 세단', '중형 세단', '가솔린, 디젤', '2019', 'WHITE', 300, 'Jcar03.png');
+
+insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
+values(car_seq.nextval, '아테온', '폭스바겐', '중형 세단', '중형 세단', '디젤', '2019', 'BLUE', 300, 'Jcar04.JPG');
+
+insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
+values(car_seq.nextval, 'A4', '아우디', '중형 세단', '중형 세단', '가솔린, 디젤', '2019', 'BLACK', 300, 'Jcar05.png');
+
+-- 중형 SUV
+insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
+values(car_seq.nextval, '싼타페 하이브리드', '현대', '중형 SUV', '중형 SUV', '가솔린, 하이브리드', '2023', 'WHITE', 350, 'Jcar06.png');
+
+insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
+values(car_seq.nextval, '쏘렌토', 'KIA', '중형 SUV', '중형 SUV', '가솔린, 디젤', '2023', 'WHITE', 350, 'Jcar07.png');
+
+insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
+values(car_seq.nextval, 'GV70', '제네시스', '중형 SUV', '중형 SUV', '가솔린, 디젤', '2022', 'BLACK', 350, 'Jcar08.png');
+
+insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
+values(car_seq.nextval, 'X3', 'BMW', '중형 SUV', '중형 SUV', '가솔린, 디젤', '2022', 'BLACK', 350, 'Jcar09.png');
+
+insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
+values(car_seq.nextval, 'SQ5', '아우디', '중형 SUV', '중형 SUV', '가솔린', '2021', 'WHITE', 350, 'Jcar10.png');
+
+-- 전기차
+insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
+values(car_seq.nextval, '코나 Electric', '현대', '소형 SUV', '전기차', '전기', '2023', 'RED', 400, 'Icar01.JPG');
+
+insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
+values(car_seq.nextval, '아이오닉6', '현대', '중형 세단', '전기차', '전기', '2023', 'GRAY', 400, 'Icar02.JPG');
+
+insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
+values(car_seq.nextval, '니로 EV', 'KIA', '소형 SUV', '전기차', '전기', '2024', 'RED', 400, 'Icar03.png');
 
