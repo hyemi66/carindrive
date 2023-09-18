@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="path" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html>
@@ -75,19 +76,25 @@
 		
 				<div id="member">
 					<h2>&nbsp;예약자 정보</h2>
-					아이디: <span>${rental.cr_mid}</span><br> 연락처: <span>${mem.m_phone}</span><br>
+					아이디: <span>${rental.cr_mid}</span><br>
+					연락처: <span>${mem.m_phone}</span><br>
 					이름: <span>${mem.m_name}</span>
 					<hr>
 
 					<h2>&nbsp;차량 정보</h2>
-					차종: <span>${car.c_name}</span><br> 차량색상: <span>${car.c_color}</span><br>
+					차종: <span>${car.c_name}</span><br>
+					차량색상: <span>${car.c_color}</span><br>
 					연식: <span>${car.c_year}년식</span><br>
 				</div>
 
 				<div id="car">
 					<h2>&nbsp;렌트 정보</h2>
-					예약일자: <span>${rental.cr_rdate}</span><br> 실제 대여일자: <span>${rental.cr_sdate}부터</span><br>
-					반납일자: <span>${rental.cr_edate}까지</span><br> 렌트 비용: <span>${total_price}원</span><br>
+					예약일자: <span>${rental.cr_rdate}</span><br>
+					실제 대여일자: <span>${rental.cr_sdate}부터</span><br>
+					반납일자: <span>${rental.cr_edate}까지</span><br>
+					렌트 비용: <span><fmt:formatNumber value="${total_price}" type="number" pattern="#,###"/>원</span><hr>
+					
+					
 <button onclick="payMent('card', '${rental.cr_mid}', '${mem.m_phone}', '${mem.m_name}', '${car.c_name}', '${car.c_color}', '${car.c_year}', ${total_price})">카드 결제</button>
 <button onclick="payMent('kakao', '${rental.cr_mid}', '${mem.m_phone}', '${mem.m_name}', '${car.c_name}', '${car.c_color}', '${car.c_year}', ${total_price})">카카오페이 결제</button>
 

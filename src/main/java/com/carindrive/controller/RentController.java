@@ -95,7 +95,6 @@ public class RentController {
 
 			// 렌트 기간 계산
 			//DateTimeFormatter를 이용하여 날짜와 시간 문자열을 파싱하여 LocalDateTime 객체로 변환
-
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 			LocalDateTime stard_date = LocalDateTime.parse(rental.getCr_sdate(), formatter);
 			LocalDateTime end_date = LocalDateTime.parse(rental.getCr_edate(), formatter);
@@ -104,13 +103,12 @@ public class RentController {
 			Duration duration = Duration.between(stard_date, end_date);
 			long minutes = duration.toMinutes();	//몇분동안 렌트했는지 파악
 
-			// 1분당 렌트 가격
-			double one_price = Math.ceil(minutes) * (car.getC_price() / 60.0);
+			// 렌트 가격 계산
+			double one_price = minutes * car.getC_price();
 
 			//DecimalFormat 는 숫자의 출력형태를 변환한다.
-			DecimalFormat decimalFormat = new DecimalFormat("#");
+			DecimalFormat decimalFormat = new DecimalFormat("#"); //소수점 제외
 			String total_price = decimalFormat.format(one_price);
-			//total_price는 단지 jsp파일에서 1,000 단위로 보이게 하기위함
 
 			//렌트 비용을 c_rental 테이블에 추가
 			this.rentService.insertCost(rental.getCr_num(),one_price);

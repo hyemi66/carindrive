@@ -24,7 +24,6 @@ WHERE c_name LIKE '%모닝%';
 update c_order_info set refund = '환불완료' where merchant_Id = 'merchant_1694756834113';
 
 
-select * from c_car where c_name =
 --ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 select * from c_member order by m_name asc; -- 사용자 확인
 select * from c_car order by c_num asc; --차량 확인
