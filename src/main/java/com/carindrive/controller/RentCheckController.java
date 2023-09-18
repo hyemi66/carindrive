@@ -188,7 +188,7 @@ public class RentCheckController {
 	        return mav;
 	    } catch (Exception e) {
 	        e.printStackTrace();
-	        mav.setViewName("/rent/rent_Check_List_Null");
+	        mav.setViewName("/rent/rent_Check_List");
 	        return mav;
 	    }
 	}

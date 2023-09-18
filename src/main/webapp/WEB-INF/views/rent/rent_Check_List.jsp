@@ -28,11 +28,13 @@
     <div id="bigbox">
         <p id="bar">예약 내역</p>
         
+        <%--라디오 버튼 --%>
         <div>
 		    <label><input type="radio" name="filter" value="all" checked> 환불 포함 보기</label>
 		    <label><input type="radio" name="filter" value="notRefunded"> 환불 제외 보기</label>
 		</div>
         
+        <%--주문 항목 --%>
         <c:forEach var="orderInfo" items="${orderInfos}" varStatus="status">
             <div class="box ${status.index > 0 ? 'hidden-history' : ''}">
                 <div class="img">
@@ -40,7 +42,7 @@
                 </div>
                 <div class="member">
                     <h2>${status.index == 0 ? '최근에 예약한 차량' : '예약 내역'}</h2>
-                    렌탈 대여/반납 일시 :<span>${rentalMap[orderInfo.merchantId].cr_sdate} - ${rentalMap[orderInfo.merchantId].cr_edate}</span><br>
+                    렌탈 대여/반납 일시 : <span>${rentalMap[orderInfo.merchantId].cr_sdate} - ${rentalMap[orderInfo.merchantId].cr_edate}</span><br>
                     예약자 성함: <span>${memberInfo.m_name}</span><br>
                     예약자 연락처: <span>${formattedPhone}</span><br>
                     예약한 차량: <span>${orderInfo.buy_product_name}</span><br>
@@ -70,30 +72,40 @@
         </c:forEach>
 
 <script type="text/javascript">
-document.addEventListener('DOMContentLoaded', function() {  // 페이지 로딩 완료 후 실행
-    const boxes = document.querySelectorAll('.box');  // 모든 주문 박스 선택
-
-    // 라디오 버튼의 상태에 따라 주문 목록 필터링
-    document.querySelectorAll('input[name="filter"]').forEach(radio => {
-        radio.addEventListener('change', function() {
-            if (this.value === 'all') {
-                boxes.forEach(box => {
-                    box.style.display = 'flex';  // 'block' 대신 'flex' 사용
-                });
-            } else if (this.value === 'notRefunded') {
-                boxes.forEach(box => {
-                    const refundStatus = box.querySelector('span[style="color: red;"]');
-                    if (refundStatus && refundStatus.textContent.trim() === '환불완료') {
-                        box.style.display = 'none';
-                    } else {
-                        box.style.display = 'flex';  // 'block' 대신 'flex' 사용
-                    }
-                });
-            }
-        });
-    });
-});
+		//문서의 내용이 모두 로드된 후에 함수를 실행
+		document.addEventListener('DOMContentLoaded', function() {
+		    // 모든 'box' 클래스를 가진 요소를 선택
+		    const boxes = document.querySelectorAll('.box');
+		    // 'filter'라는 이름을 가진 모든 라디오 버튼을 선택하여 반복 처리
+		    document.querySelectorAll('input[name="filter"]').forEach(radio => {
+		        // 라디오 버튼의 값이 변경될 때의 이벤트를 등록합니다.
+		        radio.addEventListener('change', function() {
+		            // 선택된 라디오 버튼의 값이 'all'인 경우
+		            if (this.value === 'all') {
+		                // 모든 'box' 요소를 표시
+		                boxes.forEach(box => {
+		                    box.style.display = 'flex';
+		                });
+		            } 
+		            // 선택된 라디오 버튼의 값이 'notRefunded'인 경우
+		            else if (this.value === 'notRefunded') {
+		                // 각 'box' 요소에 대해서 반복 처리
+		                boxes.forEach(box => {// 각 'box' 내부에서 'color: red;' 스타일을 가진 <span> 요소를 찾음
+		                    const refundStatus = box.querySelector('span[style="color: red;"]');
+		                    // 해당 상태가 '환불완료'이면 'box' 요소를 숨김
+		                    if (refundStatus && refundStatus.textContent.trim() === '환불완료') {
+		                        box.style.display = 'none';
+		                    } // 그렇지 않으면 'box' 요소를 표시합니다.
+		                    else {
+		                        box.style.display = 'flex';
+		                    }
+		                });
+		            }
+		        });
+		    });
+		});
 </script>
+
 
     </div>
 
