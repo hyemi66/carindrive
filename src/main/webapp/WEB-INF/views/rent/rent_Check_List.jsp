@@ -20,6 +20,7 @@
     <title>예약 확인</title>
     <link href="${path}/css/rent_Check.css" rel="stylesheet" />
     <script src="${path}/js/jquery.js"></script>
+    <script src="${path}/js/rentList.js"></script>
 </head>
 <body>
     <jsp:include page="../include/header.jsp"/>
@@ -66,26 +67,6 @@
             </div>
         </c:forEach>
     </div>
-    
-    <script type="text/javascript">
-    $(document).ready(function() {
-        $('input[name="filter"]').change(function() {
-            const value = $(this).val();
-            if (value === "all") {
-                $('.box').show();
-            } else if (value === "notRefunded") {
-                $('.box').each(function() {
-                    const paymentStatus = $(this).find('span[style="color: blue;"], span[style="color: red;"]').text().trim();
-                    if (paymentStatus === "환불완료") {
-                        $(this).hide();
-                    } else {
-                        $(this).show();
-                    }
-                });
-            }
-        });
-    });
-</script>
 
     <jsp:include page="../include/footer.jsp"/>
 </body>

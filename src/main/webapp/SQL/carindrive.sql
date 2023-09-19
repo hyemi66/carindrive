@@ -1,58 +1,11 @@
---테스트 데이터 추가
-insert into c_member (m_id, m_pwd, m_name, m_phone)values('z','1','홍길동','010-1111-2222'); --아이디 z 비밀번호 1
-
-INSERT INTO c_car (c_num, c_name, c_brand, c_year, c_color, c_type, c_oil, c_price, c_ok, c_img) --차량추가
-VALUES (car_seq.nextval, '레이', '기아', '2023', '흰색', '경차', '가솔린', 500, 0, 'Gcar01.png');
-INSERT INTO c_car (c_num, c_name, c_brand, c_year, c_color, c_type, c_oil, c_price, c_ok, c_img) --차량추가
-VALUES (car_seq.nextval, '모닝', '기아', '2023', '검정색', '경차', '가솔린', 500, 0, 'Gcar02.png');
-
 --시퀀스 1로 초기화
 update c_car set c_num = '1';
 update c_rental set cr_num = '1';
 update c_order_info set id ='1';
 
-SELECT TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS') AS current_datetime FROM DUAL;
-
-select * from c_rental where cr_mid = 'zzzz';
 
 commit; -- 설정 후 반드시 커밋하고 테스트 할 것
-SELECT * FROM c_rental WHERE cr_mid = 'zzzz';
-SELECT * FROM c_rental WHERE cr_cname = 'ray';
 
-select * from c_car where c_name = '모닝';
-SELECT * FROM c_car
-WHERE c_name LIKE '%모닝%';
-
-update c_order_info set refund = '환불완료' where merchant_Id = 'merchant_1694756834113';
-
-
---ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-
-select * from c_rental where cr_order = 'merchant_1694430815754';
-
-select * from c_member where m_id = 'zzzz';
-select * from c_rental where cr_mid ='zzzz';
-SELECT *FROM c_rental WHERE cr_mid = 'zzzz' AND cr_num = (
-    SELECT MAX(cr_num)
-    FROM c_rental
-    WHERE cr_mid = 'zzzz'
-);
-SELECT * FROM c_rental WHERE cr_mid = #{cr_mid} ORDER BY cr_rdate DESC FETCH FIRST 1 ROW ONLY;
-SELECT *FROM c_rental WHERE cr_mid = 'zzzz' AND cr_num = (SELECT MAX(cr_num) FROM c_rental WHERE cr_mid = 'zzzz');
-
-select * from c_rental where cr_order = 'merchant_1694684830756';
- 
- 
-
-
-
-select * from c_order_info where buyer_name = 'zzzz';
-
-
-update c_order_info set refund = '환불완료'
-
-
-select * from c_order_info where buyer_name = 'z';
 --ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 --확인 코드
 select * from c_member order by m_name asc; -- 사용자 확인
@@ -66,7 +19,7 @@ CREATE SEQUENCE cq_seq START WITH 1 INCREMENT BY 1 NOCACHE;  -- Q&A 테이블 �
 CREATE SEQUENCE car_seq START WITH 1 INCREMENT BY 1 NOCACHE; -- 차 정보 테이블 시퀀스
 CREATE SEQUENCE cr_seq START WITH 1 INCREMENT BY 1 NOCACHE; -- 예약(렌탈) 테이블 시퀀스
 CREATE SEQUENCE co_seq START WITH 1 INCREMENT BY 1 NOCACHE; -- 결제 정보 테이블 시퀀스
-CREATE SEQUENCE cm_seq START WITH 1 INCREMENT BY 1 NOCACHE; -- 멤버 테이블 시퀀스 (테스트용)
+
 
 --시퀀스 삭제
 drop SEQUENCE cs_seq;
@@ -152,23 +105,21 @@ create table c_car(
     c_ok int default 0, -- 차량 가능 여부
     c_img varchar2(200) not null -- 차량 이미지
 );
-drop table c_car;
 
 
 -- 예약 테이블
 CREATE TABLE c_rental (
     cr_num INT PRIMARY KEY,                    -- 예약번호
-    cr_mid VARCHAR2(30),                         -- 유저 아이디
-    cr_cname VARCHAR2(200),                    --차량 아이디(차량 고유 코드번호)    --cr_cid를 cr_cname으로 바꿈
-    cr_rdate VARCHAR2(200),                      --예약 일자
+    cr_mid VARCHAR2(30),                          -- 고객 아이디
+    cr_cname VARCHAR2(200),                     --차 이름            --cr_cid를 cr_cname으로 바꿈
+    cr_rdate VARCHAR2(200),                       --예약 일자
     cr_sdate VARCHAR2(200),                      --실제 대여일
     cr_edate VARCHAR2(200),                      --반납 일자
-    cr_price INT,                           --렌트 비용
-    cr_order VARCHAR2(100),            --주문 번호0
+    cr_price INT,                                       --렌트 비용
+    cr_order VARCHAR2(100),                       --주문 번호
     FOREIGN KEY (cr_mid) REFERENCES c_member(m_id),
     FOREIGN KEY (cr_cname) REFERENCES c_car(c_name)
 );
-drop table c_rental;
 
 
 --결제 정보 저장 테이블
