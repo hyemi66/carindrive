@@ -22,7 +22,7 @@ public class HomeController {
 	public ModelAndView home(CarVO cv) {
 		ModelAndView mm = new ModelAndView();
 		
-		List<CarVO> ml = this.rentService.getCarList(cv); //겹치는 코드가있어서 나중에 수정예정
+		List<CarVO> ml = this.rentService.getCarList(cv);
 		
 		mm.addObject("ml", ml);
 		mm.setViewName("main/index");

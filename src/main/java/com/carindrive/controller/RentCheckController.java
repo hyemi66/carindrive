@@ -166,7 +166,7 @@ public class RentCheckController {
 	           
 	           for (OrderVO order : orderInfos) {
 	                CarVO carInfo = null;
-	                //차량 정보를 불러오는 mybatis문 orders에 들어있는 차량이름으로 검색
+	                //차량 정보를 불러오는 mybatis문 orders에 들어있는 차량 이름으로 검색
 	                
 	                String[] parts = order.getBuy_product_name().split(" ");
 	                String carName = parts[parts.length - 1];
@@ -200,6 +200,9 @@ public class RentCheckController {
 
 
 	//환불 관련 메서드
+	
+	@RequestMapping(value="refund_Check")
+	public void refund_Check() {};
 
 	//토큰을 받아오는 코드
 	// IAMPORT의 API 키와 시크릿
@@ -325,7 +328,8 @@ public class RentCheckController {
 	public void refund(@RequestParam String order_number, HttpServletResponse response, HttpSession session) throws Exception {
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
-
+		
+		try {
 		// 로그인 고객정보 가져오기
 		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
 
@@ -367,18 +371,12 @@ public class RentCheckController {
 
 		double refundAmount;
 		
-		System.out.println("하루전");
-		System.out.println(oneDayBeforeRental);
-		
-		System.out.println("이틀전");
-		System.out.println(twoDaysBeforeRental);
-
 		// 하루 전 환불 불가능
-		if (now.isAfter(oneDayBeforeRental)) { 	//2023-09-14T14:39
+		if (now.isAfter(oneDayBeforeRental)) {
 		    alertMessage(out, "환불이 불가능한 시간입니다.");
 		}
 		// 이틀 전 환불
-		else if (now.isAfter(twoDaysBeforeRental) && now.isBefore(oneDayBeforeRental)) {	//2023-09-13T14:39
+		else if (now.isAfter(twoDaysBeforeRental) && now.isBefore(oneDayBeforeRental)) {	
 		    refundAmount = rentalRefund.getCr_price() * 0.5;
 		    processRefund(token, order_number, refundAmount, out, "환불 처리 되었으나, 환불 금액은 50%입니다.");
 		}
@@ -387,9 +385,16 @@ public class RentCheckController {
 		    refundAmount = rentalRefund.getCr_price();
 		    processRefund(token, order_number, refundAmount, out, "환불이 완료 되었습니다!");
 		}
-
-
 		out.close();
+		
+		}catch (Exception e) {
+			out.println("<script>");
+			out.println("alert('세션이 만료되었습니다 다시 로그인해주세요!');");
+			out.println("location.href='/member/m_login';");//로그인창으로 이동
+			out.println("</script>");
+	    } finally {
+	        out.close();
+	    }
 	}
 
 	//반복되는 자바스크립트 코드 메서드화
