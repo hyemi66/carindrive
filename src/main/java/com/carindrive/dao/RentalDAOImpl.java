@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import com.carindrive.vo.CarVO;
 import com.carindrive.vo.MemberVO;
-import com.carindrive.vo.OrderVO;
 import com.carindrive.vo.RentalVO;
 
 @Repository

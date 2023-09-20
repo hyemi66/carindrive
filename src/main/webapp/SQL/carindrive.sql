@@ -39,7 +39,7 @@ drop table c_member;
 
 commit;
 
- --삭제 코드
+ --데이터 삭제
 delete from c_member;
 delete from c_car;
 delete from c_rental; --차량 렌트 기록 삭제 --렌트기록은 0, 1로 결제 처리를 했는지 여부를 판단하고 차량과 연결지어서 예약 가능 불가능으로 나눠야함
@@ -47,6 +47,7 @@ delete from c_order_info; --결제 정보 삭제
 commit;--삭제후 커밋해야 웹에 적용됨
 
 
+select * from c_rental where cr_cname = 
 --ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 --유저 정보 테이블
 CREATE TABLE c_member (

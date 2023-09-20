@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="path" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html>
@@ -14,43 +15,16 @@
   <jsp:include page="../include/header.jsp"/>
   
   <div class="clear"></div>
+  
 <form method="post">
 <!-- 로그인 아이디 값을 히든으로 넘김 -->
 <input type="hidden" name="cr_mid" id="cr_mid" value="${memberInfo.m_id}" required><br>
+<!-- 차 이름값을 히든으로 넘김 -->
 <%-- 예약 선택 메뉴 --%>
-<div class="mainmenu">
-<div id="menu01">
-	<input type="checkbox" name="accordian" id="car01">
-	<label for="car01">빌리는 날짜 및 시간</label>
-	<div><p><input type="datetime-local" name="cr_sdate" id="cr_sdate" required></p></div>
-</div>
-<div  id="menu02">
-	<input type="checkbox" name="accordian" id="car02">
-	<label for="car02">반납하는 날짜</label>
-	<div><p><input type="datetime-local" name="cr_edate" id="cr_edate" required></p></div>
-</div>
-<div  id="menu03">
-	<input type="checkbox" name="accordian" id="car03">
-	<label for="car03">전체</label>
-	<div>
-		<p><a href="${path}/rent/rent">전체</a></p><br>
-		<p><a href="${path}/rent/rent">경형</a></p><br>
-		<p><a href="${path}/rent/rent">소형</a></p><br>
-		<p><a href="${path}/rent/rent">중형(세단)</a></p><br>
-		<p><a href="${path}/rent/rent">중형(SUV)</a></p><br>
-		<p><a href="${path}/rent/rent">전기차</a></p><br>
-	</div>
-</div>
-<div  id="menu04">
-	<input type="checkbox" name="accordian" id="car04">
-	<label for="car04">대여시간</label>
-	<div><p><input type="time">&nbsp;&nbsp;&nbsp;~&nbsp;&nbsp;&nbsp;<input type="time"></p></div>
-</div>
-</div>
-
 <div class="clear"></div>
 
 <br><br>
+
 <%-- 차종 선택별 메뉴 --%>
 <div class="tab_content">
 	<input type="radio" name="tabmenu" id="tab01" checked>
@@ -66,567 +40,217 @@
 	<input type="radio" name="tabmenu" id="tab06">
 	<label for="tab06">전기차</label>
 	
-		<!-- 임시 코드 -->
-        <input type="hidden" name="cr_cname" id="cr_cname" value="코나">
+	
+	<script>
+		function showCar(carname) {
+		    var cr_cname = carname.value;
+		    if (cr_cname) {
+		        window.location.href = "/rent/rentInfo?cr_cname=" + cr_cname;
+		    }
+		}
 
+	</script>
+	
+	<input type="hidden" name="cr_cname" id="cr_cname" value="${cr_cname}">
 	
 	<div class="conbox con1"> <!-- 전체 -->
+	<form>
 		<table>
-			<tr>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Gcar01.png" >
-							<br><br><br>
-							<hr>
-							<b>KIA 레이</b><br><br>
-							경형 RV | 가솔린 | 2023<br><br>
-							<p>\100,000</p>
-							
-							<div id="box02"><input type="submit" value="예 약 하 기""></div>
-						</a>
-					</div>
-				</td>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Gcar02.png" >
-							<br><br><br>
-							<hr>
-							<b>KIA 모닝</b><br><br>
-							경형 해치백 | 가솔린 | 2023<br><br>
-							<p>\100,000</p>
-							<div id="box02"><input type="button" value="예 약 하 기" onclick="reserveCar(2)"></div>
-						</a>
-					</div>
-				</td>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Gcar03.JPG" >
-							<br><br><br>
-							<hr>
-							<b>현대 캐스퍼</b><br><br>
-							경형 SUV | 가솔린 | 2023<br><br>
-							<p>\100,000</p>
-							<div id="box02"><input type="button" value="예 약 하 기" onclick="reserveCar(3)"></div>
-						</a>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Scar01.png" >
-							<br><br><br>
-							<hr>
-							<b>미니 해치백</b><br><br>
-							소형 해치백 | 가솔린 | 2024<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Scar02.JPG" >
-							<br><br><br>
-							<hr>
-							<b>현대 코나</b><br><br>
-							소형 SUV | 가솔린 | 2023<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Jcar01.png" >
-							<br><br><br>
-							<hr>
-							<b>기아 K5</b><br><br>
-							중형 세단 | LPG, 가솔린 | 2022<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Jcar02.JPG" >
-							<br><br><br>
-							<hr>
-							<b>현대 쏘나타</b><br><br>
-							중형 세단 | LPG, 가솔린 | 2019<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Jcar03.png" >
-							<br><br><br>
-							<hr>
-							<b>BMW 3 시리즈</b><br><br>
-							중형 세단 | 가솔린, 디젤 | 2019<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Jcar04.JPG" >
-							<br><br><br>
-							<hr>
-							<b>폭스바겐 아테온</b><br><br>
-							중형 세단 | 디젤 | 2019<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Jcar05.png" >
-							<br><br><br>
-							<hr>
-							<b>아우디 A4</b><br><br>
-							중형 세단 | 가솔린, 디젤 | 2019<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Jcar06.png" >
-							<br><br><br>
-							<hr>
-							<b>현대 싼타페 하이브리드</b><br><br>
-							중형 SUV | 가솔린, 하이브리드 | 2023<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Jcar07.png" >
-							<br><br><br>
-							<hr>
-							<b>KIA 쏘렌토</b><br><br>
-							중형 SUV | 가솔린, 디젤 | 2023<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Jcar08.png" >
-							<br><br><br>
-							<hr>
-							<b>제네시스 GV70</b><br><br>
-							중형 SUV | 가솔린, 디젤 | 2022<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Jcar09.png" >
-							<br><br><br>
-							<hr>
-							<b>BMW X3</b><br><br>
-							중형 SUV | 가솔린, 디젤 | 2022<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Jcar10.png" >
-							<br><br><br>
-							<hr>
-							<b>아우디 SQ5</b><br><br>
-							중형 SUV | 가솔린 | 2021<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Icar01.JPG" >
-							<br><br><br>
-							<hr>
-							<b>현대 코나 Electric</b><br><br>
-							소형 SUV | 전기 | 2023<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Icar02.JPG" >
-							<br><br><br>
-							<hr>
-							<b>현대 아이오닉6</b><br><br>
-							중형 세단 | 전기 | 2023<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Icar03.png" >
-							<br><br><br>
-							<hr>
-							<b>KIA 니로 EV</b><br><br>
-							소형 SUV | 전기 | 2024<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-			</tr>
+			<c:if test="${!empty clist}">
+				<tr>
+					<c:forEach var="c" items="${clist}" varStatus="status">
+						<input type="hidden" name=currentCar${status.index} value="${c.c_name}" >
+						<c:if test="${status.index % 3 == 0}">
+							</tr><tr>
+						</c:if>
+						<td>
+							<div id="box01">
+								<br><br><br>
+								<img id="imgC" src="../images/car/${c.c_img}">
+								<br><br><br>
+								<hr>
+								<b>${c.c_brand} ${c.c_name}</b><br>
+								${c.c_type} | ${c.c_oil} | ${c.c_year} <br><br>
+								<p>
+									1시간 : \ <fmt:formatNumber value="${c.c_price*60}" pattern="#,###"/>
+									<br>
+									24시간 : \ <fmt:formatNumber value="${c.c_price*60*24}" pattern="#,###"/>
+								</p>
+								<div id="box02">
+									<input type="button" value="예 약 하 기" onclick="showCar(currentCar${status.index})" />
+								</div>
+							</div>
+						</td>
+					</c:forEach>
+				</tr>
+			</c:if>
 		</table>
+	</form>
 	</div>
 	<div class="conbox con2"> <!-- 경형 -->
 		<table>
-			<tr>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Gcar01.png" >
-							<br><br><br>
-							<hr>
-							<b>KIA 레이</b><br><br>
-							경형 RV | 가솔린 | 2023<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Gcar02.png" >
-							<br><br><br>
-							<hr>
-							<b>KIA 모닝</b><br><br>
-							경형 해치백 | 가솔린 | 2023<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Gcar03.JPG" >
-							<br><br><br>
-							<hr>
-							<b>현대 캐스퍼</b><br><br>
-							경형 SUV | 가솔린 | 2023<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-			</tr>
+			<c:if test="${!empty clist}">
+				<tr>
+					<c:forEach var="c" items="${clist}" varStatus="status">
+						<c:if test="${status.index % 3 == 0}">
+							</tr><tr>
+						</c:if>
+						<c:if test="${c.c_type2.equals('경형')}">
+							<td>
+								<div id="box01">
+									<br><br><br>
+									<img id="imgC" src="../images/car/${c.c_img}">
+									<br><br><br>
+									<hr>
+									<b>${c.c_brand} ${c.c_name}</b><br>
+									${c.c_type} | ${c.c_oil} | ${c.c_year} <br><br>
+									<p>
+										1시간 : \ <fmt:formatNumber value="${c.c_price*60}" pattern="#,###"/>
+										<br>
+										24시간 : \ <fmt:formatNumber value="${c.c_price*60*24}" pattern="#,###"/>
+									</p>
+									<div id="box02">
+										
+									</div>
+								</div>
+							</td>
+						</c:if>
+					</c:forEach>
+				</tr>
+			</c:if>
 		</table>
 	</div>
 	<div class="conbox con3"> <!-- 소형 -->
 		<table>
-			<tr>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Scar01.png" >
-							<br><br><br>
-							<hr>
-							<b>미니 해치백</b><br><br>
-							소형 해치백 | 가솔린 | 2024<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Scar02.JPG" >
-							<br><br><br>
-							<hr>
-							<b>현대 코나</b><br><br>
-							소형 SUV | 가솔린 | 2023<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-			</tr>
+			<c:if test="${!empty clist}">
+				<tr>
+					<c:forEach var="c" items="${clist}" varStatus="status">
+						<c:if test="${status.index % 3 == 0}">
+							</tr><tr>
+						</c:if>
+						<c:if test="${c.c_type2.equals('소형')}">
+							<td>
+								<div id="box01">
+									<br><br><br>
+									<img id="imgC" src="../images/car/${c.c_img}">
+									<br><br><br>
+									<hr>
+									<b>${c.c_brand} ${c.c_name}</b><br>
+									${c.c_type} | ${c.c_oil} | ${c.c_year} <br><br>
+									<p>
+										1시간 : \ <fmt:formatNumber value="${c.c_price*60}" pattern="#,###"/>
+										<br>
+										24시간 : \ <fmt:formatNumber value="${c.c_price*60*24}" pattern="#,###"/>
+									</p>
+									<div id="box02">
+									</div>
+								</div>
+							</td>
+						</c:if>
+					</c:forEach>
+				</tr>
+			</c:if>
 		</table>
 	</div>
 	<div class="conbox con4"> <!-- 중형(세단) -->
 		<table>
-			<tr>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Jcar01.png" >
-							<br><br><br>
-							<hr>
-							<b>기아 K5</b><br><br>
-							중형 세단 | LPG, 가솔린 | 2022<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Jcar02.JPG" >
-							<br><br><br>
-							<hr>
-							<b>현대 쏘나타</b><br><br>
-							중형 세단 | LPG, 가솔린 | 2019<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Jcar03.png" >
-							<br><br><br>
-							<hr>
-							<b>BMW 3 시리즈</b><br><br>
-							중형 세단 | 가솔린, 디젤 | 2019<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Jcar04.JPG" >
-							<br><br><br>
-							<hr>
-							<b>폭스바겐 아테온</b><br><br>
-							중형 세단 | 디젤 | 2019<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Jcar05.png" >
-							<br><br><br>
-							<hr>
-							<b>아우디 A4</b><br><br>
-							중형 세단 | 가솔린, 디젤 | 2019<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-			</tr>
+			<c:if test="${!empty clist}">
+				<tr>
+					<c:forEach var="c" items="${clist}">
+						<c:if test="${c.c_type2.equals('중형 세단')}">
+							<td>
+								<div id="box01">
+									<br><br><br>
+									<img id="imgC" src="../images/car/${c.c_img}">
+									<br><br><br>
+									<hr>
+									<b>${c.c_brand} ${c.c_name}</b><br>
+									${c.c_type} | ${c.c_oil} | ${c.c_year} <br><br>
+									<p>
+										1시간 : \ <fmt:formatNumber value="${c.c_price*60}" pattern="#,###"/>
+										<br>
+										24시간 : \ <fmt:formatNumber value="${c.c_price*60*24}" pattern="#,###"/>
+									</p>
+									<div id="box02">
+									</div>
+								</div>
+							</td>
+						</c:if>
+						<c:if test="${c.c_name == '3 시리즈'}">
+							</tr><tr>
+						</c:if>
+					</c:forEach>
+				</tr>
+			</c:if>
 		</table>
 	</div>
 	<div class="conbox con5"> <!-- 중형(SUV) -->
 		<table>
-			<tr>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Jcar06.png" >
-							<br><br><br>
-							<hr>
-							<b>현대 싼타페 하이브리드</b><br><br>
-							중형 SUV | 가솔린, 하이브리드 | 2023<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Jcar07.png" >
-							<br><br><br>
-							<hr>
-							<b>KIA 쏘렌토</b><br><br>
-							중형 SUV | 가솔린, 디젤 | 2023<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Jcar08.png" >
-							<br><br><br>
-							<hr>
-							<b>제네시스 GV70</b><br><br>
-							중형 SUV | 가솔린, 디젤 | 2022<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Jcar09.png" >
-							<br><br><br>
-							<hr>
-							<b>BMW X3</b><br><br>
-							중형 SUV | 가솔린, 디젤 | 2022<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Jcar10.png" >
-							<br><br><br>
-							<hr>
-							<b>아우디 SQ5</b><br><br>
-							중형 SUV | 가솔린 | 2021<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-			</tr>
+			<c:if test="${!empty clist}">
+				<tr>
+					<c:forEach var="c" items="${clist}" varStatus="status">
+						<c:if test="${c.c_type2.equals('중형 SUV')}">
+							<td>
+								<div id="box01">
+									<br><br><br>
+									<img id="imgC" src="../images/car/${c.c_img}">
+									<br><br><br>
+									<hr>
+									<b>${c.c_brand} ${c.c_name}</b><br>
+									${c.c_type} | ${c.c_oil} | ${c.c_year} <br><br>
+									<p>
+										1시간 : \ <fmt:formatNumber value="${c.c_price*60}" pattern="#,###"/>
+										<br>
+										24시간 : \ <fmt:formatNumber value="${c.c_price*60*24}" pattern="#,###"/>
+									</p>
+									<div id="box02">
+									</div>
+								</div>
+							</td>
+						</c:if>
+						<c:if test="${status.index % 3 == 0}">
+							</tr><tr>
+						</c:if>
+					</c:forEach>
+				</tr>
+			</c:if>
 		</table>
 	</div>
 	<div class="conbox con6"> <!-- 전기차 -->
 		<table>
-			<tr>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Icar01.JPG" >
-							<br><br><br>
-							<hr>
-							<b>현대 코나 Electric</b><br><br>
-							소형 SUV | 전기 | 2023<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Icar02.JPG" >
-							<br><br><br>
-							<hr>
-							<b>현대 아이오닉6</b><br><br>
-							중형 세단 | 전기 | 2023<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-				<td>
-					<div id="box01">
-						<a href="${path}/rent/rentOK">
-							<br><br><br>
-							<img id="imgC" src="${path}/images/car/Icar03.png" >
-							<br><br><br>
-							<hr>
-							<b>KIA 니로 EV</b><br><br>
-							소형 SUV | 전기 | 2024<br><br>
-							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
-						</a>
-					</div>
-				</td>
-			</tr>
+			<c:if test="${!empty clist}">
+				<tr>
+					<c:forEach var="c" items="${clist}" varStatus="status">
+						<c:if test="${status.index % 3 == 0}">
+							</tr><tr>
+						</c:if>
+						<c:if test="${c.c_type2.equals('전기차')}">
+							<td>
+								<div id="box01">
+									<br><br><br>
+									<img id="imgC" src="../images/car/${c.c_img}">
+									<br><br><br>
+									<hr>
+									<b>${c.c_brand} ${c.c_name}</b><br>
+									${c.c_type} | ${c.c_oil} | ${c.c_year} <br><br>
+									<p>
+										1시간 : \ <fmt:formatNumber value="${c.c_price*60}" pattern="#,###"/>
+										<br>
+										24시간 : \ <fmt:formatNumber value="${c.c_price*60*24}" pattern="#,###"/>
+									</p>
+									<div id="box02">
+									</div>
+								</div>
+							</td>
+						</c:if>
+					</c:forEach>
+				</tr>
+			</c:if>
 		</table>
 	</div>
 </div>
 </form>
+
 
 <br>
 <br>

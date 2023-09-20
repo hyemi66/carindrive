@@ -23,52 +23,21 @@
   <jsp:include page="../include/header.jsp"/>
   
   <div class="clear"></div>
-<%-- 예약 선택 메뉴 --%>
-<div class="mainmenu">
-<div id="menu01">
-	<input type="checkbox" name="accordian" id="car01">
-	<label for="car01">2023.07.17 | 09:00</label>
-	<div><p><input type="date"></p></div>
-</div>
-<div  id="menu02">
-	<input type="checkbox" name="accordian" id="car02">
-	<label for="car02">2023.07.17 | 09:00</label>
-	<div><p><input type="date"></p></div>
-</div>
-<div  id="menu03">
-	<input type="checkbox" name="accordian" id="car03">
-	<label for="car03">전체</label>
-	<div>
-		<p><a href="#">전체</a></p><br>
-		<p><a href="#">경형</a></p><br>
-		<p><a href="#">소형</a></p><br>
-		<p><a href="#">중형(세단)</a></p><br>
-		<p><a href="#">중형(SUV)</a></p><br>
-		<p><a href="#">전기차</a></p><br>
-	</div>
-</div>
-<div  id="menu04">
-	<input type="checkbox" name="accordian" id="car04">
-	<label for="car04">대여시간</label>
-	<div><p><input type="time">&nbsp;&nbsp;&nbsp;~&nbsp;&nbsp;&nbsp;<input type="time"></p></div>
-</div>
-</div>
-
-<div class="clear"></div>
 
 <div class="carname">
-	<div><h1>KIA 레이</h1></div>
+	<div><h1>${car.c_brand} ${car.c_name}</h1></div>
 	<table border="1">
 		<tr>
 			<td>
-				<img src="${path}/images/car/Gcar01.png">
+				<img src="${path}/images/car/${car.c_img}">
 			</td>
 			<td id="sub">
-				<p>차량명 : 2023 KIA 레이</p>
+				<h2><p style="color: blue";>차량정보</p></h2>
+				<p>차량명 : ${car.c_brand} ${car.c_name} ${car.c_year}년식</p>
 				<hr>
-				<p>차량정보 : 가솔린 | 경형 RV | 2023년</p>
-				<hr>
-				<p>비고 :<br>나<br>는<br>레<br>이<br>임<br></p>
+				<p>차량색상 : ${car.c_color}</p>
+				<p>타입 : ${car.c_type}</p>
+				<p>연료 : ${car.c_oil}</p>
 				<p><a href="${path}/rent/rent">차량 다시 선택</a></p>
 			</td>
 		</tr>
