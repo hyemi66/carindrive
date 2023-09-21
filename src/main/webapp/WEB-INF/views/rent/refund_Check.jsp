@@ -23,6 +23,6 @@
         <label for="phone">전화번호:</label>
         <input type="text" id="phone" placeholder="전화번호(숫자)를 입력해주세요.">
     </div>
-    <button id="submit">제출</button>
+    <button id="submit">환불하기</button>
 </body>
 </html>

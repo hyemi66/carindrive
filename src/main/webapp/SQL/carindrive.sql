@@ -6,6 +6,13 @@ update c_order_info set id ='1';
 
 commit; -- 설정 후 반드시 커밋하고 테스트 할 것
 
+select * from c_rental;
+select * from c_rental where cr_mid = 'zzzz';
+
+UPDATE c_rental SET cr_cname = 'RAY' WHERE cr_mid = '고객 아이디';
+
+UPDATE c_rental SET cr_cname = '차이름' WHERE cr_mid = '고객 아이디';
+
 --ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 --확인 코드
 select * from c_member order by m_name asc; -- 사용자 확인

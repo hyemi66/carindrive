@@ -55,6 +55,14 @@
 				        <span>${rentalMap[orderInfo.merchantId].cr_sdate} - ${rentalMap[orderInfo.merchantId].cr_edate}</span>
 				    </div>
 				    <div class="info-line">
+				        <label>예약자 성함:</label> 
+				        <span data-member-name>${memberInfo.m_name}</span>
+				    </div>
+				    <div class="info-line">
+				        <label>예약자 연락처:</label> 
+				        <span data-member-phone>${formattedPhone}</span>
+				    </div>
+				    <div class="info-line">
 				        <label>예약한 차량:</label> 
 				        <span>${orderInfo.buy_product_name}</span>
 				    </div>

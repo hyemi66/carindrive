@@ -192,6 +192,11 @@ public class RentCheckController {
 	        return mav;
 	    }
 	}
+	
+	@RequestMapping(value="/rent_details")
+	public ModelAndView rent_details() {
+		return null;
+	}
 
 
 
@@ -373,7 +378,7 @@ public class RentCheckController {
 		
 		// 하루 전 환불 불가능
 		if (now.isAfter(oneDayBeforeRental)) {
-		    alertMessage(out, "환불이 불가능한 시간입니다.");
+		    alertMessage(out, "대여시간 24시간 이내는 환불이 불가능합니다.");
 		}
 		// 이틀 전 환불
 		else if (now.isAfter(twoDaysBeforeRental) && now.isBefore(oneDayBeforeRental)) {	
@@ -393,6 +398,9 @@ public class RentCheckController {
 			out.println("location.href='/member/m_login';");//로그인창으로 이동
 			out.println("</script>");
 	    } finally {
+	    	out.println("<script>");
+	    	out.println("location.href='/';");
+	    	out.println("</script>");
 	        out.close();
 	    }
 	}
