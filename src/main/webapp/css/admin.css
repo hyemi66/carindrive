@@ -1,0 +1,136 @@
+@charset "UTF-8";
+
+#logo {
+	font-family: 'Inter', sans-serif;
+	width: 400px;
+	height: 100px;
+	font-size: 30px;
+	font-weight: bold;
+	text-align: center;
+	margin: 0 auto;
+	margin-top: 50px;
+	letter-spacing: 8px;
+}
+#logo>hr {
+	width: 300px;
+	color: #dcdcdc;
+}
+#Login_wrap {
+	width: 500px;
+	height: 600px;
+	background-color: white;
+	border-radius: 10px;
+	border: 1px solid #dcdcdc;
+	margin: 0 auto;
+	margin-top: 50px;
+	margin-bottom: 50px;
+}
+#btn1 {
+	width: 400px;
+	height: 50px;
+	background-color: #dcdcdc;
+	border: none;
+	border-radius: 10px;
+	color: #505050;
+	font-size: 20px;
+	letter-spacing: 15px;
+	cursor: pointer;
+}
+#ano {
+	margin-top: 30px;
+	padding: 20px;
+}
+#ca_id, #ca_pwd{
+	background-image: url('../images/people.png');
+	background-repeat: no-repeat;
+	background-size: 30px 30px;
+	background-position: 20px center;
+	border-radius: 10px;
+	border: 1px solid #dcdcdc;
+	text-indent: 3em;
+	width: 400px;
+	height: 50px;
+	font-size: 20px;
+	margin-top: 20px;
+}
+#ca_pwd {
+	background-image: url('../images/lock_icon.png');
+	background-size: 20px 20px;
+}
+#id_form, #pwd_form, #button_form,#ano {
+	text-align: center;
+}
+input:focus {
+	outline: 2px solid #dcdcdc;
+}
+#button_form{
+	margin-top: 20px;
+}
+
+/*admin_main*/
+#aMain_wrap{
+	
+	
+}
+#aMain_header{
+  height: 80px;
+  background-color: #333;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+#aMain_logo{
+	flex: 0 0 auto;
+}
+#aMain_logo img{
+    width:80px; height:80px;
+    	
+}
+#aMain_menu{
+	flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+#aMain_menu ul li{
+   display: inline-block;
+  margin: 0px 100px;
+}
+#aMain_menu ul li a{
+ display: flex;
+  height: 20px;
+  padding: 10px;
+  font-size: 20px;
+  font-weight: 100;
+  text-decoration: none;
+  color: #fff;
+  text-align: center;
+}
+#aMain_menu a:hover{
+	color: orange;
+  transition: all 0.25s;
+}
+#aMain_right{
+	margin-top: 50px;
+	color: white;
+}
+.clear{
+	clear:both;
+}
+#aMain_cont{
+    width:1500px; height:700px;
+    margin: 0 auto;
+    
+  
+}
+#aMain_cont .aMainCont_title{
+	font-size:25px; text-align: center;
+	margin-top: 200px;
+}
+#aMain_footer{
+	background-color: #333;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+	
+}

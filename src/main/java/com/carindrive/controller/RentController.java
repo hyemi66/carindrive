@@ -105,7 +105,7 @@ public class RentController {
 				long minutes = duration.toMinutes();	//몇분동안 렌트했는지 파악
 
 				// 1분당 렌트 가격
-				double rental_cost = Math.ceil(minutes) * (car.getCar_price() / 60.0);
+				double rental_cost = Math.ceil(minutes) * (car.getC_price() / 60.0);
 
 				//DecimalFormat 는 숫자의 출력형태를 변환한다.
 				DecimalFormat decimalFormat = new DecimalFormat("#,###");

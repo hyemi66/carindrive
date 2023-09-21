@@ -18,7 +18,7 @@
     
     <nav>
       <ul>
-        <li><a href="${path}/rent/rent">차량예약</a></li>
+        <li><a href="/rent/rent">차량예약</a></li>
         <li><a href="${path}/rent/rent_Check_List">예약확인</a></li>
         <li><a href="${path}/guide/guide">이용안내</a></li>
         <li><a href="#">보험안내</a></li>

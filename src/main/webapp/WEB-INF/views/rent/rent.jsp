@@ -142,7 +142,9 @@
 							<b>현대 코나</b><br><br>
 							소형 SUV | 가솔린 | 2023<br><br>
 							<p>\100,000</p>
-							<div id="box02">예 약 하 기</div>
+			
+					</div>
+				</td>				<div id="box02">예 약 하 기</div>
 						</a>
 					</div>
 				</td>
@@ -158,8 +160,6 @@
 							<p>\100,000</p>
 							<div id="box02">예 약 하 기</div>
 						</a>
-					</div>
-				</td>
 			</tr>
 			<tr>
 				<td>
