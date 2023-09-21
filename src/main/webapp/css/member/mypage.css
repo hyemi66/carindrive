@@ -1,0 +1,82 @@
+@charset "UTF-8";
+
+/* 개인정보확인 */
+#mp_hr {
+	width: 500px;
+}
+#mypage {
+	border: 2px solid #1c2b37;
+	border-radius: 10px;
+	margin: 50px 450px;
+	height: 700px;
+}
+#mypage h2 {
+	text-align: center;
+	font-size: 40px;
+	font-weight: bold;
+	color: #1c2b37;
+}
+#mypage_t {
+	margin-left: 50px;
+}
+#mypage_t th {
+	float: left;
+	margin-left: 10px;
+	margin-right: 100px;
+	padding: 30px 0px;
+}
+#mypage_edit {
+	border: 1px solid #1c2b37;
+	border-radius: 10px;
+	background-color: white;
+	color: #1c2b37;
+	font-size: 14px;
+	font-weight: bold;
+	padding: 10px 20px;
+	float: right;
+	margin-right: 20px;
+}
+#mypage_edit:hover {
+	background-color: #1c2b37;
+	color: white;
+}
+/* 개인정보 비밀번호 확인 */
+#mypage2 {
+	border: 2px solid #1c2b37;
+	border-radius: 10px;
+	margin: 50px 450px;
+	height: 500px;
+}
+#mypage2 h2 {
+	text-align: center;
+	font-size: 40px;
+	font-weight: bold;
+	color: #1c2b37;
+}
+#mypage2 h3 {
+	font-size: 18px;
+	font-weight: bold;
+	color: #1c2b37;
+	margin-left: 60px;
+}
+#mypage2 h4 {
+	font-size: 10px;
+	font-weight: bold;
+	color: #1c2b37;
+	margin-left: 60px;
+}
+#mypage_edit2 {
+	border: 1px solid #1c2b37;
+	border-radius: 10px;
+	background-color: white;
+	color: #1c2b37;
+	font-size: 14px;
+	font-weight: bold;
+	padding: 10px 70px;
+	margin-left: 220px;
+	margin-top: 50px;
+}
+#mypage_edit2:hover {
+	background-color: #1c2b37;
+	color: white;
+}

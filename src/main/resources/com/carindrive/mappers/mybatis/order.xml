@@ -5,7 +5,7 @@
 
     <!-- 결제 정보 저장 -->
     <insert id="saveOrder" parameterType="order">
-        INSERT INTO cid_order_info 
+        INSERT INTO c_order_info 
         (
             ID,
             BUYER_NAME,
@@ -19,7 +19,8 @@
             PAY_PRICE,
             CARD_NUM,
             PAY_STATUS,
-            POST_CODE
+            POST_CODE,
+            refund
         ) 
         VALUES 
         (
@@ -35,13 +36,44 @@
             #{amount, jdbcType=DECIMAL}, 
             #{buyer_card_num, jdbcType=VARCHAR}, 
             #{buyer_pay_ok, jdbcType=VARCHAR}, 
-            #{buyer_postcode, jdbcType=INTEGER}
+            #{buyer_postcode, jdbcType=INTEGER},
+            '정상결제'
         )
     </insert>
     
-    <!-- 결제 정보 조회(예약 내역) -->
-    <select id="getOrder">
-    	select * from cid_order_info where buyer_name = #{m_id}
+    <!-- 아이디를 이용해서 결제정보 가져오기 -->
+    <select id="getCashInfo" resultType="order">
+    	select * from c_order_info where buyer_name = #{m_id}
     </select>
+    
+    
+    <!-- 결제 정보 조회(예약 내역) -->
+    <select id="getOrder" resultMap="orderMap">
+    	select * from c_order_info where id = #{id}
+    </select>
+    
+	<resultMap id="orderMap" type="order">
+	    <result column="ID" property="id"/>
+	    <result column="BUYER_NAME" property="buyer_name"/>
+	    <result column="BUYER_PHONE" property="buyer_phone"/>
+	    <result column="MEMBER_EMAIL" property="member_email"/>
+	    <result column="BUYER_ADDRESS" property="buyer_addr"/>
+	    <result column="BUY_DATE" property="buy_date"/>
+	    <result column="PRODUCT_NAME" property="buy_product_name"/>
+	    <result column="BUY_ID" property="buyer_buyid"/>
+	    <result column="MERCHANT_ID" property="merchantId"/>
+	    <result column="PAY_PRICE" property="amount"/>
+	    <result column="CARD_NUM" property="buyer_card_num"/>
+	    <result column="PAY_STATUS" property="buyer_pay_ok"/>
+	    <result column="POST_CODE" property="buyer_postcode"/>
+	    <result column="refund" property="refund"/>
+	</resultMap>
+	
+	
+	<!-- 환불 완료시 주문번호 업데이트 -->
+	<update id="refundOK">
+		update c_order_info set refund = '환불완료' where merchant_Id = #{merchantId}
+	</update>
+
     
 </mapper>

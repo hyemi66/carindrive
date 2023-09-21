@@ -134,9 +134,9 @@ input[id="car03"]:checked + label + div {
 }
 #box01 p {
 	text-align: right;
-	font-size: 30px;
-	font-weight: bold;
+	font-size: 20px;
 	margin-bottom: 10px;
+	color: #ccc;
 }
 #box01 hr {
 	width: 350px;

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import com.carindrive.vo.CarVO;
 import com.carindrive.vo.MemberVO;
-import com.carindrive.vo.OrderVO;
 import com.carindrive.vo.RentalVO;
 
 @Repository
@@ -20,55 +19,59 @@ public class RentalDAOImpl implements RentalDAO {
 	@Override
 	public void insertRental(RentalVO r) {
 		this.sqlSession.insert("rental_in",r);
-	}
+	}//차량 예약 정보 저장
 
 	@Override
 	public List<RentalVO> getRentList(String m_id) {
 		return this.sqlSession.selectList("get_rlist",m_id);
-	}
+	}//해당 고객의 모든차량 렌트 내역 확인
 	
 	@Override
-	public RentalVO getRentOne(String m_id) {
-	    return this.sqlSession.selectOne("get_rentCar", m_id);
-	}
+	public RentalVO getRentOne(String cr_mid) {
+	    return this.sqlSession.selectOne("get_rentCar", cr_mid);
+	}//방금 예약한목록 가져오기
 
 	@Override
 	public void getMemberList(MemberVO m) {
 		this.sqlSession.selectList("m_list",m);
-	}
+	}//회원 정보 확인(가져오기)
 
 	@Override
-	public CarVO getCarInfo(int car_id) {
-		return this.sqlSession.selectOne("c_list",car_id);
-	}
-
+	public CarVO getCarInfo(String cr_cname) {
+		return this.sqlSession.selectOne("c_list",cr_cname);
+	}//차 정보 가져오기
+	
 	@Override
-	public int insertCost(int rental_id, double rental_cost) {
+	public void insertCost(int cr_num, double one_price) {
 		RentalVO rentalVO = new RentalVO();
-        rentalVO.setRental_id(rental_id);
-        rentalVO.setRental_cost(rental_cost);
-        return sqlSession.update("cost_in", rentalVO);
-	}
+        rentalVO.setCr_num(cr_num);
+        rentalVO.setCr_price(one_price);
+        this.sqlSession.update("cost_in", rentalVO);
+	}//렌트 비용을 데이터베이스에 추가
 
 	@Override
-	public void insertMerchantId(String merchantId, int rental_id) {
+	public void insertMerchantId(String merchantId, int cr_num) {
 	    RentalVO rentalVO = new RentalVO();
-	    rentalVO.setMerchantId(merchantId);  // RentalVO에 해당하는 메서드명으로 변경해야 합니다.
-	    rentalVO.setRental_id(rental_id);       // RentalVO에 해당하는 메서드명으로 변경해야 합니다.
+	    rentalVO.setCr_order(merchantId);  // RentalVO에 해당하는 메서드명으로 변경해야 합니다.
+	    rentalVO.setCr_num(cr_num);       // RentalVO에 해당하는 메서드명으로 변경해야 합니다.
 	    this.sqlSession.update("insertMerchantId", rentalVO);
-	}
+	}//주문번호를 렌탈정보 데이터베이스에 추가
 
 	@Override
-	public void saveOrder(OrderVO order) {
-		this.sqlSession.insert("saveOrder",order);
-	}
+	public RentalVO getRentRefund(String cr_order) {
+		return this.sqlSession.selectOne("getRentRefund",cr_order);
+	}//주문번호를 기준으로 렌트내역을 가져옴
 
 	@Override
-	public List<OrderVO> getOrder(String buyer_name) {
-		return this.sqlSession.selectList("getOrder",buyer_name);
-	}
-
-
+	public List<CarVO> findAllCar() {
+		return this.sqlSession.selectList("findAllCar");
+	}//모든 차량 불러오기
+	
+	
+	@Override
+	public List<CarVO> getCarList(CarVO cv) {
+		return this.sqlSession.selectList("carList", cv);
+	} // 차 리스트 불러오기
 
 
 }

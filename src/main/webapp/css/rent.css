@@ -9,108 +9,62 @@ body {
 	display: flex;
 	justify-content: center;
 }
-div[id*="menu"] {
+#menu01 {
 	border: 1px solid black;
-	position: relative;
-	width: 300px; height: 62px;
-}
-input[id*="car"] {
-	display: none;
-}
-input[id*="car"] + label {
-	border: 1px solid black;
-	background-color: #1c2b37;
-	display: block;
-	padding: 20px;
-	border-left: 0;
-	border-right: 0;
+	width: 600px; height: 65px;
+	font-size: 18px; font-weight: 900;
 	color: white;
-	font-weight: 900;
-	font-size: 18px;
-	cursor: pointer;
-}
-input[id*="car"] + label + div {
-	max-height: 0;
-	transition: all .355s;
-	overflow: hidden;
-	font-size: 11px;
-}
-input[id*="car"] + label + div p {
-	padding: 20px;
-}
-input[id*="car"]:checked + label {
-	background-color: white;
-	color: black;
-}
-input[id*="car"]:checked + label + div {
 	background-color: #1c2b37;
+}
+#menu01 p {
+	margin-left: 30px;
+}
+#menu02 {
 	border: 1px solid black;
+	width: 600px; height: 65px;
+	font-size: 18px; font-weight: 900;
 	color: white;
-	max-height: 100px;
+	background-color: #1c2b37;
 }
-input[id="car03"]:checked + label + div {
-	max-height: 600px;
+#menu02 p {
+	margin-left: 30px;
 }
-#menu03 p {
-	font-size: 15px;
-	font-weight: bold;
-}
-#menu03 p > a {
-	text-decoration: none;
-	color: inherit;
-	font-family: consolas;
-}
-#menu03 P > a:hover {
-	color: gray;
-}
-
 
 /* 중앙부 */
+.tab_content {
+	text-align: center;
+}
 .tab_content input[type="radio"] {
 	display: none;
 }
-
 .tab_content input[type="radio"] + label {
 	display: inline-block;
 	border: 2px solid black;
-	padding: 20px 77.5px; background: #1c2b37;
+	background: #1c2b37;
+	padding: 20px 70px;
 	color: white; font-size: 14px; cursor: pointer;
 	border-radius: 10px 10px 0px 0px / 10px 10px 0px 0px;
 }
-
-.tab_content input[id="tab04"] + label {
-	padding: 20px 77.5px;
-}
-.tab_content input[id="tab05"] + label {
-	padding: 20px 76px;
-}
-
 .tab_content input[type="radio"]:checked + label {
 	background: white;
 	border-bottom: 2px solid white;
-	color: black;
+	color: #1c2b37;
 	font-weight: bold;
 }
-
-.tab_content {
-	margin: 0px 0px 0px 145px;
-}
-
 .conbox {
-	width: 89.1%; background: white;
+	margin-left: 163px;
+	width: 1190px; background: white;
 	border-bottom: 2px solid black;
 	border-left: 2px solid black;
 	border-right: 2px solid black;
 	display: none;
 }
-
 .tab_content input[id="tab01"]:checked ~ .con1 { display: block; }
 .tab_content input[id="tab02"]:checked ~ .con2 { display: block; }
 .tab_content input[id="tab03"]:checked ~ .con3 { display: block; }
 .tab_content input[id="tab04"]:checked ~ .con4 { display: block; }
 .tab_content input[id="tab05"]:checked ~ .con5 { display: block; }
 .tab_content input[id="tab06"]:checked ~ .con6 { display: block; }
-
 /* 이미지 */
 #imgC {
 	margin: 5px;
@@ -119,7 +73,7 @@ input[id="car03"]:checked + label + div {
 #box01 {
 	border: 1px solid lightgray;
 	text-align: center;
-	padding: 21px;
+	padding: 15px;
 }
 #box01 a {
 	text-decoration: none;
@@ -127,14 +81,13 @@ input[id="car03"]:checked + label + div {
 }
 #box01:hover {
 	box-shadow: 0px 0px 20px 1px #1c2b37 inset;
-	
 }
 #box01 b {
 	font-size: 30px;
 }
 #box01 p {
 	text-align: right;
-	font-size: 30px;
+	font-size: 25px;
 	font-weight: bold;
 	margin-bottom: 10px;
 }
@@ -142,48 +95,110 @@ input[id="car03"]:checked + label + div {
 	width: 350px;
 	color: lightgray;
 }
-#box02 {
-	background: #1c2b37;
-	text-align: center;
-	height: 40px;
-	font-size: 20px; font-weight: bold; color: white;
-	padding-top: 10px;
+#box02 input {
+	border: 1px solid black;
+	padding: 15px 130px;
+	margin: 10px 0px;
+	background-color: #1c2b37;
+	color: white;
+	font-size: 20px; font-weight: bolder;
 }
-
-/* 예약페이지 */
+/* 차량 정보 */
 .carname {
 	margin-left: 153px;
 	margin-right: 153px;
 }
-.carname img {
-	width: 450px; height: 250px;
-	padding: 50px;
-}
-#sub {
-	text-align: left;
-	padding: 0px 20px;
-	background-color: white;
-	color: black;
-	font-size: 20px;
+.carname h1 {
+	color: #1c2b37;
 	font-weight: bold;
 }
-#sub a {
-	background-color: #1c2b37;
+.carInfo {
+	display: flex;
+}
+#carImg img {
+	width: 900px; height: 400px;
+}
+#carInfo {
+	margin-top: 5px;
+	margin-left: 20px;
+}
+#carInfo h2 {
+	color: #1c2b37;
+	font-weight: bold;
+}
+#carInfo ul {
+	list-style-type: square;
+	color: #1c2b37;
+	font-weight: bold;
+	font-size: 20px;
+}
+#carInfo li {
+	margin: 15px 0px;
+}
+#carInfo button {
+	border: 1px solid #1c2b37;
+	border-radius: 10px;
+	width: 200px; height: 40px;
+	background-color: white;
+	margin-top: 50px;
 	float: right;
-	text-decoration: none;
+	font-weight: bold;
+	font-size: 15px;
+	color: #1c2b37;
+}
+#carInfo button:hover {
+	background-color: #1c2b37;
 	color: white;
+}
+/* 차 예약 버튼 */
+#carRent input {
+	border: 1px solid #1c2b37;
+	background-color: #1c2b37;
+	padding: 15px 540px;
+	font-weight: bold;
+	font-size: 20px;
+	color: white;
+}
+/* 예약자 확인 및 예약일자 + 가격 */
+#cp_intro h3 {
+	color: #1c2b37;
+}
+#cp_intro p {
+	font-size: 16px;
+	color: #787878;
+}
+#cp_intro table {
+	border: 1px solid #ccc;
+	width: 500px; height: 50px;
+	color: #787878;
+}
+#menu01_1 {
 	border: 1px solid black;
-	border-radius: 5px;
-	padding: 10px 20px;
-	margin-bottom: 20px;
+	width: 450px; height: 65px;
+	font-size: 18px; font-weight: 900;
+	color: white;
+	background-color: #1c2b37;
 }
-#sub hr {
-	width: 610px;
+#menu01_1 p {
+	margin-left: 18px;
 }
-.carname table {
-	width: 1000px;
+#menu02_1 {
+	border: 1px solid black;
+	width: 450px; height: 65px;
+	font-size: 18px; font-weight: 900;
+	color: white;
+	background-color: #1c2b37;
 }
-#carpay {
-	width:1210px;
-	height: 500px;
+#menu02_1 p {
+	margin-left: 18px;
+}
+#menu03_1 {
+	border: 1px solid black;
+	width: 300px; height: 65px;
+	font-size: 18px; font-weight: 900;
+	color: white;
+	background-color: #1c2b37;
+}
+#menu03_1 p {
+	margin-left: 18px;
 }

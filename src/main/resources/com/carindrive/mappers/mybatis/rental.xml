@@ -6,36 +6,46 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="rental">
 
-	<!-- 렌트정보 저장 -->
+	<!-- 차량 예약 정보 저장 -->
 <insert id="rental_in" parameterType="rental">
-  INSERT INTO cid_rentals (rental_id, m_id, car_id, reservation_date, rental_date_time, return_date_time, rental_cost)
-VALUES (rentals_seq.NEXTVAL, #{m_id}, #{car_id}, #{reservation_date}, #{rental_date_time}, #{return_date_time}, #{rental_cost})
+  INSERT INTO c_rental (cr_num, cr_mid, cr_cname, cr_rdate, cr_sdate, cr_edate, cr_price)
+VALUES (cr_seq.NEXTVAL, #{cr_mid}, #{cr_cname}, #{cr_rdate}, #{cr_sdate}, #{cr_edate}, #{cr_price})
 </insert>
 
-	<!-- 방금 렌트신청한것 가져오기 -->
+	<!-- 방금 렌트신청한것 가져오기 --> <!-- cr_mid를 기준으로 검색하는데 그중 cr_num이 가장 높은 레코드를 찾아옴  -->
     <select id="get_rentCar" resultType="rental" parameterType="rental">
-    	SELECT * FROM cid_rentals WHERE m_id = #{m_id} ORDER BY reservation_date DESC FETCH FIRST 1 ROW ONLY
+    	SELECT *FROM c_rental WHERE cr_mid = #{cr_mid} AND cr_num = (SELECT MAX(cr_num) FROM c_rental WHERE cr_mid = #{cr_mid})
 	</select>
 	
-	<!-- 차량 정보 조회 -->
+	<!-- 해당 차 정보 가져오기 -->
 	<select id="c_list" resultType="car" parameterType="car">
-	    SELECT * FROM cid_cars WHERE car_id = #{car_id}
+	    SELECT * FROM c_car WHERE c_name = #{c_name}
 	</select>
 	
-    <!-- 렌트 모든 내역 가져오기 -->
+    <!-- 해당 고객의 모든차량 렌트 내역 확인 -->
     <select id="get_rlist" resultType="rental" parameterType="rental">
-    	select * from cid_rentals where m_id = #{m_id} order by rental_date desc
+    	select * from c_rental where cr_mid = #{cr_mid}
     </select>
     
-    <!-- cid_rentals 테이블에 렌트비용 추가  (환불할때 용이)-->
+    <!-- 렌트 비용을 렌탈정보 데이터베이스에 추가  (환불할때 용이)-->
     <update id="cost_in">
-    	update cid_rentals set rental_cost = #{rental_cost} where rental_id = #{rental_id}
+    	update c_rental set cr_price = #{cr_price} where cr_num = #{cr_num}
     </update>
     
-    <!-- cid_rentals 테이블에 주문번호 추가  (환불할때 용이)-->
+    <!-- 주문번호를 렌탈정보 데이터베이스에 추가  (환불할때 용이)-->
     <update id="insertMerchantId">
-    	update cid_rentals set merchantId = #{merchantId} where rental_id = #{rental_id}
+    	update c_rental set cr_order = #{cr_order} where cr_num = #{cr_num}
     </update>
+    
+    <!-- 주문번호를 기준으로 해당 렌탈내역을 가져옴 (환불에 사용) -->
+    <select id="getRentRefund" resultType="rental">
+    	select * from c_rental where cr_order = #{cr_order}
+    </select>
+    
+    <!-- 모든 차량의 정보를 가져오기 -->
+    <select id="findAllCar" resultType="car">
+        SELECT * FROM c_car
+    </select>
     
 
 </mapper>

@@ -1,0 +1,13 @@
+-- 예약 테이블
+CREATE TABLE c_rental (
+    cr_num INT PRIMARY KEY,                      --예약번호
+    cr_mid VARCHAR2(30),                         --고객 아이디
+    cr_cname VARCHAR2(200),                      --차이름   --cr_cid를 cr_cname으로 바꿈
+    cr_rdate VARCHAR2(200),                      --예약 일자
+    cr_sdate VARCHAR2(200),                      --실제 대여일
+    cr_edate VARCHAR2(200),                      --반납 일자
+    cr_price INT,                                --렌트 비용
+    cr_order VARCHAR2(100),			 --주문 번호
+    FOREIGN KEY (cr_mid) REFERENCES c_member(m_id),
+    FOREIGN KEY (cr_cname) REFERENCES c_car(c_name)
+);

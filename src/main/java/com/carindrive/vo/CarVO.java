@@ -2,18 +2,23 @@ package com.carindrive.vo;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
-public class CarVO {
-
-    private int car_id;         // 차량 고유번호
-    private String car_name;    // 차량 이름
-    private String car_brand;   // 차량 브랜드
-    private int car_year;       // 차량 연식
-    private String car_color;   // 차량 색상
-    private double car_price;   // 차량 가격 (1분당 가격)
-    private int car_availability; // 차량 이용 가능 여부
-    
-    // Getter와 Setter는 Lombok으로 생성할 수도 있습니다.
+@ToString
+public class CarVO { // c_car 테이블
+	
+	private int c_num; // 차량코드번호
+	private String c_name; // 차량 이름
+	private String c_brand; // 차량 브랜드
+	private String c_year; // 차량 년식 
+	private String c_color; // 차량 색상
+	private double c_price; // 차량 렌트 비용
+	private int c_ok; // 차량 대여 가능 여부
+	private String c_img; // 차량 이미지 이름
+	private String c_oil; // 차량 기름
+	private String c_type; // 상세 차종
+	private String c_type2; // 차종
+	
 }

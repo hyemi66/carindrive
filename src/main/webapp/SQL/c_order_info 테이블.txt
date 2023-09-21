@@ -1,0 +1,17 @@
+--결제 정보 저장 테이블
+create table c_order_info (
+    id number primary key,
+    buyer_name varchar2(255),
+    buyer_phone varchar2(20),
+    member_email varchar2(255),
+    buyer_address varchar2(500),
+    buy_date varchar2(20),
+    product_name varchar2(255),
+    buy_id varchar2(255),
+    merchant_id varchar2(255),
+    pay_price number,
+    card_num varchar2(255),
+    pay_status varchar2(50),
+    post_code number,
+    refund varchar2(20)
+);

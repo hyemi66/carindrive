@@ -3,19 +3,21 @@ body {
   margin: 0;
   padding: 0;
 }
-
+/* header.jsp */
 header {
-  height: 80px;
-  background-color: #333;
-  padding: 10px;
+  height: 100px;
+  background-color: white;
+  margin: 10px 20px;
   display: flex;
   align-items: center;
 }
-
 .logo {
   flex: 0 0 auto;
 }
-
+.logo img {
+	width: 300px; height: 110px;
+	margin-top: 12px;
+}
 nav {
   flex: 1;
   display: flex;
@@ -37,30 +39,158 @@ nav a {
   height: 20px;
   padding: 10px;
   font-size: 20px;
-  font-weight: 100;
+  font-weight: bold;
   text-decoration: none;
-  color: #fff;
+  color: #1c2b37;
   text-align: center;
 }
 
 nav a:hover {
-  color: orange;
-  transition: all 0.25s;
+	border-bottom: 2px solid #1c2b37;
+  	/*transition: all 0.25s;*/
 }
-
+/* footer.jsp */
 footer {
-  background-color: #333;
-  color: #fff;
-  padding: 10px;
-  text-align: center;
+  background-color: white;
+  color: #1c2b37;
+}
+#f1 {
+	text-align: center;
+	margin: 40px;
+}
+#m_hr2 {
+	width: 1000px;
 }
 
-/* 메인페이지(index.jsp) css */
+/* 로그인 로그아웃 */
 .login {
-	margin-top: 50px;
+	margin-top: 70px;
+	margin-right: 20px;
 	color: white;
 }
 .login a {
 	text-decoration: none;
-	color: inherit;
+	color: #1c2b37;
+}
+/* 메인 이미지 */
+.mainimg {
+	background-color: #ccc;
+	height: 600px;
+	margin: 10px 100px 0px 100px;
+}
+.mainimg h1 {
+	text-align: center;
+}
+/* 메인이미지 밑에 */
+.main_car {
+	margin: 50px 100px;
+	height: 700px;
+	text-align: center;
+}
+#m_font1 {
+	font-size: 40px;
+	font-weight: bold;
+	color: #1c2b37;
+}
+#m_font2 {
+	font-size: 20px;
+	color: #999999;
+}
+#m_rent {
+	border:1px solid black;
+	background-color: #1c2b37;
+	width:200px;
+	padding: 10px 0px;
+	margin: auto;
+}
+#m_rent a {
+	text-decoration: none;
+	color:white;
+}
+#m_intro {
+	border: 1px solid #1c2b37;
+	border-radius: 400px;
+	height: 400px;
+	margin: 50px 0px;
+}
+#mainLogo {
+	width: 550px; height: 350px;
+	margin-top: 20px;
+}
+#m_hr {
+	width: 1450px;
+}
+/* 이벤트 넘기기 */
+.m_event {
+	text-align: center;
+	margin: 0px 100px;
+	margin-bottom: 50px;
+}
+.m_tab_content input[type="radio"] {
+	display: none;
+}
+.m_conbox {
+	width: 1200px;
+	height: 600px;
+	background: #aaa;
+	display: none;
+	margin-left: 70px;
+}
+.m_btn {
+	padding: 20px;
+	margin-left: 220px;
+}
+label[for*="tab"] {
+	display: inline-block;
+	padding: 10px;
+	background: #ccc;
+	cursor: pointer;
+	margin: 5px;
+	border-radius: 100%;
+}
+input[id="tab01"]:checked ~ .con1 {
+	display: block;
+}
+input[id="tab02"]:checked ~ .con2 {
+	display: block;
+}
+input[id="tab03"]:checked ~ .con3 {
+	display: block;
+}
+input[id="tab01"]:checked ~ .m_btn > label[for="tab01"] {
+	background: #1c2b37;
+}
+input[id="tab02"]:checked ~ .m_btn > label[for="tab02"] {
+	background: #1c2b37;
+}
+input[id="tab03"]:checked ~ .m_btn > label[for="tab03"] {
+	background: #1c2b37;
+}
+#m_fullev {
+	float: right;
+	margin-right: 40px;
+}
+#m_fullev a {
+	text-decoration: none;
+	color: #1c2b37;
+	font-weight: bold;
+}
+/* 안내서비스 */
+.m_ser {
+	display: flex;
+	text-align: center;
+	margin-left: 390px;
+}
+.m_ser input {
+	border: 1px solid #1c2b37;
+	border-radius: 20px;
+	padding: 10px 50px;
+	margin: 50px 40px;
+	font-size: 15px;
+	font-weight: bold;
+	background-color: white;
+}
+.m_ser input:hover {
+	background-color: #1c2b37;
+	color: white;
 }

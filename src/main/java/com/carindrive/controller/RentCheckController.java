@@ -2,9 +2,12 @@ package com.carindrive.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -34,18 +37,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.carindrive.service.MemberService;
+import com.carindrive.service.OrderService;
 import com.carindrive.service.RentService;
 import com.carindrive.vo.CarVO;
 import com.carindrive.vo.MemberVO;
@@ -57,80 +57,148 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Controller
 @RequestMapping("/rent/*")
 public class RentCheckController {
+
 	@Autowired
 	private RentService rentService;
 
 	@Autowired
-	private MemberService memberService;
+	private OrderService orderService;
 
+	@Autowired
 	private static final Logger log = LoggerFactory.getLogger(RentCheckController.class);
 
 	//렌탈 정보 저장
-	@RequestMapping("/rent_Check")//rentOK에서 넘어온 데이터
-	public ModelAndView rent_Check(@RequestParam("merchantId") String mId,
-	        @ModelAttribute OrderVO order, // OrderVO 객체에 직접 매핑
-	        BindingResult bindingResult, //바인딩 체크
-	        HttpSession session) {
-		ModelAndView mav = new ModelAndView();
-		
-	    if (bindingResult.hasErrors()) {
-	        log.error("Binding errors: " + bindingResult.getAllErrors());
-	        mav.setViewName("/main/error");
-	        return mav;
-	    }
+	@RequestMapping("/rent_Check")//rentOK.jsp에서 넘어온 데이터
+	public ResponseEntity<Map<String, Object>> rent_Check(@RequestBody OrderVO order,HttpSession session) {
+
+		Map<String, Object> map = new HashMap<>();
+
 		try {
 			// 로그인 정보 가져오기
-			MemberVO loggedInUser = (MemberVO) session.getAttribute("loggedInUser");
-			 // 렌탈 정보 가져오기
-			RentalVO rental = this.rentService.getRentOne(loggedInUser.getM_id());
-			//RentalVO에 주문번호 추가
-			this.rentService.insertMerchantId(mId, rental.getRental_id());
-			// 데이터베이스에 OrderVO 정보 저장 (필요한 서비스 메서드를 호출)
-	        this.rentService.saveOrder(order);
+			MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+			// 해당 고객의 렌탈 정보 가져오기
+			RentalVO rental = this.rentService.getRentOne(memberInfo.getM_id());
+			// 해당 렌탈정보에 예약번호에 맞는 주문번호 추가
+			String merchantId = order.getMerchantId();
+			this.rentService.insertMerchantId(merchantId, rental.getCr_num());
 
-			// Order_Info 객체를 가져올 때 orderInfo의 타입을 선언해야 합니다.
-			OrderVO orderInfo = getPayInfo(mId);
+			// 결제정보 getPayInfo 메서드에 주문번호를 넣고 OrderVO에 값들을 셋팅
+			OrderVO orderInfo = getPayInfo(merchantId);
 
-			mav.addObject("orderInfo", orderInfo); // JSP에서 사용할 수 있게 orderInfo를 모델에 추가
-			mav.addObject("rental", rental);
-			mav.setViewName("/rent/rent_Check"); // testInfo.jsp를 view로 설정
-		} catch (Exception e) {
-			log.error("Error fetching payment info: ", e);
-			mav.setViewName("/main/error"); // 에러 발생 시, errorPage로 리다이렉트
+			// 데이터베이스에 OrderVO 결제정보 저장	//setBuy_date만 저장해서 넣어야될수도있다.
+			this.orderService.saveOrder(orderInfo);
+
+			map.put("orderInfo", orderInfo);
+			map.put("rental", rental);
+			map.put("success", true);
+			map.put("redirectUrl", "/rent/rent_Check_List"); // 리디렉트할 URL 추가
+
+			return new ResponseEntity<>(map, HttpStatus.OK);
+
+		} catch (Exception e) {//결제시 문제 발생
+			try {
+				// 환불 처리 시작
+				String token = getImportToken();
+
+				if (token == null || token.isEmpty()) {
+					log.error("인증 정보에 문제가 발생했습니다. 환불 처리를 위해 다시 시도해주세요.");
+				} else {
+					double refundAmount = order.getAmount(); // 주문에서 환불 금액을 가져옴
+					int result_delete = cancelPay(token, order.getMerchantId(), refundAmount); 
+
+					if (result_delete == -1) {
+						log.error("환불에 실패했습니다. 다시 시도해주세요.");
+					} else {
+						this.orderService.refundOK(order.getMerchantId()); // 환불 완료시 refund 업데이트
+						log.info("환불이 완료되었습니다.");
+					}
+				}// 환불 처리 종료
+
+			} catch (Exception refundException) {
+				log.error("환불 처리 중 오류 발생: ", refundException);
+
+				// 경고창을 띄우고 서비스 센터로 리디렉션
+				map.put("redirectUrl", "/service/service_center");
+				map.put("message", "환불 처리 중 오류가 발생했습니다. 1:1 문의를 통해 문제를 알려주세요.");
+				map.put("success", false);
+
+				return new ResponseEntity<>(map, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+
+			map.put("success", false);
+			map.put("message", "결제 정보 처리 중 오류 발생 컨트롤러");
+			log.error("결제 정보 가져오기 오류: ", e);
+			return new ResponseEntity<>(map, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return mav;
 	}
 
-	//예약내역 확인
-	@RequestMapping(value = "/rent_Check_List", method = RequestMethod.GET)
-	public String rent_Check_List(Model model, HttpSession session, RedirectAttributes rttr) {
-		MemberVO loggedInUser = (MemberVO) session.getAttribute("loggedInUser");	//로그인 정보를 가져옴
+	//예약 확인
+	@RequestMapping(value = "/rent_Check_List")
+	public ModelAndView rent_Check_List(HttpSession session, RedirectAttributes rttr) {
+	    ModelAndView mav = new ModelAndView();
+	    MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
 
-		try {
-			if (loggedInUser != null) {//로그인이 되었을 때
-				RentalVO rental = this.rentService.getRentOne(loggedInUser.getM_id());
-				CarVO car = this.rentService.getCarInfo(rental.getCar_id());	//렌탈비용 데이터베이스에 추가
-				List<OrderVO> order = this.rentService.getOrder(loggedInUser.getM_id());
+	    try {
+	        if (memberInfo != null) {//로그인시
+	            List<RentalVO> rentals = this.rentService.getRentList(memberInfo.getM_id());//아이디를 기준으로 렌트정보를 다가져옴
+	            Map<String, RentalVO> rentalMap = new HashMap<>(); 	//키,값으로 담기위해 map 생성
+	            for (RentalVO rental : rentals) {					//(RentalVO)rentals를 rental로 한개씩 뽑아서 키,값으로 저장
+	                rentalMap.put(rental.getCr_order(), rental);	//주문번호, 렌탈정보로 저장시킴 주문번호 호출시 렌탈정보 전체가 호출됨
+	            }
 
-				//DecimalFormat 는 숫자의 출력형태를 변환한다.
-				DecimalFormat decimalFormat = new DecimalFormat("#,###");
-				String rental_cost_total = decimalFormat.format(rental.getRental_cost());
+	            mav.addObject("rentalMap", rentalMap);
+	            mav.addObject("rentals", rentals);
 
-				model.addAttribute("rental", rental);	//렌탈정보
-				model.addAttribute("order",order);
-				model.addAttribute("rental_cost_total",rental_cost_total);//렌트비용
+	            List<OrderVO> orders = this.orderService.getCashInfo(memberInfo.getM_id());
+	            List<OrderVO> orderInfos = new ArrayList<>();
 
-				return "/rent/rent_Check_List";
-			}else {
-				// 로그인 정보가 없을 경우 로그인 페이지로 이동 또는 처리
-				rttr.addFlashAttribute("LoginNull", "alert('로그인 이후 이용 가능합니다!');");
-				return "redirect:/member/memberLogin";
-			}//else
-		}catch (Exception e) {
-			return "/rent/rent_Check_List_Null";
-		}
+	            List<CarVO> carInfos = new ArrayList<>(); 
+	            
+	            		
+	            for (OrderVO order : orders) {
+	                OrderVO orderInfo = orderService.getOrder(order.getId());
+	                orderInfos.add(orderInfo);
+	                
+	                }
+
+	            //정렬
+	           Collections.sort(orderInfos, Comparator.comparing(OrderVO::getBuy_date).reversed());
+	           
+	           for (OrderVO order : orderInfos) {
+	                CarVO carInfo = null;
+	                //차량 정보를 불러오는 mybatis문 orders에 들어있는 차량이름으로 검색
+	                
+	                String[] parts = order.getBuy_product_name().split(" ");
+	                String carName = parts[parts.length - 1];
+	                
+	                carInfo = this.rentService.getCarInfo(carName);
+	                carInfos.add(carInfo);
+	                }
+
+	            mav.addObject("memberInfo", memberInfo);
+	            mav.addObject("carInfos", carInfos);
+	            mav.addObject("orderInfos", orderInfos);
+	        } else {
+	            rttr.addFlashAttribute("LoginNull", "로그인 이후 이용 가능합니다!");
+	            mav.setViewName("redirect:/member/m_login");
+	            return mav;
+	        }
+
+	        mav.setViewName("/rent/rent_Check_List");
+	        return mav;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        mav.setViewName("/rent/rent_Check_List");
+	        return mav;
+	    }
 	}
-	
+
+
+
+
+
+
+
 	//환불 관련 메서드
 
 	//토큰을 받아오는 코드
@@ -168,8 +236,8 @@ public class RentCheckController {
 		}
 	}
 
-	// 결제정보 메서드
-	public OrderVO getPayInfo(String mId) throws Exception { 
+	// 결제정보 조회 메서드
+	public OrderVO getPayInfo(String merchantId) throws Exception { 
 		String buyer_name = "";
 		String buyer_phone = "";
 		String member_email = "";
@@ -188,10 +256,11 @@ public class RentCheckController {
 		long unixTime = 0L;
 		Date date = null;
 
-		String token = getImportToken();//토큰생성
+		String token = getImportToken();	//토큰생성 API요청 인증에 활용
 
+		//HttpClient를 사용하여 API에게 요청을 보냄
 		HttpClient client = HttpClientBuilder.create().build(); 
-		HttpGet get = new HttpGet(IMPORT_PAYMENTINFO_URL + mId + "/paid"); 
+		HttpGet get = new HttpGet(IMPORT_PAYMENTINFO_URL + merchantId + "/paid"); //merchantId를 보낸 이유
 		get.setHeader("Authorization", token); 
 		try { 
 			HttpResponse res = client.execute(get);
@@ -200,7 +269,9 @@ public class RentCheckController {
 			JsonNode rootNode = mapper.readTree(body); 
 			JsonNode resNode = rootNode.get("response"); 
 			log.info("wowwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww resNode: "+resNode);
-			//amount = resNode.get("amount").asText(); 
+
+			// API에게 받은 응답은 JsonNode방식으로 파싱됨
+			///JsonNode에 저장되어 있는 값들을 변수에 저장
 			buyer_name = resNode.get("buyer_name").asText(); 
 			buyer_phone = resNode.get("buyer_tel").asText(); 
 			member_email = resNode.get("buyer_email").asText(); 
@@ -216,6 +287,7 @@ public class RentCheckController {
 			amount = resNode.get("amount").asText();
 			buyer_card_num = resNode.get("apply_num").asText(); 
 			buyer_pay_ok = resNode.get("status").asText(); 
+			//buy_date = resNode.get("buy_date").asText(); 
 
 
 
@@ -228,7 +300,7 @@ public class RentCheckController {
 
 		buyer_pay_price = Long.parseLong(amount);
 
-		// 카드 결제 시간 - 형식 바꾸기
+		// 결제 시간 - 형식 바꾸기
 		paid_atLong = Long.parseLong(paid_at);
 		unixTime = paid_atLong * 1000;
 		date = new Date(unixTime);
@@ -236,8 +308,10 @@ public class RentCheckController {
 		// 형식 바꾸기
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		sdf.setTimeZone(TimeZone.getTimeZone("GMT+9")); // GMT(그리니치 표준시 +9 시가 한국의 표준시
-		String buy_date = sdf.format(date);
+
+		String buy_date = sdf.format(date);	//paid_at를 이용해서 생성된 buy_date
 		log.info("++++++++++++++++++++++++++++++++++++import date: "+buy_date);
+
 
 		OrderVO order_info = new OrderVO(-1L, buyer_name, buyer_phone, member_email, 
 				buyer_addr, buy_date, buy_product_name, buyer_buyid, buyer_merid, 
@@ -248,46 +322,106 @@ public class RentCheckController {
 
 	//환불하기 기능
 	@PostMapping("/refund")
-	public void refund(@RequestParam String order_index, @RequestParam String order_number,
-			HttpServletResponse response) throws Exception {
+	public void refund(@RequestParam String order_number, HttpServletResponse response, HttpSession session) throws Exception {
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
-		long order_index2 = Long.parseLong(order_index);
 
-		String token = getImportToken();
-		if (token == null || token.isEmpty()) {
-			out.println("<script>");
-			out.println("alert('환불도중 문제가 발생되었습니다! 다시 시도해주세요!');");
-			out.println("location.href='/';");
-			out.println("</script>");
+		// 로그인 고객정보 가져오기
+		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+
+		// 해당 아이디의 모든 렌트 정보를 가져옴
+		List<RentalVO> rentals = this.rentService.getRentList(memberInfo.getM_id());
+
+		// 리스트에 담긴 모든 렌트 정보에서 주문번호로 예약 내역 찾기
+		RentalVO rentalRefund = null;
+		for (RentalVO rental : rentals) {
+			if (order_number.equals(rental.getCr_order())) {//RentalVO에 들어있는 주문번호와 order_number가 
+				rentalRefund = rental;						//동일할때 까지 돌려서 어떤걸 환불할때 주문번호로 사용할것인지 찾음
+				break;										//rentalRefund에 환불할 정보들이 담김
+			}
 		}
 
-		int result_delete = cancelPay(token, order_number);
+		if (rentalRefund == null) {
+			out.print("일치하는 주문번호를 찾을 수 없습니다.");
+			out.close();
+			return;
+		}
 
-		if(result_delete == -1) {
-			out.println("<script>");
-			out.println("alert('환불에 실패 했습니다 다시 시도해주세요!');");
-			out.println("location.href='/';");
-			out.println("</script>");
+		// String 날짜를 LocalDateTime으로 변환
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		LocalDateTime rentalDateTime = LocalDateTime.parse(rentalRefund.getCr_sdate(), formatter);
 
+		// 하루 전 및 이틀 전 날짜 계산
+		LocalDateTime oneDayBeforeRental = rentalDateTime.minusDays(1);
+		LocalDateTime twoDaysBeforeRental = rentalDateTime.minusDays(2);
+
+		// 현재 날짜와 시간
+		LocalDateTime now = LocalDateTime.now();
+
+		String token = getImportToken();
+
+		if (token == null || token.isEmpty()) {
+			alertMessage(out, "인증 정보에 문제가 발생했습니다 다시 시도해주세요!");
+			return;
+		}
+
+		double refundAmount;
+		
+		System.out.println("하루전");
+		System.out.println(oneDayBeforeRental);
+		
+		System.out.println("이틀전");
+		System.out.println(twoDaysBeforeRental);
+
+		// 하루 전 환불 불가능
+		if (now.isAfter(oneDayBeforeRental)) { 	//2023-09-14T14:39
+		    alertMessage(out, "환불이 불가능한 시간입니다.");
+		}
+		// 이틀 전 환불
+		else if (now.isAfter(twoDaysBeforeRental) && now.isBefore(oneDayBeforeRental)) {	//2023-09-13T14:39
+		    refundAmount = rentalRefund.getCr_price() * 0.5;
+		    processRefund(token, order_number, refundAmount, out, "환불 처리 되었으나, 환불 금액은 50%입니다.");
+		}
+		// 그 외 환불 금액 100% 가능
+		else {
+		    refundAmount = rentalRefund.getCr_price();
+		    processRefund(token, order_number, refundAmount, out, "환불이 완료 되었습니다!");
+		}
+
+
+		out.close();
+	}
+
+	//반복되는 자바스크립트 코드 메서드화
+	private void alertMessage(PrintWriter out, String message) {
+		out.println("<script>");
+		out.println("alert('" + message + "');");
+		out.println("location.href='/';");
+		out.println("</script>");
+	}
+
+	//반복되는 환불처리 메서드
+	private void processRefund(String token, String order_number, double refundAmount, PrintWriter out, String successMessage) {
+		int result_delete = cancelPay(token, order_number, refundAmount);
+		if (result_delete == -1) {
+			alertMessage(out, "환불에 실패 했습니다 다시 시도해주세요!");
 		} else {
-			out.println("<script>");
-			out.println("alert('환불이 완료 되었습니다!');");
-			out.println("location.href='/';");
-			out.println("</script>");
+			this.orderService.refundOK(order_number); // 환불완료 시 refund에 '환불완료' 업데이트
+			alertMessage(out, successMessage);
 		}
 	}
 
 
+	//환불 API 구현
 	public static final String IMPORT_CANCEL_URL = "https://api.iamport.kr/payments/cancel"; 
 
-	//환불 메서드
-	public int cancelPay(String token, String mid) { 
+	public int cancelPay(String token, String order_number, double refundAmount) { 
 		CloseableHttpClient client = HttpClientBuilder.create().build();
 		HttpPost post = new HttpPost(IMPORT_CANCEL_URL); 
 		Map<String, String> map = new HashMap<String, String>(); 
 		post.setHeader("Authorization", token); 
-		map.put("merchant_uid", mid); 
+		map.put("merchant_uid", order_number);						//주문번호와
+		map.put("amount", String.valueOf(refundAmount));	//환불금액 정보 추가
 
 		try { 
 			post.setEntity(new UrlEncodedFormEntity(convertParameter(map), "UTF-8")); 
@@ -323,7 +457,6 @@ public class RentCheckController {
 		}
 	}
 
-
 	private List<NameValuePair> convertParameter(Map<String, String> params) {
 		List<NameValuePair> paramList = new ArrayList<>();
 		for (Map.Entry<String, String> entry : params.entrySet()) {
@@ -331,7 +464,4 @@ public class RentCheckController {
 		}
 		return paramList;
 	}
-
-
-
 }

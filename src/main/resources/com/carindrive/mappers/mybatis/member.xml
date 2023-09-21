@@ -8,11 +8,57 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!-- 회원 정보 저장(회원가입) -->
 	<insert id="member_in" parameterType="member">
-	    INSERT INTO cid_members (m_num, m_id, m_pwd, m_name, m_phone)
+	    INSERT INTO c_member (m_num, m_id, m_pwd, m_name, m_phone)
 		VALUES (m_seq.NEXTVAL, #{m_id}, #{m_pwd}, #{m_name}, #{m_phone})
 	</insert>
 
 	<select id="get_member" resultType="member" parameterType="member">
-		select * from cid_members where m_id = #{m_id}
+		select * from c_member where m_id = #{m_id}
 	</select>
+	
+	
+	
+	
+	<!-- yw -->
+	
+	 	<!-- 아이디 중복 검색 -->
+   	<select id="m_idcheck"  resultType="member">
+   		select * from c_member where m_id=#{id}
+   	</select>
+   	
+   	<!-- 회원 저장 -->
+   	<insert id="C_mem_in">
+   		insert into 
+   		c_member(m_id,m_pwd,m_birth,m_name,m_email,m_tel,m_phone,
+   		m_state,m_regdate)
+   		values(#{m_id},#{m_pwd},#{m_birth},#{m_name},#{m_email},
+   		#{m_tel},#{m_phone},1,sysdate)
+   	</insert>
+   	
+   	<!-- 회원 로그인 -->
+   	<select id="C_mem_login" resultType="member">
+   		select * from c_member where m_id=#{m_id} and m_state=1 
+   	</select>
+   	
+   	<!-- 관리자 로그인 -->
+   	<select id="admin_ck" resultType="member">
+   		select * from c_member where m_id=#{m_id} and m_state=9
+   	</select>
+   	
+   	<!-- 멤버 리스트 불러오기 -->
+   	<select id="mypage" resultType="member">
+   		select * from c_member where m_id=#{m_id}
+   	</select>
+   	
+   	<!-- 비번찾기 -->
+   	<select id="findpwd" resultType="member">
+   		select * from c_member where m_id=#{m_id}
+   	</select>
+   	
+   	<!-- 멤버 수정 완료 -->
+   	<update id="update_mem">
+   		update c_member set m_tel = #{m_tel}, m_phone = #{m_phone}, m_email = #{m_email}
+   		where m_id = #{m_id}
+   	</update>
+
 </mapper>

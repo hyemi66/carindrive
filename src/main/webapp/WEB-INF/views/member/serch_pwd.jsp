@@ -6,9 +6,9 @@
 <head>
 <meta charset="UTF-8">
 <title>비밀번호 찾기 페이지</title>
-<link rel="stylesheet" type="text/css" href="${path}/css/serch_pwd.css">
+<link rel="stylesheet" type="text/css" href="${path}/css/member/serch_pwd.css">
 <script src="${path}/js/jquery.js"></script>
-<script src="${path}/js/s_pwd.js"></script>
+<script src="${path}/js/member/s_pwd.js"></script>
 </head>
 <body>
 <%-- include : main --%>
