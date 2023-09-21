@@ -14,7 +14,6 @@
 </head>
 <body>
 <jsp:include page="../include/header.jsp"/>
-
 <div id="mypage">
 	<h2>마이페이지</h2>
 	<hr id="mp_hr">
@@ -45,6 +44,12 @@
 					<th>면허등록여부</th>
 					<td>
 						<input type="button" value="면허등록" onclick="${path}/">
+					</td>
+				</tr>
+				<tr>
+					<th>회원탈퇴</th>
+					<td>
+						<input type="button" value="회원탈퇴" onclick="location.href='mypage_del' ">
 					</td>
 				</tr>
 			</c:forEach>

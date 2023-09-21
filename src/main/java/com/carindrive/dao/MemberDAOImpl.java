@@ -91,6 +91,11 @@ public class MemberDAOImpl implements MemberDAO {
 		public void updateMember(MemberVO m) {
 			this.sqlSession.update("update_mem", m);
 		} // 회원정보수정완료
+
+		@Override
+		public void delMember(String m_id) {
+			this.sqlSession.update("del_mem", m_id);
+		} // 회원탈퇴 state = 2로 수정
 		
 		
 		/*	

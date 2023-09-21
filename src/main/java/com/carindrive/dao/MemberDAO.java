@@ -39,4 +39,7 @@ public interface MemberDAO {
 
 	void updateMember(MemberVO m);
 
+
+	void delMember(String m_id);
+
 }

@@ -80,7 +80,10 @@
 				<hr>
 				<ul>
 					<li>
-						차량명 : ${car.c_brand} ${car.c_name} ${car.c_year}년식
+						차량명 : ${car.c_brand} ${car.c_name}
+					</li>
+					<li>
+						차량연식 : ${car.c_year}년식
 					</li>
 					<li>
 						차량색상 : ${car.c_color}

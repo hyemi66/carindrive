@@ -20,7 +20,7 @@
 	<h3>비밀번호 재확인</h3>
 	<h4>회원님의 정보를 안전하게 보호하기 위해 비밀번호를 다시 한번 확인해주세요.</h4>
 	<hr id="mp_hr">
-	<form method="post" action="mypage_edit">
+	<form method="post" action="mypage_del_ok">
 		<table id="mypage_t">
 			<c:forEach var="m" items="${mlist}">
 				<tr>
@@ -33,7 +33,7 @@
 				</tr>
 			</c:forEach>
 		</table>
-		<input id="mypage_edit2" type="submit" value="확인" />
+		<input id="mypage_edit2" type="submit" value="탈퇴" />
 		<input id="mypage_edit3" type="button" value="취소" onclick="location.href='mypage' " />
 	</form>
 </div>

@@ -44,6 +44,8 @@ public interface MemberService {
 
 	void updateMember(MemberVO m);
 
+	void delMember(String m_id);
+
 
 
 	

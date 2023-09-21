@@ -45,6 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    		select * from c_member where m_id=#{m_id} and m_state=9
    	</select>
    	
+   	<!-- 마이페이지쪽 마이바티스 -->
    	<!-- 멤버 리스트 불러오기 -->
    	<select id="mypage" resultType="member">
    		select * from c_member where m_id=#{m_id}
@@ -59,6 +60,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    	<update id="update_mem">
    		update c_member set m_tel = #{m_tel}, m_phone = #{m_phone}, m_email = #{m_email}
    		where m_id = #{m_id}
+   	</update>
+   	
+   	<!-- 회원탈퇴(state = 2) -->
+   	<update id="del_mem">
+   		update c_member set m_state = 2 where m_id = #{m_id}
    	</update>
 
 </mapper>

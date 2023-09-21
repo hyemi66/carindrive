@@ -120,9 +120,10 @@ body {
 }
 #carInfo {
 	margin-top: 5px;
-	margin-left: 20px;
+	margin-left: 60px;
 }
 #carInfo h2 {
+	font-size: 30px;
 	color: #1c2b37;
 	font-weight: bold;
 }
@@ -140,7 +141,7 @@ body {
 	border-radius: 10px;
 	width: 200px; height: 40px;
 	background-color: white;
-	margin-top: 50px;
+	margin-top: 22px;
 	float: right;
 	font-weight: bold;
 	font-size: 15px;

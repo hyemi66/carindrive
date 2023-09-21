@@ -349,7 +349,50 @@ public class MemberController {
 		
 		return mm;
 	}
+	
+	// 회원정보삭제(비번 입력창)
+	@GetMapping("/mypage_del")
+	public ModelAndView mypage_del(String m_id, String m_pwd, MemberVO m,
+			HttpSession session, HttpServletResponse response) throws Exception {
+		ModelAndView mom = new ModelAndView();
+		
+		m_id = (String)session.getAttribute("id");
+		List<MemberVO> mlist = this.memberService.myPage(m_id);
+	          
+		mom.addObject("mlist", mlist);
+		mom.setViewName("/member/mypage_del");
+	          
+		return mom;
+	}
+	
+	// 회원삭제정보(비번 입력시)
+	@PostMapping("/mypage_del_ok")
+	public ModelAndView mypage_del_ok(String m_id, String m_pwd, MemberVO m,
+			HttpSession session, HttpServletResponse response) throws Exception {
+		response.setContentType("text/html; charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		m_id = (String)session.getAttribute("id");
+		
+		List<MemberVO> mlist = this.memberService.myPage(m_id);
+		m = this.memberService.findPwd(m_id);
+		
+		if(!m.getM_pwd().equals(CarPwdCh.getPassWordToXEMD5String(m_pwd))) {
+			out.println("<script>");
+			out.println("alert('비번이 다릅니다!');");
+			out.println("location='mypage_del';");
+			out.println("</script>"); 
+		} else {
+			ModelAndView fm = new ModelAndView();
+			this.memberService.delMember(m_id);
+			out.println("<script>");
+			out.println("alert('회원탈퇴되셨습니다.');");
+			out.println("location='/';");
+			out.println("</script>");
+			
+			session.invalidate();
+		
+		}
+		return null;
+	}
+	
 }
-	    
-
-
