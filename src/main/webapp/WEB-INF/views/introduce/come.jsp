@@ -25,33 +25,13 @@
 </div>
 
 <article id="intro_ceo_cont">
-	<h1>| 오시는 길 |</h1>
-	<p>
+	<h1>오시는 길</h1>
+	<p id="intro_img">
 		→ 서울시 종로구 돈화문로 26 단성사 빌딩 지하 1층 CARINDRIVE
 		<br><br>
 		<img alt="come" src="${path}/images/come.PNG">
 	</p>
 </article>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
 </div>
 
 <jsp:include page="../include/footer.jsp"/>

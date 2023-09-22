@@ -29,7 +29,7 @@
 			<h1>회 원 정 보 탈 퇴</h1>
 			<h3>비밀번호 재확인</h3>
 			<h4>회원님의 정보를 안전하게 보호하기 위해 비밀번호를 다시 한번 확인해주세요.</h4>
-			<form method="post" action=mypage_del_ok">
+			<form method="post" action="mypage_del_ok">
 				<table id="mypage_st">
 					<c:forEach var="m" items="${mlist}">
 						<tr>

@@ -74,12 +74,11 @@ footer {
 }
 /* 메인 이미지 */
 .mainimg {
-	background-color: #ccc;
-	height: 600px;
-	margin: 10px 100px 0px 100px;
+	margin: 20px 100px 0px 100px;
 }
-.mainimg h1 {
-	text-align: center;
+.mainimg img {
+	width: 1320px;
+	height: 600px;
 }
 /* 메인이미지 밑에 */
 .main_car {

@@ -95,7 +95,6 @@
 						연료 : ${car.c_oil}
 					</li>
 				</ul>
-				<button type="button" onclick="location.href='rent' ">차량 다시 선택</button>
 		</div>
 	</div>
 	<hr>

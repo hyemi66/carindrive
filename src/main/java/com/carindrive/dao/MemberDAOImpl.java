@@ -94,7 +94,7 @@ public class MemberDAOImpl implements MemberDAO {
 
 		@Override
 		public void delMember(String m_id) {
-			this.sqlSession.update("del_mem", m_id);
+			this.sqlSession.delete("del_mem", m_id);
 		} // 회원탈퇴 state = 2로 수정
 		
 		

@@ -16,7 +16,7 @@
 <!-- 페이지 내용 -->
 
 <div class="mainimg">
-	<h1>메인 사진</h1>
+	<img alt="메인사진" src="${path}/images/MAINIMG.jpg">
 </div>
 
 <div class="main_car">

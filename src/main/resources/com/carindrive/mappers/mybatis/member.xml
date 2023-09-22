@@ -62,9 +62,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    		where m_id = #{m_id}
    	</update>
    	
-   	<!-- 회원탈퇴(state = 2) -->
+   	<!-- 회원탈퇴(DB에서 삭제) -->
    	<update id="del_mem">
-   		update c_member set m_state = 2 where m_id = #{m_id}
+   		delete from c_member where m_id = #{m_id}
    	</update>
 
 </mapper>
