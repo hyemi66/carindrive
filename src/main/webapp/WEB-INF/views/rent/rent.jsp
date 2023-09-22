@@ -193,7 +193,7 @@
 		<table>
 			<c:if test="${!empty clist}">
 				<tr>
-					<c:forEach var="c" items="${clist}">
+					<c:forEach var="c" items="${clist}" varStatus="status">
 						<c:if test="${c.c_name.equals('아테온')}">
 							</tr><tr>
 						</c:if>
@@ -218,7 +218,6 @@
 								</div>
 							</td>
 						</c:if>
-						
 					</c:forEach>
 				</tr>
 			</c:if>

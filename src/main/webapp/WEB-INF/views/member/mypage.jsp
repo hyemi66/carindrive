@@ -14,50 +14,55 @@
 </head>
 <body>
 <jsp:include page="../include/header.jsp"/>
-<div id="mypage">
-	<h2>마이페이지</h2>
-	<hr id="mp_hr">
-	<form method="post" action="mypage_ok">
-		<table id="mypage_t">
-			<c:forEach var="m" items="${mlist}">
-				<tr>
-					<th>회원 아이디</th>
-					<td>${m.m_id}</td>
-				</tr>
-				<tr>
-					<th>회원이름</th>
-					<td>${m.m_name}</td>
-				</tr>
-				<tr>
-					<th>회원생일</th>
-					<td>${m.m_birth}</td>
-				</tr>
-				<tr>
-					<th>전화번호</th>
-					<td>${m.m_tel} | ${m.m_phone}</td>
-				</tr>
-				<tr>
-					<th>이메일</th>
-					<td>${m.m_email}</td>
-				</tr>
-				<tr>
-					<th>면허등록여부</th>
-					<td>
-						<input type="button" value="면허등록" onclick="${path}/">
-					</td>
-				</tr>
-				<tr>
-					<th>회원탈퇴</th>
-					<td>
-						<input type="button" value="회원탈퇴" onclick="location.href='mypage_del' ">
-					</td>
-				</tr>
-			</c:forEach>
-		</table>
-		<input id="mypage_edit" type="button" value="회원정보수정" onclick="location='${path}/member/mypage_ok';">
-	</form>
+<div class="Bmypage">
+	<div class="Mypage">
+		<div class="Mypage_menu">
+			<h2>마이페이지</h2>
+			<img id="mypage_img" alt="사람" src="${path}/images/people.jpg">
+			<ul>
+				<li><a href="${path}/member/mypage">회원정보확인</a>
+				<li><a href="${path}/member/mypage_ok">회원정보수정</a>
+				<li><a href="${path}/member/mypage_del">회원탈퇴</a>
+			</ul>
+		</div>
+		<article id="mypage_show">
+			<h1>회 원 정 보 확 인</h1>
+			<table id="mypage_st">
+				<c:forEach var="m" items="${mlist}">
+					<tr>
+						<th>아이디</th>
+						<td>${m.m_id}</td>
+					</tr>
+					<tr>
+						<th>이름</th>
+						<td>${m.m_name}</td>
+					</tr>
+					<tr>
+						<th>생일</th>
+						<td>${m.m_birth}</td>
+					</tr>
+					<tr>
+						<th>전화번호</th>
+						<td>${m.m_phone}(${m.m_tel})</td>
+					</tr>
+					<tr>
+						<th>이메일</th>
+						<td>${m.m_email}</td>
+					</tr>
+					<tr>
+						<th>가입날짜</th>
+						<td>${m.m_regdate}</td>
+					</tr>
+					<tr>
+						<th>면허 등록 여부</th>
+						<td>미등록</td>
+					</tr>
+				</c:forEach>
+			</table>
+			<div class="clear"></div>
+		</article>
+	</div>
 </div>
-
 <div class="clear"></div>
 <jsp:include page="../include/footer.jsp"/>
 </body>

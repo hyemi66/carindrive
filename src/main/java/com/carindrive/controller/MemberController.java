@@ -276,10 +276,10 @@ public class MemberController {
 	    	return "member/serch_pwd";
 	    }
 	    
-	/* 마이페이지 관련 부분 */
+	/* 마이페이지 관련 부분(회원정보확인페이지) */
 	@RequestMapping("/mypage")
-	public ModelAndView mypage(String m_id, HttpSession session) {
-		m_id = (String)session.getAttribute("id");
+	public ModelAndView mypage(HttpSession session) {
+		String m_id = (String)session.getAttribute("id");
 	
 		ModelAndView mm = new ModelAndView();
 	
