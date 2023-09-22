@@ -424,16 +424,19 @@ public class RentCheckController {
 
 			// 하루 전 환불 불가능
 			if (now.isAfter(oneDayBeforeRental)) {
-				alertMessage(out, "대여시간 24시간 이내는 환불이 불가능합니다.");
+				out.println("<script>");
+				out.println("alert('대여시간 24시간 이내는 환불이 불가능합니다.');");
+				out.println("window.close()");	//현재창을 닫고
+				out.println("</script>");
 			}
 			// 이틀 전 환불
 			else if (now.isAfter(twoDaysBeforeRental) && now.isBefore(oneDayBeforeRental)) {	
-				refundAmount = rentalRefund.getCr_price() * 0.5;
+				refundAmount = rentalRefund.getCr_price() * 0.5; //환불처리후 새로고침
 				processRefund(token, order_number, refundAmount, out, "환불 처리 되었으나, 환불 금액은 50%입니다.");
 			}
 			// 그 외 환불 금액 100% 가능
 			else {
-				refundAmount = rentalRefund.getCr_price();
+				refundAmount = rentalRefund.getCr_price(); //환불처리후 새로고침
 				processRefund(token, order_number, refundAmount, out, "환불이 완료 되었습니다!");
 			}
 			out.close();
@@ -452,7 +455,8 @@ public class RentCheckController {
 	private void alertMessage(PrintWriter out, String message) {
 		out.println("<script>");
 		out.println("alert('" + message + "');");
-		out.println("window.close()");
+		out.println("window.close()");	//현재창을 닫고
+		out.println("opener.location.reload();"); //부모창을 새로고침
 		out.println("</script>");
 	}
 

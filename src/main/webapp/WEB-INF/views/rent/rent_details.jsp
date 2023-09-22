@@ -33,9 +33,8 @@
 	<div class=box>
 		<div class="infobox">
 		<h2>고객정보</h2>
-			<span data-member-name>예약자 성함: ${memberInfo.m_name}</span>
-			<hr>
-			<span data-member-phone>예약자 연락처: ${memberInfo.m_phone}</span>
+			<p>예약자 성함: ${memberInfo.m_name}</p>
+			<p>예약자 연락처: ${formattedPhone}</p>
 			<p>운전자 성함: 추후 수정</p>
 			<p>운전자 연락처: 추후 수정</p>
 		</div>
@@ -78,8 +77,10 @@
 		<div class="infobox">
 			<c:choose>
 				<c:when test="${orderInfo.refund == '정상결제'}">
-             <a href="javascript:void(0);" 
-             onclick="openPopup('/rent/refund_Check?order_number=${orderInfo.merchantId}')">환불하기</a>
+                   <form action="/rent/refund" method="post" id="refundForm">
+                      <input type="hidden" name="order_number" value="${orderInfo.merchantId}">
+                      <button type="submit">환불하기</button>
+                  </form>
 				</c:when>
 				<c:when test="${orderInfo.refund == '환불완료' || currentDateTime > rentalInfo.cr_sdate}">
 					<h2>환불불가</h2>
