@@ -38,4 +38,7 @@ public interface RentService {
 	
 	// 차 리스트 가져오기
 	List<CarVO> getCarList(CarVO cv);
+
+	//차량코드번호(프라이머리키)로 차정보 가져오기
+	CarVO getCarInfo2(int c_num);
 }

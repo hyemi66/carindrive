@@ -57,10 +57,10 @@
 			<p>렌트비용: <fmt:formatNumber value="${orderInfo.amount}" type="number" pattern="#,###"/>원</p>
 			<c:choose>
 				<c:when test="${orderInfo.refund == '정상결제'}">
-					결제정보: <span style="color: blue;">${orderInfo.refund}</span>
+					결제상태: <span style="color: blue;">${orderInfo.refund}</span>
 				</c:when>
 				<c:when test="${orderInfo.refund == '환불완료'}">
-					결제정보: <span style="color: red;">${orderInfo.refund}</span>
+					결제상태: <span style="color: red;">${orderInfo.refund}</span>
 				</c:when>
 			</c:choose>
 			<p>대여일자: ${rentalInfo.cr_sdate}</p>
@@ -71,8 +71,21 @@
 			
 		<div class=box>
 		<div class="infobox">
-		<h2>시간연장</h2>
+		    <c:choose>
+		       	<c:when test="${orderInfo.refund == '정상결제' || currentDateTime < rentalInfo.cr_edate}">
+		            <form action="/rent/timeUp" method="post">
+		                <input type="hidden" name="c_num" value="${carInfo.c_num}">
+		                <input type="hidden" name="cr_edate" value="${rentalInfo.cr_edate}">
+		                <input type="hidden" name="order_number" value="${orderInfo.merchantId}">
+		                <button type="submit">시간연장</button>
+		            </form>		
+		        </c:when>
+		        <c:otherwise>
+		            <h2>시간연장불가</h2>
+		        </c:otherwise>
+		    </c:choose>
 		</div>
+
 		
 		<div class="infobox">
 			<c:choose>

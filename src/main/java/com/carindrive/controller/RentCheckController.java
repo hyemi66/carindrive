@@ -2,7 +2,9 @@ package com.carindrive.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -200,6 +202,7 @@ public class RentCheckController {
 	@RequestMapping(value="/rent_details")
 	public ModelAndView rent_details(@RequestParam("merchantId") String merchantId,
 			@RequestParam("carname") String carName, HttpSession session) {
+		System.out.println("rent_details메서드 동작");
 		ModelAndView model = new ModelAndView();
 		//로그인정보
 		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
@@ -218,32 +221,110 @@ public class RentCheckController {
 		return model;
 	}
 
+	//시간 연장 코드
+	@RequestMapping(value="/timeUp")
+	public ModelAndView timeUp(@RequestParam int c_num,
+			@RequestParam String order_number, HttpServletResponse response) throws Exception {
+		System.out.println("timeUp메서드 동작");
+		System.out.println(c_num);//차량코드번호
+		System.out.println(order_number);//차량코드번호
+
+		response.setContentType("text/html;charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		ModelAndView model = new ModelAndView();
+
+		//해당 차량의 정보 가져오기
+		CarVO car = this.rentService.getCarInfo2(c_num);
+		System.out.println(car);
+		//렌트 정보 가져오기
+		RentalVO rental = this.rentService.getRentCar(order_number);
+		System.out.println(rental);
+
+		model.addObject("rental",rental);
+		model.addObject("car",car);
+
+		return model;
+	}
+
+
+	@RequestMapping(value="/timeUpPay") //결제하는 로직을 구현해야함 timeUpPay.jsp도 완성시킬것
+	public ModelAndView timeUpPay(@RequestParam String cr_sdate, @RequestParam String cr_edate, @RequestParam int c_num) throws Exception {
+		System.out.println("timeUpPay메서드 실행");
+
+		ModelAndView model = new ModelAndView();
+		
+		// 받아온 날짜 형태 변경
+		cr_sdate = cr_sdate.replace("T", " ");
+		cr_edate = cr_edate.replace("T", " ");
+
+		// DateTimeFormatter를 사용하여 날짜 및 시간 문자열을 파싱하여 LocalDateTime 객체로 변환
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		LocalDateTime new_sdate = LocalDateTime.parse(cr_sdate, formatter);
+		LocalDateTime new_edate = LocalDateTime.parse(cr_edate, formatter);
+
+		// 렌트 기간의 시간 간격을 계산
+		Duration duration = Duration.between(new_sdate, new_edate);
+		long minutes = duration.toMinutes();
+
+		// 해당 차량의 정보 가져오기
+		CarVO car = this.rentService.getCarInfo2(c_num);
+
+		// 렌트 가격 계산
+		double one_price = minutes * car.getC_price();
+
+		// 가격 형태 변경 (소수점 제거)
+		DecimalFormat decimalFormat = new DecimalFormat("#");
+		String total_price = decimalFormat.format(one_price);
+
+		System.out.println("렌탈가격: "+total_price);
+
+		// 렌트 비용을 c_rental 테이블에 추가
+		this.rentService.insertCost(c_num, one_price);
+
+		model.addObject("total_price", total_price);
+
+		// 다음 페이지 or 동일 페이지에 가격 정보를 표시하도록 설정
+		model.setViewName("/rent/timeUpPay"); // 여기에 결과를 표시하려는 페이지의 이름을 넣으세요.
+		
+		return model;
+	}
+
+
+
+
+
+
+
+
+
+
+
 
 	//환불 관련 메서드
 
-	
+
 	//본인 인증 메서드 //사용안함
 	@RequestMapping(value="refund_Check")
 	public ModelAndView refund_Check(HttpSession session, HttpServletRequest request) throws Exception {
-		
+
 		System.out.println("refund_Check 메서드 동작");
 		ModelAndView model = new ModelAndView();
 		try {
-		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo"); //로그인정보
+			MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo"); //로그인정보
 
-		String mPwd = request.getParameter("mPwd");
-		System.out.println("암호화 전: "+mPwd);
+			String mPwd = request.getParameter("mPwd");
+			System.out.println("암호화 전: "+mPwd);
 
-		if(mPwd != null) {//사용자에게 값을 입력 받은 뒤
-			mPwd = CarPwdCh.getPassWordToXEMD5String(mPwd);
-			System.out.println("암호화 후: "+mPwd);
-			if(memberInfo.getM_pwd().equals(mPwd)) {//인증이 되면
-				System.out.println("인증완료");
-			}else {
-				System.out.println("인증실패");
-			}
-		}//
-		return model;
+			if(mPwd != null) {//사용자에게 값을 입력 받은 뒤
+				mPwd = CarPwdCh.getPassWordToXEMD5String(mPwd);
+				System.out.println("암호화 후: "+mPwd);
+				if(memberInfo.getM_pwd().equals(mPwd)) {//인증이 되면
+					System.out.println("인증완료");
+				}else {
+					System.out.println("인증실패");
+				}
+			}//
+			return model;
 		}catch(Exception e) {
 			e.printStackTrace();
 			model.addObject("noSession", true);//세션이 없음을 jsp에 전달 //이 기능이 동작을 안함

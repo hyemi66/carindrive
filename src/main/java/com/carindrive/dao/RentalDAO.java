@@ -29,4 +29,6 @@ public interface RentalDAO {
 	
 	List<CarVO> getCarList(CarVO cv);
 
+	CarVO getCarInfo2(int c_num);
+
 }

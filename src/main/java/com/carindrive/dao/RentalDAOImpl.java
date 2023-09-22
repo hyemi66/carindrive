@@ -73,5 +73,10 @@ public class RentalDAOImpl implements RentalDAO {
 		return this.sqlSession.selectList("carList", cv);
 	} // 차 리스트 불러오기
 
+	@Override
+	public CarVO getCarInfo2(int c_num) {
+		return this.sqlSession.selectOne("getCarInfo2",c_num);
+	}//차량 코드번호로 차 정보 가져오기
+
 
 }

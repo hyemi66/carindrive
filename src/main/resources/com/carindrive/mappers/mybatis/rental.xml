@@ -52,6 +52,11 @@ VALUES (cr_seq.NEXTVAL, #{cr_mid}, #{cr_cname}, #{cr_rdate}, #{cr_sdate}, #{cr_e
 		select * from c_car
 	</select>
 	
+	<!-- 차량코드번호를 기준으로 차량정보 가져오기 -->
+	<select id="getCarInfo2" resultType="car">
+		select * from c_car where c_num = #{c_num} 
+	</select>
+	
     
 
 </mapper>

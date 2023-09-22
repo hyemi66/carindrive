@@ -155,7 +155,6 @@ public class RentController {
 				//고객 정보 가져오기 (렌트 내역에 필요)
 				MemberVO mem = this.memberService.getMemberInfo(memberInfo.getM_id());
 
-				// 렌트 기간 계산 여기 변수를 수정해야할듯 여기부터 작업하면 됨
 				//DateTimeFormatter를 이용하여 날짜와 시간 문자열을 파싱하여 LocalDateTime 객체로 변환
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 				System.out.println("렌트시작시간: "+rental.getCr_sdate());
