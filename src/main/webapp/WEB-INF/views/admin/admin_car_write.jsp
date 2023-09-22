@@ -42,7 +42,7 @@
 				</tr>
 				<tr>
 					<th>차량 이미지</th>
-					<td><input type="file" name="c_img" /></td>
+					<td><input type="file" id="c_img" name="c_img" /></td>
 				</tr>
 			</table>
 			<div id="aBw_menu">

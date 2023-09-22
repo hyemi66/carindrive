@@ -48,5 +48,13 @@ function car_write_check(){
 		return false;
 	}
 	
+	let checkpr = /^[0-9]*$/;
+	  
+	  if(!checkpr.test(c_price.value)){
+		  alert("가격은 숫자만 가능합니다.");
+		  $("#c_price").val("").focus();
+		  return false;
+	  }
+	
 	
 }

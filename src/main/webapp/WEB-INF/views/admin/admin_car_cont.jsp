@@ -38,7 +38,7 @@
     <th>차량 가능 여부</th> <td>${c.c_ok}</td>
    </tr>
    <tr>
-    <th>차량 이미지</th><td><img src="./upload${c.c_img}" width="280"
+    <th>차량 이미지</th><td><img src="./images/car/${c.c_img}" width="280"
 						height="180" />
    </tr>
 

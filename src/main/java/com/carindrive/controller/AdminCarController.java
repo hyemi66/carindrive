@@ -107,7 +107,7 @@ public class AdminCarController {
 		response.setContentType("text/html;charset=UTF-8");
 	
 		if(isAdminLogin(session, response)) {
-			String saveFolder=request.getRealPath("upload");
+			String saveFolder=request.getRealPath("images/car");
 			//이진파일 업로드 서버경로
 			int fileSize=5*1024*1024;//이진파일 업로드 최대크기
 			MultipartRequest multi=null;//이진파일을 받을 참조변수
@@ -128,7 +128,9 @@ public class AdminCarController {
 			//을 받아옴.
 			if(upFile != null) {//첨부한 이진파일이 있다면
 				String fileName=upFile.getName();//첨부한 파일명
+				/*
 				Calendar ca=Calendar.getInstance();//칼렌더는 추상
+				
 				//클래스로 new로 객체 생성을 못함. 년월일 시분초 값을 반환
 				int year=ca.get(Calendar.YEAR);//년도값
 				int month=ca.get(Calendar.MONTH)+1;//월값. +1을 한
@@ -142,8 +144,8 @@ public class AdminCarController {
 				}
 				Random r=new Random();
 				int random=r.nextInt(100000000);
-
-				/*첨부 파일 확장자 구함*/
+				
+				//첨부 파일 확장자 구함
 				int index=fileName.lastIndexOf(".");//마침표 위치
 				//번호를 구함
 				String fileExtension=fileName.substring(index+1);//마침표
@@ -153,8 +155,10 @@ public class AdminCarController {
 				String fileDBName="/"+year+"-"+month+"-"+date+"/"+
 						refileName;//DB에 저장될 레코드값
 				upFile.renameTo(new File(homedir+"/"+refileName));
+				*/
 				//바뀌어진 이진파일로 업로드
-				c.setC_img(fileDBName);
+				
+				c.setC_img(fileName);
 			}
 			c.setC_brand(c_brand); c.setC_color(c_color);
 			c.setC_name(c_name); c.setC_oil(c_oil);
@@ -195,7 +199,7 @@ public class AdminCarController {
 		response.setContentType("text/html;charset=UTF-8");
 		
 		if(isAdminLogin(session, response)) {
-			String saveFolder=request.getRealPath("upload");//수정 첨부된 파일을 실제 업로드하는
+			String saveFolder=request.getRealPath("images/car");//수정 첨부된 파일을 실제 업로드하는
 			//서버 폴더 경로
 			int fileSize=5*1024*1024;
 			
@@ -218,11 +222,12 @@ public class AdminCarController {
 			
 			CarVO db_File=this.AcService.getAdminCarCont(c_num);
 			//DB로 부터 기존 첨부파일명을 구함
+			
 			File upFile=multi.getFile("c_img");//수정 첨부된 파일을 가져온다.
 			
 			if(upFile != null) {//수정 첨부된 파일이 있는 경우 실행
 				String fileName=upFile.getName();//수정 첨부된 파일명을 구함.
-				File delFile=new File(saveFolder+db_File.getC_img());
+				/*File delFile=new File(saveFolder+db_File.getC_img());
 				//삭제할 파일 객체 생성
 				if(delFile.exists()) { 
 					delFile.delete();//기존첨부파일을 삭제				
@@ -245,8 +250,18 @@ public class AdminCarController {
 				String refileName="car"+year+month+date+random+"."+fileExtendsion;
 				String fileDBName="/"+year+"-"+month+"-"+date+"/"+refileName;
 				upFile.renameTo(new File(homedir+"/"+refileName));
-				c.setC_img(fileDBName);
-			}
+				*/
+				
+				
+				c.setC_img(fileName);
+			}else {//수정 첨부파일이 없는 경우
+				String fileDBName="";
+				if(db_File.getC_img() != null) {//기존 첨부파일이 있는 경우
+					c.setC_img(db_File.getC_img());
+				}else {
+					c.setC_img(fileDBName);
+				}
+			}//if else
 			c.setC_num(c_num);
 			c.setC_brand(c_brand); c.setC_color(c_color);
 			c.setC_name(c_name); c.setC_oil(c_oil);
