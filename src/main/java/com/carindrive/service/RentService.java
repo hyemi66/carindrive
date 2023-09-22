@@ -31,7 +31,7 @@ public interface RentService {
 	void insertMerchantId(String merchantId, int cr_num);
 
 	//주문번호를 기준으로 해당 예약내역을 선택
-	RentalVO getRentRefund(String cr_order);
+	RentalVO getRentCar(String cr_order);
 
 	//모든 차 정보를 가져오기
 	List<CarVO> findAllCar();

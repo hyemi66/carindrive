@@ -81,20 +81,31 @@
 					        </c:when>
 					    </c:choose>
 					</div>
-					<c:if test="${orderInfo.refund == '정상결제'}">
-					    <div class ="button">
-					        <form action="/rent/refund" method="post">
-					            <input type="hidden" name="order_number" value="${orderInfo.merchantId}">
-					            <button type="submit">환불하기</button>
-					        </form>
-					    </div>
-					</c:if>
+					 <div class="info-line">
+            <label>세부 정보:</label>
+            <a href="javascript:void(0);" 
+             onclick="openPopup('/rent/rent_details?merchantId=${orderInfo.merchantId}&carname=${carInfos[status.index].c_name}')">세부 정보 보기</a>
+        </div>
+
 				    </div>
 	            </div>
 	        </c:forEach>
 	      </c:otherwise>
 	   </c:choose>
 	</div>
+	
+	<!-- JavaScript 함수를 사용하여 팝업 창 열기 -->
+<script>
+function openPopup(url) {
+    var width = 1200; // 팝업 창 가로 크기
+    var height = 1000; // 팝업 창 세로 크기
+    var left = (screen.width - width) / 2; // 화면 가운데 정렬을 위한 좌표
+    var top = (screen.height - height) / 2; // 화면 가운데 정렬을 위한 좌표
+
+ // 팝업 창 열기 resizable=no'는 창의 크기 고정
+    window.open(url, 'popup', 'width=' + width + ', height=' + height + ', left=' + left + ', top=' + top + ', resizable=no');
+}
+</script>
 <jsp:include page="../include/footer.jsp"/>
 </body>
 </html>

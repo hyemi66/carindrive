@@ -1,43 +1,13 @@
 #bigbox {
-    width: 1300px;
-    padding: 20px;
-    margin-top: 30px;
+    width: 770px;
+    padding: 10px;
+    margin-top: 30px; 
     margin-bottom: 30px;
     margin-left: auto;  /* 왼쪽 마진을 자동으로 설정하여 가운데 정렬 */
     margin-right: auto; /* 오른쪽 마진을 자동으로 설정하여 가운데 정렬 */
     background-color: #f5f5f5;
     border-radius: 10px;
     box-shadow: 0px 0px 15px #aaa;
-}
-
-
-#bar {
-    background-color: #555;
-    color: white;
-    font-size: 40px;
-    text-align: center;
-    height: 80px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 7px;
-    margin-bottom: 15px;
-}
-
-#toggleHistory {
-    margin-bottom: 20px;
-    background-color: #007bff;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    font-weight: bold;
-}
-
-#toggleHistory:hover {
-    background-color: #0056b3;
 }
 
 .box {
@@ -54,8 +24,21 @@
     background-color: #f8f8f8;
 }
 
+#bar {
+    background-color: #555;
+    color: white;
+    font-size: 40px;
+    text-align: center;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 7px;
+    margin-bottom: 15px;
+}
+
 .img {/*이미지 파일의 박스 크기*/
-    width: 500px;
+    width: 770px;
     height: 250px;
     padding: 5px;
     display: flex;
@@ -67,6 +50,14 @@
 .img img {/*이미지 파일의 크기*/
     max-width: 100%;
     max-height: 100%;
+}
+
+.infobox{
+	width:750px;
+    margin-bottom: 10px 0px 10px 0px; /* 각 정보 블럭의 아래쪽에 간격을 추가 */
+    padding: 10px; /* 정보 블럭 내부에 간격을 추가 */
+    border: 1px solid #e0e0e0; /* 경계선 추가 */
+    background-color: #f9f9f9; /* 배경색 추가 */
 }
 
 .infobox h2 {
@@ -85,15 +76,22 @@
 .hidden-refunded {
     display: none;
 }
-
-.infobox{
-	width:700px;
-	height:250px;
-    margin-bottom: 10px 0px 10px 0px; /* 각 정보 블럭의 아래쪽에 간격을 추가 */
-    padding: 10px; /* 정보 블럭 내부에 간격을 추가 */
-    border: 1px solid #e0e0e0; /* 경계선 추가 */
-    background-color: #f9f9f9; /* 배경색 추가 */
+#toggleHistory {
+    margin-bottom: 20px;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold;
 }
+
+#toggleHistory:hover {
+    background-color: #0056b3;
+}
+
 
 .infobox .info-line {
     display: flex;
@@ -141,7 +139,7 @@ button {
 
 
 
-/*환불시 비밀번호 입력창*/
+/*환불시 이름 연락처 입력창*/
 .modal {
         display: none;
         position: fixed;

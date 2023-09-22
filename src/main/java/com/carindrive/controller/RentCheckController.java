@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -40,11 +41,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.carindrive.CarPwdCh;
 import com.carindrive.service.OrderService;
 import com.carindrive.service.RentService;
 import com.carindrive.vo.CarVO;
@@ -135,79 +138,122 @@ public class RentCheckController {
 	//예약 확인
 	@RequestMapping(value = "/rent_Check_List")
 	public ModelAndView rent_Check_List(HttpSession session, RedirectAttributes rttr) {
-	    ModelAndView mav = new ModelAndView();
-	    MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+		ModelAndView mav = new ModelAndView();
+		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
 
-	    try {
-	        if (memberInfo != null) {//로그인시
-	            List<RentalVO> rentals = this.rentService.getRentList(memberInfo.getM_id());//아이디를 기준으로 렌트정보를 다가져옴
-	            Map<String, RentalVO> rentalMap = new HashMap<>(); 	//키,값으로 담기위해 map 생성
-	            for (RentalVO rental : rentals) {					//(RentalVO)rentals를 rental로 한개씩 뽑아서 키,값으로 저장
-	                rentalMap.put(rental.getCr_order(), rental);	//주문번호, 렌탈정보로 저장시킴 주문번호 호출시 렌탈정보 전체가 호출됨
-	            }
+		try {
+			if (memberInfo != null) {//로그인시
+				List<RentalVO> rentals = this.rentService.getRentList(memberInfo.getM_id());//아이디를 기준으로 렌트정보를 다가져옴
+				Map<String, RentalVO> rentalMap = new HashMap<>(); 	//키,값으로 담기위해 map 생성
+				for (RentalVO rental : rentals) {					//(RentalVO)rentals를 rental로 한개씩 뽑아서 키,값으로 저장
+					rentalMap.put(rental.getCr_order(), rental);	//주문번호, 렌탈정보로 저장시킴 주문번호 호출시 렌탈정보 전체가 호출됨
+				}
 
-	            mav.addObject("rentalMap", rentalMap);
-	            mav.addObject("rentals", rentals);
+				mav.addObject("rentalMap", rentalMap);
+				mav.addObject("rentals", rentals);
 
-	            List<OrderVO> orders = this.orderService.getCashInfo(memberInfo.getM_id());
-	            List<OrderVO> orderInfos = new ArrayList<>();
+				List<OrderVO> orders = this.orderService.getCashInfo(memberInfo.getM_id());
+				List<OrderVO> orderInfos = new ArrayList<>();
 
-	            List<CarVO> carInfos = new ArrayList<>(); 
-	            
-	            		
-	            for (OrderVO order : orders) {
-	                OrderVO orderInfo = orderService.getOrder(order.getId());
-	                orderInfos.add(orderInfo);
-	                
-	                }
+				List<CarVO> carInfos = new ArrayList<>(); 
 
-	            //정렬
-	           Collections.sort(orderInfos, Comparator.comparing(OrderVO::getBuy_date).reversed());
-	           
-	           for (OrderVO order : orderInfos) {
-	                CarVO carInfo = null;
-	                //차량 정보를 불러오는 mybatis문 orders에 들어있는 차량 이름으로 검색
-	                
-	                String[] parts = order.getBuy_product_name().split(" ");
-	                String carName = parts[parts.length - 1];
-	                
-	                carInfo = this.rentService.getCarInfo(carName);
-	                carInfos.add(carInfo);
-	                }
 
-	            mav.addObject("memberInfo", memberInfo);
-	            mav.addObject("carInfos", carInfos);
-	            mav.addObject("orderInfos", orderInfos);
-	        } else {
-	            rttr.addFlashAttribute("LoginNull", "로그인 이후 이용 가능합니다!");
-	            mav.setViewName("redirect:/member/m_login");
-	            return mav;
-	        }
+				for (OrderVO order : orders) {
+					OrderVO orderInfo = orderService.getOrder(order.getId());
+					orderInfos.add(orderInfo);
 
-	        mav.setViewName("/rent/rent_Check_List");
-	        return mav;
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        mav.setViewName("/rent/rent_Check_List");
-	        return mav;
-	    }
+				}
+
+				//정렬
+				Collections.sort(orderInfos, Comparator.comparing(OrderVO::getBuy_date).reversed());
+
+				for (OrderVO order : orderInfos) {
+					CarVO carInfo = null;
+					//차량 정보를 불러오는 mybatis문 orders에 들어있는 차량 이름으로 검색
+
+					String[] parts = order.getBuy_product_name().split(" ");
+					String carName = parts[parts.length - 1];
+
+					carInfo = this.rentService.getCarInfo(carName);
+					carInfos.add(carInfo);
+				}
+
+				mav.addObject("memberInfo", memberInfo);
+				mav.addObject("carInfos", carInfos);
+				mav.addObject("orderInfos", orderInfos);
+			} else {
+				rttr.addFlashAttribute("LoginNull", "로그인 이후 이용 가능합니다!");
+				mav.setViewName("redirect:/member/m_login");
+				return mav;
+			}
+
+			mav.setViewName("/rent/rent_Check_List");
+			return mav;
+		} catch (Exception e) {
+			e.printStackTrace();
+			mav.setViewName("/rent/rent_Check_List");
+			return mav;
+		}
 	}
-	
+
+	//예약내역 상세보기
 	@RequestMapping(value="/rent_details")
-	public ModelAndView rent_details() {
-		return null;
+	public ModelAndView rent_details(@RequestParam("merchantId") String merchantId,
+			@RequestParam("carname") String carName, HttpSession session) {
+		ModelAndView model = new ModelAndView();
+		//로그인정보
+		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+		//차량 정보 가져오기
+		CarVO carInfo = this.rentService.getCarInfo(carName);
+		//렌탈 정보 가져오기
+		RentalVO rentalInfo = this.rentService.getRentCar(merchantId);
+		//결제내역
+		OrderVO orderInfo = this.orderService.getOrder2(merchantId);
+
+		model.addObject("memberInfo", memberInfo);
+		model.addObject("carInfo",carInfo);
+		model.addObject("rentalInfo",rentalInfo);
+		model.addObject("orderInfo",orderInfo);
+
+		return model;
 	}
-
-
-
-
-
 
 
 	//환불 관련 메서드
+
 	
+	//본인 인증 메서드 //사용안함
 	@RequestMapping(value="refund_Check")
-	public void refund_Check() {};
+	public ModelAndView refund_Check(HttpSession session, HttpServletRequest request) throws Exception {
+		
+		System.out.println("refund_Check 메서드 동작");
+		ModelAndView model = new ModelAndView();
+		try {
+		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo"); //로그인정보
+
+		String mPwd = request.getParameter("mPwd");
+		System.out.println("암호화 전: "+mPwd);
+
+		if(mPwd != null) {//사용자에게 값을 입력 받은 뒤
+			mPwd = CarPwdCh.getPassWordToXEMD5String(mPwd);
+			System.out.println("암호화 후: "+mPwd);
+			if(memberInfo.getM_pwd().equals(mPwd)) {//인증이 되면
+				System.out.println("인증완료");
+			}else {
+				System.out.println("인증실패");
+			}
+		}//
+		return model;
+		}catch(Exception e) {
+			e.printStackTrace();
+			model.addObject("noSession", true);//세션이 없음을 jsp에 전달 //이 기능이 동작을 안함
+			return model;
+		}
+	};
+
+
+
+
 
 	//토큰을 받아오는 코드
 	// IAMPORT의 API 키와 시크릿
@@ -333,83 +379,80 @@ public class RentCheckController {
 	public void refund(@RequestParam String order_number, HttpServletResponse response, HttpSession session) throws Exception {
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
-		
+
 		try {
-		// 로그인 고객정보 가져오기
-		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+			// 로그인 고객정보 가져오기
+			MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
 
-		// 해당 아이디의 모든 렌트 정보를 가져옴
-		List<RentalVO> rentals = this.rentService.getRentList(memberInfo.getM_id());
+			// 해당 아이디의 모든 렌트 정보를 가져옴
+			List<RentalVO> rentals = this.rentService.getRentList(memberInfo.getM_id());
 
-		// 리스트에 담긴 모든 렌트 정보에서 주문번호로 예약 내역 찾기
-		RentalVO rentalRefund = null;
-		for (RentalVO rental : rentals) {
-			if (order_number.equals(rental.getCr_order())) {//RentalVO에 들어있는 주문번호와 order_number가 
-				rentalRefund = rental;						//동일할때 까지 돌려서 어떤걸 환불할때 주문번호로 사용할것인지 찾음
-				break;										//rentalRefund에 환불할 정보들이 담김
+			// 리스트에 담긴 모든 렌트 정보에서 주문번호로 예약 내역 찾기
+			RentalVO rentalRefund = null;
+			for (RentalVO rental : rentals) {
+				if (order_number.equals(rental.getCr_order())) {//RentalVO에 들어있는 주문번호와 order_number가 
+					rentalRefund = rental;						//동일할때 까지 돌려서 어떤걸 환불할때 주문번호로 사용할것인지 찾음
+					break;										//rentalRefund에 환불할 정보들이 담김
+				}
 			}
-		}
 
-		if (rentalRefund == null) {
-			out.print("일치하는 주문번호를 찾을 수 없습니다.");
+			if (rentalRefund == null) {
+				out.print("일치하는 주문번호를 찾을 수 없습니다.");
+				out.close();
+				return;
+			}
+
+			// String 날짜를 LocalDateTime으로 변환
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+			LocalDateTime rentalDateTime = LocalDateTime.parse(rentalRefund.getCr_sdate(), formatter);
+
+			// 하루 전 및 이틀 전 날짜 계산
+			LocalDateTime oneDayBeforeRental = rentalDateTime.minusDays(1);
+			LocalDateTime twoDaysBeforeRental = rentalDateTime.minusDays(2);
+
+			// 현재 날짜와 시간
+			LocalDateTime now = LocalDateTime.now();
+
+			String token = getImportToken();
+
+			if (token == null || token.isEmpty()) {
+				alertMessage(out, "인증 정보에 문제가 발생했습니다 다시 시도해주세요!");
+				return;
+			}
+
+			double refundAmount;
+
+			// 하루 전 환불 불가능
+			if (now.isAfter(oneDayBeforeRental)) {
+				alertMessage(out, "대여시간 24시간 이내는 환불이 불가능합니다.");
+			}
+			// 이틀 전 환불
+			else if (now.isAfter(twoDaysBeforeRental) && now.isBefore(oneDayBeforeRental)) {	
+				refundAmount = rentalRefund.getCr_price() * 0.5;
+				processRefund(token, order_number, refundAmount, out, "환불 처리 되었으나, 환불 금액은 50%입니다.");
+			}
+			// 그 외 환불 금액 100% 가능
+			else {
+				refundAmount = rentalRefund.getCr_price();
+				processRefund(token, order_number, refundAmount, out, "환불이 완료 되었습니다!");
+			}
 			out.close();
-			return;
-		}
 
-		// String 날짜를 LocalDateTime으로 변환
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		LocalDateTime rentalDateTime = LocalDateTime.parse(rentalRefund.getCr_sdate(), formatter);
-
-		// 하루 전 및 이틀 전 날짜 계산
-		LocalDateTime oneDayBeforeRental = rentalDateTime.minusDays(1);
-		LocalDateTime twoDaysBeforeRental = rentalDateTime.minusDays(2);
-
-		// 현재 날짜와 시간
-		LocalDateTime now = LocalDateTime.now();
-
-		String token = getImportToken();
-
-		if (token == null || token.isEmpty()) {
-			alertMessage(out, "인증 정보에 문제가 발생했습니다 다시 시도해주세요!");
-			return;
-		}
-
-		double refundAmount;
-		
-		// 하루 전 환불 불가능
-		if (now.isAfter(oneDayBeforeRental)) {
-		    alertMessage(out, "대여시간 24시간 이내는 환불이 불가능합니다.");
-		}
-		// 이틀 전 환불
-		else if (now.isAfter(twoDaysBeforeRental) && now.isBefore(oneDayBeforeRental)) {	
-		    refundAmount = rentalRefund.getCr_price() * 0.5;
-		    processRefund(token, order_number, refundAmount, out, "환불 처리 되었으나, 환불 금액은 50%입니다.");
-		}
-		// 그 외 환불 금액 100% 가능
-		else {
-		    refundAmount = rentalRefund.getCr_price();
-		    processRefund(token, order_number, refundAmount, out, "환불이 완료 되었습니다!");
-		}
-		out.close();
-		
 		}catch (Exception e) {
 			out.println("<script>");
 			out.println("alert('세션이 만료되었습니다 다시 로그인해주세요!');");
-			out.println("location.href='/member/m_login';");//로그인창으로 이동
+			out.println("window.open('/member/m_login', '_blank');");//로그인창으로 이동
 			out.println("</script>");
-	    } finally {
-	    	out.println("<script>");
-	    	out.println("location.href='/';");
-	    	out.println("</script>");
-	        out.close();
-	    }
+		} finally {
+			out.close();
+		}
 	}
 
 	//반복되는 자바스크립트 코드 메서드화
 	private void alertMessage(PrintWriter out, String message) {
 		out.println("<script>");
 		out.println("alert('" + message + "');");
-		out.println("location.href='/';");
+		out.println("window.close()");
 		out.println("</script>");
 	}
 

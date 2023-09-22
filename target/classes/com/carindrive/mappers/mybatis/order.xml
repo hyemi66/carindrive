@@ -70,6 +70,11 @@
 	</resultMap>
 	
 	
+	<!-- 결제 정보 조회(예약 내역) -->
+    <select id="getOrder2" resultMap="orderMap">
+    	select * from c_order_info where merchant_id = #{merchantId}
+    </select>
+	
 	<!-- 환불 완료시 주문번호 업데이트 -->
 	<update id="refundOK">
 		update c_order_info set refund = '환불완료' where merchant_Id = #{merchantId}

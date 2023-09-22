@@ -17,5 +17,8 @@ public interface OrderService {
 
 	//환불 완료시 주문번호를 기준으로 refund에 '환불완료'라고 업데이트
 	void refundOK(String order_number);
+
+	//주문번호를 기준으로 결제내역을 가져옴
+	OrderVO getOrder2(String merchantId);
 	
 }

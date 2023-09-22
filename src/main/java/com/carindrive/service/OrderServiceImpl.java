@@ -33,6 +33,11 @@ public class OrderServiceImpl implements OrderService {
 	public void refundOK(String order_number) {
 		this.orderDAO.refundOK(order_number);
 	}//환불 완료시 주문번호를 기준으로 refund에 '환불완료'라고 업데이트
+
+	@Override
+	public OrderVO getOrder2(String merchantId) {
+		return this.orderDAO.getOrder2(merchantId);
+	}//주문번호를 기준으로 결제내역을 가져옴
 	
 	
 	

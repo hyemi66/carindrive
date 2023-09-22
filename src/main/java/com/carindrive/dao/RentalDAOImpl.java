@@ -58,8 +58,8 @@ public class RentalDAOImpl implements RentalDAO {
 	}//주문번호를 렌탈정보 데이터베이스에 추가
 
 	@Override
-	public RentalVO getRentRefund(String cr_order) {
-		return this.sqlSession.selectOne("getRentRefund",cr_order);
+	public RentalVO getRentCar(String cr_order) {
+		return this.sqlSession.selectOne("getRentCar",cr_order);
 	}//주문번호를 기준으로 렌트내역을 가져옴
 
 	@Override

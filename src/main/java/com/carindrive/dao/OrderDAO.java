@@ -13,4 +13,6 @@ public interface OrderDAO {
 	OrderVO getOrder(long num);
 
 	void refundOK(String order_number);
+
+	OrderVO getOrder2(String merchantId);
 }
