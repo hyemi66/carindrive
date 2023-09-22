@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,8 +44,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -245,60 +246,38 @@ public class RentCheckController {
 
 		return model;
 	}
+	
+	@RequestMapping(value="/calculatePrice")
+	@ResponseBody
+	public double calculatePrice(@RequestParam int c_num, 
+	                             @RequestParam String order_number, 
+	                             @RequestParam String cr_edate) throws Exception {
+	    System.out.println("calculatePrice메서드 동작");
 
+	    // 1. 차량 정보와 대여 정보 가져오기
+	    CarVO car = this.rentService.getCarInfo2(c_num);
+	    RentalVO rental = this.rentService.getRentCar(order_number);
 
-	@RequestMapping(value="/timeUpPay") //결제하는 로직을 구현해야함 timeUpPay.jsp도 완성시킬것
-	public ModelAndView timeUpPay(@RequestParam String cr_sdate, @RequestParam String cr_edate, @RequestParam int c_num) throws Exception {
-		System.out.println("timeUpPay메서드 실행");
+	    // 2. 기존 반납시간과 새로운 반납시간의 차이 계산
+	    cr_edate = cr_edate.replace("T", " ");
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+	    LocalDateTime originalEndDate = LocalDateTime.parse(rental.getCr_edate(), formatter);
+	    LocalDateTime newEndDate = LocalDateTime.parse(cr_edate, formatter);
+	    
+	    Duration duration = Duration.between(originalEndDate, newEndDate);
+	    long minutes = duration.toMinutes();
 
-		ModelAndView model = new ModelAndView();
-		
-		// 받아온 날짜 형태 변경
-		cr_sdate = cr_sdate.replace("T", " ");
-		cr_edate = cr_edate.replace("T", " ");
+	    // 3. 차량의 가격 정보를 이용해 연장시간의 가격 계산
+	    double perMinuteRate = car.getC_price(); // 분당 요금. CarVO에 해당 메서드가 있어야 합니다.
+	    double price = perMinuteRate * minutes;
+	    System.out.println("렌탈비용: "+price);
 
-		// DateTimeFormatter를 사용하여 날짜 및 시간 문자열을 파싱하여 LocalDateTime 객체로 변환
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		LocalDateTime new_sdate = LocalDateTime.parse(cr_sdate, formatter);
-		LocalDateTime new_edate = LocalDateTime.parse(cr_edate, formatter);
-
-		// 렌트 기간의 시간 간격을 계산
-		Duration duration = Duration.between(new_sdate, new_edate);
-		long minutes = duration.toMinutes();
-
-		// 해당 차량의 정보 가져오기
-		CarVO car = this.rentService.getCarInfo2(c_num);
-
-		// 렌트 가격 계산
-		double one_price = minutes * car.getC_price();
-
-		// 가격 형태 변경 (소수점 제거)
-		DecimalFormat decimalFormat = new DecimalFormat("#");
-		String total_price = decimalFormat.format(one_price);
-
-		System.out.println("렌탈가격: "+total_price);
-
-		// 렌트 비용을 c_rental 테이블에 추가
-		this.rentService.insertCost(c_num, one_price);
-
-		model.addObject("total_price", total_price);
-
-		// 다음 페이지 or 동일 페이지에 가격 정보를 표시하도록 설정
-		model.setViewName("/rent/timeUpPay"); // 여기에 결과를 표시하려는 페이지의 이름을 넣으세요.
-		
-		return model;
+	    return price;
 	}
-
-
-
-
-
-
-
-
-
-
-
+	
+	//시간추가 결제창
+	@RequestMapping(value="/timeUpPay")
+	public void timeUpPay() {};
 
 	//환불 관련 메서드
 
