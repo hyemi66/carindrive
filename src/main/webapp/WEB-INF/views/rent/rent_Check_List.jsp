@@ -95,6 +95,7 @@
 	</div>
 	
 	<!-- JavaScript 함수를 사용하여 팝업 창 열기 -->
+	<%--내역서 열기 --%>
 <script>
 function openPopup(url) {
     var width = 1200; // 팝업 창 가로 크기

@@ -2,7 +2,6 @@ package com.carindrive.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -15,7 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,6 +42,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
@@ -213,6 +212,7 @@ public class RentCheckController {
 		RentalVO rentalInfo = this.rentService.getRentCar(merchantId);
 		//결제내역
 		OrderVO orderInfo = this.orderService.getOrder2(merchantId);
+		System.out.println("주문번호: "+merchantId);
 
 		model.addObject("memberInfo", memberInfo);
 		model.addObject("carInfo",carInfo);
@@ -268,16 +268,46 @@ public class RentCheckController {
 	    long minutes = duration.toMinutes();
 
 	    // 3. 차량의 가격 정보를 이용해 연장시간의 가격 계산
-	    double perMinuteRate = car.getC_price(); // 분당 요금. CarVO에 해당 메서드가 있어야 합니다.
+	    double perMinuteRate = car.getC_price();
 	    double price = perMinuteRate * minutes;
 	    System.out.println("렌탈비용: "+price);
 
 	    return price;
 	}
 	
-	//시간추가 결제창
-	@RequestMapping(value="/timeUpPay")
-	public void timeUpPay() {};
+	@RequestMapping(value="/timeUpPay", method=RequestMethod.POST)
+	public ModelAndView timeUpPay(
+	        @RequestParam("c_num") int cNum, 
+	        @RequestParam("order_number") String orderNumber, 
+	        @RequestParam("calculatedPrice") double calculatedPrice,
+	        HttpSession session) {//주문번호를 전달받은 이유는 해당차량의 데이터베이스에 접근하기 위함
+		ModelAndView model = new ModelAndView();
+
+	    // 메서드 내에서 전달받은 정보들을 활용
+	    System.out.println("c_num: " + cNum);
+	    System.out.println("order_number: " + orderNumber);
+	    System.out.println("calculatedPrice: " + calculatedPrice);
+	    
+	    //로그인정보
+	    MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+	    //차정보 가져오기
+	    CarVO car = this.rentService.getCarInfo2(cNum);
+		// 주문번호를 기준으로 렌탈 정보 가져오기
+		RentalVO rental = this.rentService.getRentCar(orderNumber);
+		// 해당 렌탈정보에 예약번호에 맞는 주문번호 추가
+		//String merchantId = order.getMerchantId();
+		//this.rentService.insertMerchantId(merchantId, rental.getCr_num());
+
+		// 결제정보 getPayInfo 메서드에 주문번호를 넣고 OrderVO에 값들을 셋팅
+		//OrderVO orderInfo = getPayInfo(merchantId);
+		
+		model.addObject("memberInfo", memberInfo);
+		model.addObject("car", car);
+		model.addObject("rental", rental);
+
+	    return model;
+	}
+
 
 	//환불 관련 메서드
 
