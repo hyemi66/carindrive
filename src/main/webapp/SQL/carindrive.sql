@@ -147,6 +147,8 @@ create table c_order_info (
     post_code number,
     refund varchar2(20)
 );
+ALTER TABLE c_order_info ADD (parent_merchant_id VARCHAR2(255));
+
 
 --차량추가
 

@@ -340,6 +340,70 @@ public class RentCheckController {
 			return model;
 		}
 	};
+	
+	//렌탈 정보 저장
+	@RequestMapping("/pay_Check")//rentOK.jsp에서 넘어온 데이터
+	public ResponseEntity<Map<String, Object>> pay_Check(@RequestBody OrderVO order,HttpSession session) {
+		System.out.println("pay_Check메서드 동작");
+		Map<String, Object> map = new HashMap<>();
+
+		try {
+			// 로그인 정보 가져오기
+			MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+			
+			//주문번호를 기준으로 렌트정보를 가져옴
+			String merchantId = order.getMerchantId();
+			RentalVO rental = this.rentService.getRentCar(merchantId);
+			
+			//결제정보 getPayInfo 메서드에 주문번호를 넣고 OrderVO에 값들을 셋팅
+			OrderVO orderInfo = getPayInfo(merchantId);
+
+			// 데이터베이스에 OrderVO 결제정보 저장
+			this.orderService.saveOrder(orderInfo);
+
+			map.put("orderInfo", orderInfo);
+			map.put("rental", rental);
+			map.put("success", true);
+			map.put("redirectUrl", "/rent/rent_Check_List"); // 리디렉트할 URL 추가
+
+			return new ResponseEntity<>(map, HttpStatus.OK);
+
+		} catch (Exception e) {//결제시 문제 발생
+			try {
+				// 환불 처리 시작
+				String token = getImportToken();
+
+				if (token == null || token.isEmpty()) {
+					log.error("인증 정보에 문제가 발생했습니다. 환불 처리를 위해 다시 시도해주세요.");
+				} else {
+					double refundAmount = order.getAmount(); // 주문에서 환불 금액을 가져옴
+					int result_delete = cancelPay(token, order.getMerchantId(), refundAmount); 
+
+					if (result_delete == -1) {
+						log.error("환불에 실패했습니다. 다시 시도해주세요.");
+					} else {
+						this.orderService.refundOK(order.getMerchantId()); // 환불 완료시 refund 업데이트
+						log.info("환불이 완료되었습니다.");
+					}
+				}// 환불 처리 종료
+
+			} catch (Exception refundException) {
+				log.error("환불 처리 중 오류 발생: ", refundException);
+
+				// 경고창을 띄우고 서비스 센터로 리디렉션
+				map.put("redirectUrl", "/service/service_center");
+				map.put("message", "환불 처리 중 오류가 발생했습니다. 1:1 문의를 통해 문제를 알려주세요.");
+				map.put("success", false);
+
+				return new ResponseEntity<>(map, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+
+			map.put("success", false);
+			map.put("message", "결제 정보 처리 중 오류 발생 컨트롤러");
+			log.error("결제 정보 가져오기 오류: ", e);
+			return new ResponseEntity<>(map, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
 
 
@@ -399,6 +463,7 @@ public class RentCheckController {
 		long paid_atLong = 0L;
 		long unixTime = 0L;
 		Date date = null;
+		String parent_merchant_id="";
 
 		String token = getImportToken();	//토큰생성 API요청 인증에 활용
 
@@ -431,6 +496,7 @@ public class RentCheckController {
 			amount = resNode.get("amount").asText();
 			buyer_card_num = resNode.get("apply_num").asText(); 
 			buyer_pay_ok = resNode.get("status").asText(); 
+			parent_merchant_id = resNode.get("status").asText(); 
 			//buy_date = resNode.get("buy_date").asText(); 
 
 
@@ -459,7 +525,7 @@ public class RentCheckController {
 
 		OrderVO order_info = new OrderVO(-1L, buyer_name, buyer_phone, member_email, 
 				buyer_addr, buy_date, buy_product_name, buyer_buyid, buyer_merid, 
-				buyer_pay_price, buyer_card_num, buyer_pay_ok, -1);
+				buyer_pay_price, buyer_card_num, buyer_pay_ok, -1, parent_merchant_id);
 
 		return order_info;
 	}

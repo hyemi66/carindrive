@@ -17,8 +17,7 @@
 <script>
 //전역 변수로 buy_date 선언 결제일자 새로갱신
 let globalBuyDate = new Date().getTime();
-
-function payMent(paymentType, rental_cr_mid, car_c_name, car_c_color, car_c_year, calculatedPrice, rental_cr_order) {
+function payMent(paymentType, rental_cr_mid, car_c_name, car_c_color, car_c_year, calculatedPrice) {
 
 	if (typeof calculatedPrice === 'undefined' || !calculatedPrice) {
 	    alert('결제 금액을 확인할 수 없습니다.');
@@ -26,8 +25,8 @@ function payMent(paymentType, rental_cr_mid, car_c_name, car_c_color, car_c_year
 	}
 
 	IMP.init('imp87360186');
-	 var orderNum = rental_cr_order;
-	 var showName = car_c_year+'년식 ' + car_c_color + ' ' + car_c_name +' 시간연장';
+
+	 var showName = car_c_year+'년식 ' + car_c_color + ' ' + car_c_name +' 시간연장'
 	 var pgValue;
 	 globalBuyDate = new Date().getTime();	// 날짜 값을 전역 변수에 저장
 
@@ -43,7 +42,7 @@ function payMent(paymentType, rental_cr_mid, car_c_name, car_c_color, car_c_year
 	IMP.request_pay({
 	    pg : pgValue,
 	    pay_method : 'card', //카드결제
-	    merchant_uid : 'timeUp_' + new Date().getTime(),
+	    merchant_uid : 'merchant_' + new Date().getTime(),
 	    name : showName,
 	    amount : calculatedPrice, //판매가격
 	    buyer_name : rental_cr_mid,
@@ -78,14 +77,15 @@ function payMent(paymentType, rental_cr_mid, car_c_name, car_c_color, car_c_year
         buyer_pay_ok: rsp.success,
         buyer_postcode: rsp.buyer_postcode,
         merchantId: rsp.merchant_uid,
-        paid_at: globalBuyDate,		//결제일자를 paid_at 변수로 받음 paid_at를 컨트롤러로 가공해서 buy_date로 만들것임
+        paid_at: globalBuyDate		//결제일자를 paid_at 변수로 받음 paid_at를 컨트롤러로 가공해서 buy_date로 만들것임
+        
     };
 
  // AJAX 요청
     $.ajax({
         type: "POST",
         contentType: "application/json",
-        url: "/rent/rent_Check",
+        url: "/rent/pay_Check",
         data: JSON.stringify(orderData),
         dataType: "json",
         success: function(map) {
@@ -105,7 +105,7 @@ function payMent(paymentType, rental_cr_mid, car_c_name, car_c_color, car_c_year
         error: function(error) {
         console.error("Error:", error); //콘솔에 에러 로그 출력
             alert("오류로 인해서 결제가 취소되었습니다. 다시 시도해주세요");
-            location.href = "/rent/rent";
+            location.href = "/rent/timeUpPay";
         }
 	});
 }
@@ -120,8 +120,8 @@ function payMent(paymentType, rental_cr_mid, car_c_name, car_c_color, car_c_year
 	결제가격:${calculatedPrice}<br>
 	
 
-<button onclick="payMent('card', '${rental.cr_mid}', '${car.c_name}', '${car.c_color}', '${car.c_year}', ${calculatedPrice}), '${rental.cr_order}'">카드 결제</button>
-<button onclick="payMent('kakao', '${rental.cr_mid}', '${car.c_name}', '${car.c_color}', '${car.c_year}', ${calculatedPrice}), '${rental.cr_order}'">카카오페이 결제</button>
+<button onclick="payMent('card', '${rental.cr_mid}', '${car.c_name}', '${car.c_color}', '${car.c_year}', ${calculatedPrice})">카드 결제</button>
+<button onclick="payMent('kakao', '${rental.cr_mid}', '${car.c_name}', '${car.c_color}', '${car.c_year}', ${calculatedPrice})">카카오페이 결제</button>
 
 
 	
