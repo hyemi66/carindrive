@@ -17,7 +17,9 @@
 <script>
 //전역 변수로 buy_date 선언 결제일자 새로갱신
 let globalBuyDate = new Date().getTime();
-function payMent(paymentType, rental_cr_mid, car_c_name, car_c_color, car_c_year, calculatedPrice) {
+function payMent(paymentType, rental_cr_mid, car_c_name, car_c_color, car_c_year, calculatedPrice, order) {
+	console.log("Order:", order);
+
 
 	if (typeof calculatedPrice === 'undefined' || !calculatedPrice) {
 	    alert('결제 금액을 확인할 수 없습니다.');
@@ -54,7 +56,7 @@ function payMent(paymentType, rental_cr_mid, car_c_name, car_c_color, car_c_year
 		msg += '결제 금액 : ' + rsp.paid_amount;
 		msg += '카드 승인번호 : ' + rsp.apply_num;
 		   
-		pay_info(rsp);
+		pay_info(rsp,order); //pay_info내부의 orderData의 정보들을 /rent/pay_Check로 보냄 
 		
 	    } else {
 	        var errorMsg = '결제가 취소되었습니다.';
@@ -64,7 +66,8 @@ function payMent(paymentType, rental_cr_mid, car_c_name, car_c_color, car_c_year
 	});
 }
 //데이터 담아서 비동기식으로 JSON타입으로 데이터 전송
-	function pay_info(rsp) {
+	function pay_info(rsp, order) {
+
     var orderData = {
         buyer_name: rsp.buyer_name,
         buyer_phone: rsp.buyer_tel,
@@ -77,7 +80,8 @@ function payMent(paymentType, rental_cr_mid, car_c_name, car_c_color, car_c_year
         buyer_pay_ok: rsp.success,
         buyer_postcode: rsp.buyer_postcode,
         merchantId: rsp.merchant_uid,
-        paid_at: globalBuyDate		//결제일자를 paid_at 변수로 받음 paid_at를 컨트롤러로 가공해서 buy_date로 만들것임
+        paid_at: globalBuyDate,
+        parent_merchant_id: order,
         
     };
 
@@ -120,8 +124,8 @@ function payMent(paymentType, rental_cr_mid, car_c_name, car_c_color, car_c_year
 	결제가격:${calculatedPrice}<br>
 	
 
-<button onclick="payMent('card', '${rental.cr_mid}', '${car.c_name}', '${car.c_color}', '${car.c_year}', ${calculatedPrice})">카드 결제</button>
-<button onclick="payMent('kakao', '${rental.cr_mid}', '${car.c_name}', '${car.c_color}', '${car.c_year}', ${calculatedPrice})">카카오페이 결제</button>
+<button onclick="payMent('card', '${rental.cr_mid}', '${car.c_name}', '${car.c_color}', '${car.c_year}', ${calculatedPrice}, '${rental.cr_order}')">카드 결제</button>
+<button onclick="payMent('kakao', '${rental.cr_mid}', '${car.c_name}', '${car.c_color}', '${car.c_year}', ${calculatedPrice}, '${rental.cr_order}')">카카오페이 결제</button>
 
 
 	

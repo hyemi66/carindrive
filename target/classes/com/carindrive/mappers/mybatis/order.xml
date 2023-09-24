@@ -20,7 +20,8 @@
             CARD_NUM,
             PAY_STATUS,
             POST_CODE,
-            refund
+            refund,
+            parent_merchant_id
         ) 
         VALUES 
         (
@@ -37,7 +38,8 @@
             #{buyer_card_num, jdbcType=VARCHAR}, 
             #{buyer_pay_ok, jdbcType=VARCHAR}, 
             #{buyer_postcode, jdbcType=INTEGER},
-            '정상결제'
+            '정상결제',
+            #{parent_merchant_id, jdbcType=VARCHAR}
         )
     </insert>
     

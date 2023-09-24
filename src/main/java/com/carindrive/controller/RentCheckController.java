@@ -307,62 +307,56 @@ public class RentCheckController {
 
 	    return model;
 	}
-
-
-	//환불 관련 메서드
-
-
-	//본인 인증 메서드 //사용안함
-	@RequestMapping(value="refund_Check")
-	public ModelAndView refund_Check(HttpSession session, HttpServletRequest request) throws Exception {
-
-		System.out.println("refund_Check 메서드 동작");
-		ModelAndView model = new ModelAndView();
-		try {
-			MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo"); //로그인정보
-
-			String mPwd = request.getParameter("mPwd");
-			System.out.println("암호화 전: "+mPwd);
-
-			if(mPwd != null) {//사용자에게 값을 입력 받은 뒤
-				mPwd = CarPwdCh.getPassWordToXEMD5String(mPwd);
-				System.out.println("암호화 후: "+mPwd);
-				if(memberInfo.getM_pwd().equals(mPwd)) {//인증이 되면
-					System.out.println("인증완료");
-				}else {
-					System.out.println("인증실패");
-				}
-			}//
-			return model;
-		}catch(Exception e) {
-			e.printStackTrace();
-			model.addObject("noSession", true);//세션이 없음을 jsp에 전달 //이 기능이 동작을 안함
-			return model;
-		}
-	};
+	
 	
 	//렌탈 정보 저장
-	@RequestMapping("/pay_Check")//rentOK.jsp에서 넘어온 데이터
-	public ResponseEntity<Map<String, Object>> pay_Check(@RequestBody OrderVO order,HttpSession session) {
+	@RequestMapping("/pay_Check")//timeUpPay.jsp에서 넘어온 데이터를 처리 
+	public ResponseEntity<Map<String, Object>> pay_Check(@RequestBody OrderVO order, HttpSession session) {
 		System.out.println("pay_Check메서드 동작");
 		Map<String, Object> map = new HashMap<>();
 
 		try {
 			// 로그인 정보 가져오기
 			MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
-			
-			//주문번호를 기준으로 렌트정보를 가져옴
+			// 해당 고객의 렌탈 정보 가져오기
+			RentalVO rental = this.rentService.getRentOne(memberInfo.getM_id());
+			// 해당 렌탈정보에 예약번호에 맞는 주문번호 추가
 			String merchantId = order.getMerchantId();
-			RentalVO rental = this.rentService.getRentCar(merchantId);
-			
+			this.rentService.insertMerchantId(merchantId, rental.getCr_num());
+
 			//결제정보 getPayInfo 메서드에 주문번호를 넣고 OrderVO에 값들을 셋팅
 			OrderVO orderInfo = getPayInfo(merchantId);
+			orderInfo.setPMerchantId(order); //저장하기전 전달받은 원래의 주문번호를 orderInfo에 셋팅
 
+			
+			
+			//RentalVO rental = this.rentService.getRentCar(order.getParent_merchant_id());
+			System.out.println("기존 렌탈 정보: "+rental);
+			
+			//결제된 품목에서 차량의 정보를 얻기위해 값을 추출
+			String productName = order.getBuy_product_name(); // "2019년식 BLACK A4 시간연장"
+			String[] parts = productName.split(" "); // 공백을 기준으로 문자열을 나눔
+
+			    String year = parts[0]; // "2019년식"
+			    String color = parts[1]; // "BLACK"
+			    String carName = parts[2]; // "A4"
+
+			    System.out.println("년식: " + year);
+			    System.out.println("색상: " + color);
+			    System.out.println("차량명: " + carName);
+			    
+			CarVO car = this.rentService.getCarInfo(carName);
+			System.out.println("차량 정보 : "+car);
+
+			
 			// 데이터베이스에 OrderVO 결제정보 저장
 			this.orderService.saveOrder(orderInfo);
+			
+			
 
 			map.put("orderInfo", orderInfo);
 			map.put("rental", rental);
+			map.put("car", car);
 			map.put("success", true);
 			map.put("redirectUrl", "/rent/rent_Check_List"); // 리디렉트할 URL 추가
 
@@ -406,6 +400,41 @@ public class RentCheckController {
 	}
 
 
+	//환불 관련 메서드
+
+
+	//본인 인증 메서드 //사용안함
+	@RequestMapping(value="refund_Check")
+	public ModelAndView refund_Check(HttpSession session, HttpServletRequest request) throws Exception {
+
+		System.out.println("refund_Check 메서드 동작");
+		ModelAndView model = new ModelAndView();
+		try {
+			MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo"); //로그인정보
+
+			String mPwd = request.getParameter("mPwd");
+			System.out.println("암호화 전: "+mPwd);
+
+			if(mPwd != null) {//사용자에게 값을 입력 받은 뒤
+				mPwd = CarPwdCh.getPassWordToXEMD5String(mPwd);
+				System.out.println("암호화 후: "+mPwd);
+				if(memberInfo.getM_pwd().equals(mPwd)) {//인증이 되면
+					System.out.println("인증완료");
+				}else {
+					System.out.println("인증실패");
+				}
+			}//
+			return model;
+		}catch(Exception e) {
+			e.printStackTrace();
+			model.addObject("noSession", true);//세션이 없음을 jsp에 전달 //이 기능이 동작을 안함
+			return model;
+		}
+	};
+	
+
+
+
 
 
 
@@ -446,6 +475,7 @@ public class RentCheckController {
 
 	// 결제정보 조회 메서드
 	public OrderVO getPayInfo(String merchantId) throws Exception { 
+		
 		String buyer_name = "";
 		String buyer_phone = "";
 		String member_email = "";
@@ -496,7 +526,6 @@ public class RentCheckController {
 			amount = resNode.get("amount").asText();
 			buyer_card_num = resNode.get("apply_num").asText(); 
 			buyer_pay_ok = resNode.get("status").asText(); 
-			parent_merchant_id = resNode.get("status").asText(); 
 			//buy_date = resNode.get("buy_date").asText(); 
 
 

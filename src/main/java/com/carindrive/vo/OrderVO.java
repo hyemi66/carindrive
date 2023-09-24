@@ -77,5 +77,11 @@ public class OrderVO {
                 ", parent_merchant_id=" + parent_merchant_id +
                 '}';
     }
+	
+    public void setPMerchantId(OrderVO order) {
+        this.parent_merchant_id = order.getParent_merchant_id();
+    }
 }
+
+
 
