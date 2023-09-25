@@ -597,6 +597,7 @@ public class RentCheckController {
 	//환불하기 기능
 	@PostMapping("/refund")
 	public void refund(@RequestParam String order_number, HttpServletResponse response, HttpSession session) throws Exception {
+		System.out.println("refund메서드 동작");
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 
@@ -659,21 +660,20 @@ public class RentCheckController {
 				refundAmount = rentalRefund.getCr_price(); //환불처리후 새로고침
 				processRefund(token, order_number, refundAmount, out, "환불이 완료 되었습니다!");
 
-				OrderVO order = this.orderService.getPayInfo2(order_number);
-				//주문번호를 기준으로 렌탈내역 가져옴
-				RentalVO rental = this.rentService.getRentCar(order_number);
+				//order_number를 기준으로 parent_merchant_id 값이 주문번호와 동일한 레코드를 찾음
+				OrderVO order = this.orderService.getPayInfo2(order_number); //부모의 주문번호를 이용해서 그의 자식을 찾음
+				//찾은 레코드의 새로 갱신된 주문번호를 가져옴
+				RentalVO rental = this.rentService.getRentCar(order.getMerchantId());
 
-				//부모와 자식의 주문번호가 같으면 동작 자식의 결제도 환불됨
-				//부모가 환불이 될때 자식도 같이 환불이 되어야함
-				//여기서부터 시작
+				//부모와 자식의 주문번호가 같으면 환불메서드를 한번 더 진행
 				if(order_number.equals(order.getParent_merchant_id())){
-					//해당 결제내역에서 현재 주문번호 추출 //price가 의심됨 다른변수 찾아보기
-					String orderNum = order.getMerchantId();
-					double price = rental.getCr_price();
-					System.out.println("가격: "+price);
-					String token2 = getImportToken();
+					double price = rental.getCr_price(); 	//환불 금액
+					String token2 = getImportToken(); 		//토큰 생성
+					String orderNum = rental.getCr_order(); //자식의 주문번호
 					//환불처리 메서드 (토큰, 주문번호, 가격)
 					cancelPay(token2,orderNum,price);
+					this.orderService.refundOK(orderNum);
+					
 					out.println("<script>");
 					out.println("alert('시간추가된 결제도 환불되었습니다!');");
 					out.println("</script>");
@@ -687,9 +687,10 @@ public class RentCheckController {
 			}
 
 			}catch (Exception e) {
+				e.printStackTrace();
 				out.println("<script>");
 				out.println("alert('세션이 만료되었습니다 다시 로그인해주세요!');");
-				out.println("window.open('/member/m_login', '_blank');");//로그인창으로 이동
+				//out.println("window.open('/member/m_login', '_blank');");//로그인창으로 이동
 				out.println("</script>");
 			} finally {
 				out.close();
@@ -700,8 +701,7 @@ public class RentCheckController {
 		private void alertMessage(PrintWriter out, String message) {
 			out.println("<script>");
 			out.println("alert('" + message + "');");
-			out.println("window.close()");	//현재창을 닫고
-			out.println("opener.location.reload();"); //부모창을 새로고침
+			//out.println("opener.location.reload();"); //부모창을 새로고침
 			out.println("</script>");
 		}
 
@@ -746,6 +746,8 @@ public class RentCheckController {
 					return 1;
 				} else {
 					System.err.println("환불실패");
+					System.out.println("IAMPORT Response: " + responseBody);
+
 					return -1;
 				}
 

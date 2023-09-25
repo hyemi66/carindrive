@@ -69,6 +69,7 @@
 	    <result column="PAY_STATUS" property="buyer_pay_ok"/>
 	    <result column="POST_CODE" property="buyer_postcode"/>
 	    <result column="refund" property="refund"/>
+	    <result column="parent_merchant_id" property="parent_merchant_id"/>
 	</resultMap>
 	
 	
@@ -83,8 +84,8 @@
 	</update>
 	
 	<!--  -->
-	<select id="getPayInfo2">
-		select * from c_order_info where parent_merchant_id = #{parent_merchant_id}
+	<select id="getPayInfo2" resultMap="orderMap">
+		select * from c_order_info where parent_merchant_id = #{merchantId}
 	</select>
 
     

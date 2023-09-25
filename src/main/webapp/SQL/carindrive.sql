@@ -18,14 +18,18 @@ delete from c_rental where cr_num = 107;
 --확인 코드
 select * from c_member order by m_name asc; -- 사용자 확인
 select * from c_car order by c_num asc; --차량 확인
-select * from c_rental order by cr_num desc; --렌·트 확인
+select * from c_rental order by cr_num desc; --렌트 확인
 select * from c_order_info order by id desc; --결제 정보 확인
 merchant_1695602468086
 select * from c_order_info where MERCHANT_ID = 'merchant_1695602937057';
 
 select * from c_order_info where MERCHANT_ID = 'merchant_1695602468086';
 
-select * from c_order_info where parent_merchant_id = 'merchant_1695617278879';
+select * from c_order_info where parent_merchant_id = 'merchant_1695632654275'; --부모의 주문번호를 이용해서 그의 자식을 찾음
+select * from c_rental where cr_order = 'merchant_1695632654275';
+select * from c_rental where cr_order = 'merchant_1695632899760';
+
+select * from c_order_info where parent_merchant_id =
 
 --시퀀스 생성
 CREATE SEQUENCE cs_seq START WITH 1 INCREMENT BY 1 NOCACHE;  -- 공지사항 테이블 시퀀스
