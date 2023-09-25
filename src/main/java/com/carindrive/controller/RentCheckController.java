@@ -653,12 +653,38 @@ public class RentCheckController {
 			// 이틀 전 환불
 			else if (now.isAfter(twoDaysBeforeRental) && now.isBefore(oneDayBeforeRental)) {	
 				refundAmount = rentalRefund.getCr_price() * 0.5; //환불처리후 새로고침
-				processRefund(token, order_number, refundAmount, out, "환불 처리 되었으나, 환불 금액은 50%입니다.");
+				cancelPay(token, order_number, refundAmount);
+				alertMessage(out, "환불 처리 되었으나, 환불 금액은 50%입니다.");
+				this.orderService.refundOK(order_number); //환불완료로 업데이트
+				
+				//order_number를 기준으로 parent_merchant_id 값이 주문번호와 동일한 레코드를 찾음
+				OrderVO order = this.orderService.getPayInfo2(order_number); //부모의 주문번호를 이용해서 그의 자식을 찾음
+				//찾은 레코드의 새로 갱신된 주문번호를 가져옴
+				RentalVO rental = this.rentService.getRentCar(order.getMerchantId());
+
+				//부모와 자식의 주문번호가 같으면 환불메서드를 한번 더 진행
+				if(order_number.equals(order.getParent_merchant_id())){
+					double price = rental.getCr_price(); 	//환불 금액
+					String token2 = getImportToken(); 		//토큰 생성
+					String orderNum = rental.getCr_order(); //자식의 주문번호
+					//환불처리 메서드 (토큰, 주문번호, 가격)
+					cancelPay(token2,orderNum,price);
+					this.orderService.refundOK(orderNum);
+					
+					alertMessage(out, "시간추가된 결제도 환불되었습니다!");
+					out.println("<script>");
+					out.println("window.close()");	//현재창을 닫고
+					out.println("opener.location.reload();"); //부모창을 새로고침
+					out.println("</script>");
+				}
+			
 			}
 			// 그 외 환불 금액 100% 가능
 			else {
 				refundAmount = rentalRefund.getCr_price(); //환불처리후 새로고침
-				processRefund(token, order_number, refundAmount, out, "환불이 완료 되었습니다!");
+				cancelPay(token, order_number, refundAmount);
+				alertMessage(out, "환불이 완료 되었습니다!");
+				this.orderService.refundOK(order_number); //환불완료로 업데이트
 
 				//order_number를 기준으로 parent_merchant_id 값이 주문번호와 동일한 레코드를 찾음
 				OrderVO order = this.orderService.getPayInfo2(order_number); //부모의 주문번호를 이용해서 그의 자식을 찾음
@@ -674,13 +700,10 @@ public class RentCheckController {
 					cancelPay(token2,orderNum,price);
 					this.orderService.refundOK(orderNum);
 					
+					alertMessage(out, "시간추가된 결제도 환불되었습니다!");
 					out.println("<script>");
-					out.println("alert('시간추가된 결제도 환불되었습니다!');");
-					out.println("</script>");
-
-				}else {
-					out.println("<script>");
-					out.println("alert('환불이 잘 되었습니다!');");
+					out.println("window.close()");	//현재창을 닫고
+					out.println("opener.location.reload();"); //부모창을 새로고침
 					out.println("</script>");
 				}
 				out.close();
@@ -690,7 +713,7 @@ public class RentCheckController {
 				e.printStackTrace();
 				out.println("<script>");
 				out.println("alert('세션이 만료되었습니다 다시 로그인해주세요!');");
-				//out.println("window.open('/member/m_login', '_blank');");//로그인창으로 이동
+				out.println("window.open('/member/m_login', '_blank');");//로그인창으로 이동
 				out.println("</script>");
 			} finally {
 				out.close();
@@ -701,19 +724,7 @@ public class RentCheckController {
 		private void alertMessage(PrintWriter out, String message) {
 			out.println("<script>");
 			out.println("alert('" + message + "');");
-			//out.println("opener.location.reload();"); //부모창을 새로고침
 			out.println("</script>");
-		}
-
-		//반복되는 환불처리 메서드
-		private void processRefund(String token, String order_number, double refundAmount, PrintWriter out, String successMessage) {
-			int result_delete = cancelPay(token, order_number, refundAmount);
-			if (result_delete == -1) {
-				alertMessage(out, "환불에 실패 했습니다 다시 시도해주세요!");
-			} else {
-				this.orderService.refundOK(order_number); // 환불완료 시 refund에 '환불완료' 업데이트
-				alertMessage(out, successMessage);
-			}
 		}
 
 
