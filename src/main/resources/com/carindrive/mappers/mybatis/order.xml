@@ -83,8 +83,18 @@
 		update c_order_info set refund = '환불완료' where merchant_Id = #{merchantId}
 	</update>
 	
-	<!--  -->
+	<!-- 시간추가시 기존 예약 주문번호 업데이트 -->
+	<update id="addTime">
+		update c_order_info set refund = '시간연장' where merchant_Id = #{merchantId}
+	</update>
+	
+	<!-- 주문번호를 기준으로 결제내역을 가져옴 (추가결제용,환불용) -->
 	<select id="getPayInfo2" resultMap="orderMap">
+		select * from c_order_info where parent_merchant_id = #{merchantId}
+	</select>
+	
+	<!--주문번호를 기준으로 모든 결제내역을 가져옴 (추가결제용,환불용) -->
+	<select id="getAllChildOrders" resultMap="orderMap">
 		select * from c_order_info where parent_merchant_id = #{merchantId}
 	</select>
 

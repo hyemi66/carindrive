@@ -100,7 +100,9 @@ function payMent(paymentType, rental_cr_mid, car_c_name, car_c_color, car_c_year
             	const orderInfo = map.orderInfo;
                 const rental = map.rental;
                 const car = map.car;
-                location.href = map.redirectUrl	 // 서버에서 지정한 URL로 리디렉트
+                alert("시간연장 결제가 완료 되었습니다 !");
+                window.close();
+                opener.location.reload();
 
         }else {
                 alert("결제 정보 처리 중 오류 발생 다시 시도해주세요");

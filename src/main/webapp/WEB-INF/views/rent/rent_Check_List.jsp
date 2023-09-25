@@ -79,6 +79,9 @@
 					        <c:when test="${orderInfo.refund == '환불완료'}">
 					            <span style="color: red;">${orderInfo.refund}</span>
 					        </c:when>
+					        <c:when test="${orderInfo.refund == '시간연장'}">
+					            <span style="color: green;">${orderInfo.refund}</span>
+					        </c:when>
 					    </c:choose>
 					</div>
 					 <div class="info-line">

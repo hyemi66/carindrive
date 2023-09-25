@@ -23,5 +23,11 @@ public interface OrderService {
 
 	//주문번호를 기준으로 결제내역을 가져옴 (추가결제용)
 	OrderVO getPayInfo2(String order_number);
+
+	//주문번호를 기준으로 모든 결제내역을 가져옴 (추가결제용,환불용)
+	List<OrderVO> getAllChildOrders(String order_number);
+
+	//시간연장이 되면 기존결제내역 refund에 시간연장이라고 업데이트
+	void addTime(String oldOrder);
 	
 }

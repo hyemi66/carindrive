@@ -43,6 +43,16 @@ public class OrderServiceImpl implements OrderService {
 	public OrderVO getPayInfo2(String order_number) {
 		return this.orderDAO.getPayInfo2(order_number);
 	}//주문번호를 기준으로 결제내역을 가져옴 (추가결제용)
+
+	@Override
+	public List<OrderVO> getAllChildOrders(String order_number) {
+		return this.orderDAO.getAllChildOrders(order_number);
+	}//주문번호를 기준으로 모든 결제내역을 가져옴 (추가결제용,환불용)
+
+	@Override
+	public void addTime(String oldOrder) {
+		this.orderDAO.addTime(oldOrder);
+	}//시간연장이 되면 기존결제내역 refund에 시간연장이라고 업데이트
 	
 	
 	

@@ -388,6 +388,13 @@ public class RentCheckController {
 
 			// 데이터베이스에 OrderVO 결제정보 저장
 			this.orderService.saveOrder(orderInfo);
+			this.orderService.addTime(orderInfo.getMerchantId());
+			
+			System.out.println("시간추가 완료");
+			//주문번호 기준
+			String oldOrder = orderInfo.getParent_merchant_id();
+			// 기존예약은 정상결제 -> 시간연장 으로 바꿈
+			this.orderService.addTime(oldOrder);
 
 			map.put("orderInfo", orderInfo);
 			map.put("rental", rental);
@@ -685,14 +692,14 @@ public class RentCheckController {
 				cancelPay(token, order_number, refundAmount);
 				alertMessage(out, "환불이 완료 되었습니다!");
 				this.orderService.refundOK(order_number); //환불완료로 업데이트
+				
+				// order_number를 기준으로 parent_merchant_id 값이 주문번호와 동일한 모든 레코드를 찾음
+				List<OrderVO> childOrders = this.orderService.getAllChildOrders(order_number);
+				
+				for(OrderVO childOrder : childOrders) {
+				    RentalVO rental = this.rentService.getRentCar(childOrder.getMerchantId());
 
-				//order_number를 기준으로 parent_merchant_id 값이 주문번호와 동일한 레코드를 찾음
-				OrderVO order = this.orderService.getPayInfo2(order_number); //부모의 주문번호를 이용해서 그의 자식을 찾음
-				//찾은 레코드의 새로 갱신된 주문번호를 가져옴
-				RentalVO rental = this.rentService.getRentCar(order.getMerchantId());
-
-				//부모와 자식의 주문번호가 같으면 환불메서드를 한번 더 진행
-				if(order_number.equals(order.getParent_merchant_id())){
+				    //환불처리
 					double price = rental.getCr_price(); 	//환불 금액
 					String token2 = getImportToken(); 		//토큰 생성
 					String orderNum = rental.getCr_order(); //자식의 주문번호
@@ -700,7 +707,7 @@ public class RentCheckController {
 					cancelPay(token2,orderNum,price);
 					this.orderService.refundOK(orderNum);
 					
-					alertMessage(out, "시간추가된 결제도 환불되었습니다!");
+					alertMessage(out, "관련된 모든 예약이 취소 되었습니다 !");
 					out.println("<script>");
 					out.println("window.close()");	//현재창을 닫고
 					out.println("opener.location.reload();"); //부모창을 새로고침
