@@ -99,6 +99,7 @@ function payMent(paymentType, rental_cr_mid, car_c_name, car_c_color, car_c_year
             if(map.success) {
             	const orderInfo = map.orderInfo;
                 const rental = map.rental;
+                const car = map.car;
                 location.href = map.redirectUrl	 // 서버에서 지정한 URL로 리디렉트
 
         }else {

@@ -165,19 +165,28 @@ public class RentCheckController {
 					orderInfos.add(orderInfo);
 
 				}
+				
+				// 정렬 전의 데이터 출력
+				System.out.println("Before sorting: " + orderInfos);
 
 				//정렬
 				Collections.sort(orderInfos, Comparator.comparing(OrderVO::getBuy_date).reversed());
 
+				
+				// 정렬 후의 데이터 출력
+				System.out.println("After sorting: " + orderInfos);
+				
+				//결제정보를 한개씩 추출함
 				for (OrderVO order : orderInfos) {
 					CarVO carInfo = null;
 					//차량 정보를 불러오는 mybatis문 orders에 들어있는 차량 이름으로 검색
 
+					//결제내역에서 예약한 차량의 이름을 ""(공백)으로 구분함
 					String[] parts = order.getBuy_product_name().split(" ");
-					String carName = parts[parts.length - 1];
+					String carName = parts[2];	//0부터 시작하는 인덱스중 2번째 값을 carName에 저장시킴 ex) 2023년식 WHITE '레이' 시간연장
 
-					carInfo = this.rentService.getCarInfo(carName);
-					carInfos.add(carInfo);
+					carInfo = this.rentService.getCarInfo(carName);	//차량정보를 carName을 기준으로 가져옴
+					carInfos.add(carInfo);	//객체에 저장시킴
 				}
 
 				mav.addObject("memberInfo", memberInfo);
@@ -227,8 +236,8 @@ public class RentCheckController {
 	public ModelAndView timeUp(@RequestParam int c_num,
 			@RequestParam String order_number, HttpServletResponse response) throws Exception {
 		System.out.println("timeUp메서드 동작");
-		System.out.println(c_num);//차량코드번호
-		System.out.println(order_number);//차량코드번호
+		System.out.println("차량 코드번호: "+c_num);//차량코드번호
+		System.out.println("결제 주문번호: "+order_number);//차량코드번호
 
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
@@ -236,10 +245,10 @@ public class RentCheckController {
 
 		//해당 차량의 정보 가져오기
 		CarVO car = this.rentService.getCarInfo2(c_num);
-		System.out.println(car);
+		System.out.println("car정보: "+car);
 		//렌트 정보 가져오기
 		RentalVO rental = this.rentService.getRentCar(order_number);
-		System.out.println(rental);
+		System.out.println("rental정보: "+rental);
 
 		model.addObject("rental",rental);
 		model.addObject("car",car);
@@ -280,28 +289,42 @@ public class RentCheckController {
 	        @RequestParam("c_num") int cNum, 
 	        @RequestParam("order_number") String orderNumber, 
 	        @RequestParam("calculatedPrice") double calculatedPrice,
+	        @RequestParam("cr_sdate") String sDate,
+	        @RequestParam("cr_edate") String eDate,
 	        HttpSession session) {//주문번호를 전달받은 이유는 해당차량의 데이터베이스에 접근하기 위함
+		System.out.println("timeUpPay메서드 동작");
 		ModelAndView model = new ModelAndView();
+		// 현재 날짜 가져오기
+		Date d = new Date();
+		SimpleDateFormat s = new SimpleDateFormat("yyyy년 MM월 dd일 aa hh시 mm분");
+		String cr_rdate = s.format(d);
+		
+		//로그인정보
+	    MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+	    
+	    //차정보 가져오기
+	    CarVO car = this.rentService.getCarInfo2(cNum);
 
+		//날짜와 시간의 경계선인 T문자열을 공백처리
+		String cr_edate = eDate;
+		cr_edate = cr_edate.replace("T", " ");
+
+		//렌탈정보 셋팅
+		RentalVO rental = new RentalVO();
+		rental.setCr_mid(memberInfo.getM_id()); rental.setCr_cname(car.getC_name()); rental.setCr_rdate(cr_rdate);
+		rental.setCr_sdate(sDate);	rental.setCr_edate(cr_edate);	rental.setCr_price(calculatedPrice);
+		rental.setCr_order(orderNumber);
+		System.out.println("셋팅후 렌탈정보: "+rental);
 	    // 메서드 내에서 전달받은 정보들을 활용
 	    System.out.println("c_num: " + cNum);
 	    System.out.println("order_number: " + orderNumber);
 	    System.out.println("calculatedPrice: " + calculatedPrice);
 	    
-	    //로그인정보
-	    MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
-	    //차정보 가져오기
-	    CarVO car = this.rentService.getCarInfo2(cNum);
-		// 주문번호를 기준으로 렌탈 정보 가져오기
-		RentalVO rental = this.rentService.getRentCar(orderNumber);
-		// 해당 렌탈정보에 예약번호에 맞는 주문번호 추가
-		//String merchantId = order.getMerchantId();
-		//this.rentService.insertMerchantId(merchantId, rental.getCr_num());
-
-		// 결제정보 getPayInfo 메서드에 주문번호를 넣고 OrderVO에 값들을 셋팅
-		//OrderVO orderInfo = getPayInfo(merchantId);
+		this.rentService.insertRental(rental);
 		
-		model.addObject("memberInfo", memberInfo);
+		System.out.println("rental정보: "+rental);
+		
+		model.addObject("memberInfo", memberInfo);//결제내역에 사용되는 model들
 		model.addObject("car", car);
 		model.addObject("rental", rental);
 
@@ -320,6 +343,7 @@ public class RentCheckController {
 			MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
 			// 해당 고객의 렌탈 정보 가져오기
 			RentalVO rental = this.rentService.getRentOne(memberInfo.getM_id());
+			System.out.println("pay_Check메서드의 rental정보: "+rental);
 			// 해당 렌탈정보에 예약번호에 맞는 주문번호 추가
 			String merchantId = order.getMerchantId();
 			this.rentService.insertMerchantId(merchantId, rental.getCr_num());
@@ -327,8 +351,6 @@ public class RentCheckController {
 			//결제정보 getPayInfo 메서드에 주문번호를 넣고 OrderVO에 값들을 셋팅
 			OrderVO orderInfo = getPayInfo(merchantId);
 			orderInfo.setPMerchantId(order); //저장하기전 전달받은 원래의 주문번호를 orderInfo에 셋팅
-
-			
 			
 			//RentalVO rental = this.rentService.getRentCar(order.getParent_merchant_id());
 			System.out.println("기존 렌탈 정보: "+rental);
@@ -351,8 +373,6 @@ public class RentCheckController {
 			
 			// 데이터베이스에 OrderVO 결제정보 저장
 			this.orderService.saveOrder(orderInfo);
-			
-			
 
 			map.put("orderInfo", orderInfo);
 			map.put("rental", rental);

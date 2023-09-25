@@ -22,10 +22,15 @@
         </p>
     </div>
     <div id="menu02">
-        <p>
             반 납 하 는 시 간 <br>
-            <input type="datetime-local" name="cr_edate" id="cr_edate" onchange="setMinValue()" required>
-        </p>
+		            <form method="POST" action="/rent/timeUpPay">
+						<input type="hidden" name="c_num" id="c_num" value="${car.c_num}">
+						<input type="hidden" name="cr_sdate" id="cr_sdate" value="${rental.cr_edate}">
+						<input type="hidden" name="order_number" id="order_number" value="${rental.cr_order}">
+					    <input type="hidden" name="calculatedPrice" id="calculatedPrice">
+					    <input type="datetime-local" name="cr_edate" id="cr_edate" onchange="setMinValue()" required>
+					    <input type="submit" value="결제요청">
+					</form>
     </div>
 	<input type="hidden" value="선택완료" onclick="fetchPrice()">
 
@@ -40,12 +45,7 @@
     </c:choose>
 </span></p>
 
-<form method="POST" action="/rent/timeUpPay">
-	<input type="hidden" name="c_num" id="c_num" value="${car.c_num}">
-	<input type="hidden" name="order_number" id="order_number" value="${rental.cr_order}">
-    <input type="hidden" name="calculatedPrice" id="calculatedPrice">
-    <input type="submit" value="결제요청">
-</form>
+
 
 <script type="text/javascript">
 	//기존반납일과 새로운 반납시간을 받아서 변수에 저장 
@@ -62,6 +62,9 @@
             alert("기존의 반납시간보다 작은 시간은 설정할 수 없습니다.");
             endDate.value = startDate.value;
         } else {//날짜를 잘 선택하면
+        	// 여기서 hidden input의 value를 업데이트
+            document.getElementById("cr_edate").value = endDate.value;
+            console.log('cr_edate:', endDate.value);
             fetchPrice();	//fetchPrice()함수 시작
         }
     }
@@ -108,6 +111,13 @@ function fetchPrice() {
 
 // 페이지 로드 시 초기 가격 계산
 fetchPrice();
+document.querySelector("form").addEventListener("submit", function(e) {
+    console.log("c_num:", document.getElementById("c_num").value);
+    console.log("cr_sdate:", document.getElementById("cr_sdate").value);
+    console.log("cr_edate:", document.getElementById("cr_edate").value);
+    console.log("order_number:", document.getElementById("order_number").value);
+    console.log("calculatedPrice:", document.getElementById("calculatedPrice").value);
+});
 
 
 </script>

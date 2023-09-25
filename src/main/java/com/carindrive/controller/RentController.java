@@ -124,6 +124,7 @@ public class RentController {
 			// 현재 날짜 설정 (렌트 신청일)
 			r.setCr_rdate(cr_rdate);	//클라이언트에게 입력받는것이 아닌 코드가 동작하는 순간 시간 저장
 			System.out.println("데이터베이스에 저장");
+			System.out.println("저장전 값 RentalVO값: "+r);
 			this.rentService.insertRental(r);			//모든 값들이 준비되었으면 데이터베이스에 저장
 
 			rttr.addFlashAttribute("msg", "success"); //성공시 메세지띄우기
