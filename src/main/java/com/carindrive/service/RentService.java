@@ -41,4 +41,7 @@ public interface RentService {
 
 	//차량코드번호(프라이머리키)로 차정보 가져오기
 	CarVO getCarInfo2(int c_num);
+
+	//주문순서를 기준으로 주문번호가 null인것을 지우기
+	void delOrder(int cr_num);
 }

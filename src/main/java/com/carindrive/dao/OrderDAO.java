@@ -15,4 +15,6 @@ public interface OrderDAO {
 	void refundOK(String order_number);
 
 	OrderVO getOrder2(String merchantId);
+
+	OrderVO getPayInfo2(String order_number);
 }

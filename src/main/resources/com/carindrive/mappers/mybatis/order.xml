@@ -81,6 +81,11 @@
 	<update id="refundOK">
 		update c_order_info set refund = '환불완료' where merchant_Id = #{merchantId}
 	</update>
+	
+	<!--  -->
+	<select id="getPayInfo2">
+		select * from c_order_info where parent_merchant_id = #{parent_merchant_id}
+	</select>
 
     
 </mapper>

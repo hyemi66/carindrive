@@ -38,6 +38,11 @@ public class OrderServiceImpl implements OrderService {
 	public OrderVO getOrder2(String merchantId) {
 		return this.orderDAO.getOrder2(merchantId);
 	}//주문번호를 기준으로 결제내역을 가져옴
+
+	@Override
+	public OrderVO getPayInfo2(String order_number) {
+		return this.orderDAO.getPayInfo2(order_number);
+	}//주문번호를 기준으로 결제내역을 가져옴 (추가결제용)
 	
 	
 	

@@ -20,5 +20,8 @@ public interface OrderService {
 
 	//주문번호를 기준으로 결제내역을 가져옴
 	OrderVO getOrder2(String merchantId);
+
+	//주문번호를 기준으로 결제내역을 가져옴 (추가결제용)
+	OrderVO getPayInfo2(String order_number);
 	
 }

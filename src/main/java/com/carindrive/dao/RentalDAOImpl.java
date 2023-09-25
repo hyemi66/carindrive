@@ -78,5 +78,10 @@ public class RentalDAOImpl implements RentalDAO {
 		return this.sqlSession.selectOne("getCarInfo2",c_num);
 	}//차량 코드번호로 차 정보 가져오기
 
+	@Override
+	public void delOrder(int cr_num) {
+		this.sqlSession.delete("delOrder",cr_num);
+	}//예약순을 기준으로 주문번호가 없으면 삭제시킴
+
 
 }

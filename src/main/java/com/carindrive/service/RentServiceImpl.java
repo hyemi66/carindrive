@@ -71,6 +71,11 @@ public class RentServiceImpl implements RentService {
 		return this.rentalDao.getCarInfo2(c_num);
 	}
 
+	@Override
+	public void delOrder(int cr_num) {
+		this.rentalDao.delOrder(cr_num);
+	}
+
 
 
 }

@@ -31,4 +31,6 @@ public interface RentalDAO {
 
 	CarVO getCarInfo2(int c_num);
 
+	void delOrder(int cr_num);
+
 }
