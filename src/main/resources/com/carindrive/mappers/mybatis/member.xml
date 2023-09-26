@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="member">
+
+	<!-- 회원 정보 저장(회원가입) -->
+	<insert id="member_in" parameterType="member">
+	    INSERT INTO cid_members (m_num, m_id, m_pwd, m_name, m_phone)
+		VALUES (m_seq.NEXTVAL, #{m_id}, #{m_pwd}, #{m_name}, #{m_phone})
+	</insert>
+
+	<select id="get_member" resultType="member" parameterType="member">
+		select * from cid_members where m_id = #{m_id}
+	</select>
+	
+	
+	
+	
+	<!-- yw -->
+	
+	 	<!-- 아이디 중복 검색 -->
+   	<select id="m_idcheck"  resultType="member">
+   		select * from c_member where m_id=#{id}
+   	</select>
+   	
+   	<!-- 회원 저장 -->
+   	<insert id="C_mem_in">
+   		insert into 
+   		c_member(m_id,m_pwd,m_birth,m_name,m_email,m_tel,m_phone,
+   		m_state,regdate)
+   		values(#{m_id},#{m_pwd},#{m_birth},#{m_name},#{m_email},
+   		#{m_tel},#{m_phone},1,sysdate)
+   	</insert>
+   	
+   	<!-- 회원 로그인 -->
+   	<select id="C_mem_login" resultType="member">
+   		select * from c_member where m_id=#{m_id} and m_state=1 
+   	</select>
+   	
+   	<!-- 관리자 로그인 -->
+   	<select id="admin_ck" resultType="member">
+   		select * from c_member where m_id=#{m_id} and m_state=9
+   	</select>
+  
+  <!-- 유저 이메일 검색 -->
+  	<select id="Serch_email" resultType="member">
+  		select m_id from c_member where m_email =#{m_email}
+  	</select>
+  	
+  <!-- 유저 비밀번호 변경 -->
+	<update id="update_pwd">
+	update c_member set m_pwd=#{m_pwd} where m_id=#{m_id}
+	</update>
+	
+	
+	
+	
+</mapper>

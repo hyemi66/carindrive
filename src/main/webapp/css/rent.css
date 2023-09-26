@@ -1,0 +1,165 @@
+@charset "UTF-8";
+body {
+	background: white;
+}
+
+/* 상단메뉴 */
+.mainmenu {
+	margin-top: 30px;
+	display: flex;
+	justify-content: center;
+}
+#menu01 {
+	border: 1px solid black;
+	width: 500px; height: 65px;
+	font-size: 18px; font-weight: 900;
+	color: white;
+	background-color: #1c2b37;
+}
+#menu01 p {
+	margin-left: 18px;
+}
+#menu02 {
+	border: 1px solid black;
+	width: 500px; height: 65px;
+	font-size: 18px; font-weight: 900;
+	color: white;
+	background-color: #1c2b37;
+}
+#menu02 p {
+	margin-left: 18px;
+}
+#menu03 {
+	border: 1px solid black;
+	width: 200px; height: 65px;
+	font-size: 18px; font-weight: 900;
+	color: white;
+	background-color: #1c2b37;
+}
+#menu03 p {
+	margin-left: 18px;
+}
+
+/* 중앙부 */
+.tab_content input[type="radio"] {
+	display: none;
+}
+
+.tab_content input[type="radio"] + label {
+	display: inline-block;
+	border: 2px solid black;
+	padding: 20px 77.5px; background: #1c2b37;
+	color: white; font-size: 14px; cursor: pointer;
+	border-radius: 10px 10px 0px 0px / 10px 10px 0px 0px;
+}
+
+.tab_content input[id="tab04"] + label {
+	padding: 20px 77.5px;
+}
+.tab_content input[id="tab05"] + label {
+	padding: 20px 76px;
+}
+
+.tab_content input[type="radio"]:checked + label {
+	background: white;
+	border-bottom: 2px solid white;
+	color: black;
+	font-weight: bold;
+}
+
+.tab_content {
+	margin: 0px 0px 0px 145px;
+}
+
+.conbox {
+	width: 89.1%; background: white;
+	border-bottom: 2px solid black;
+	border-left: 2px solid black;
+	border-right: 2px solid black;
+	display: none;
+}
+
+.tab_content input[id="tab01"]:checked ~ .con1 { display: block; }
+.tab_content input[id="tab02"]:checked ~ .con2 { display: block; }
+.tab_content input[id="tab03"]:checked ~ .con3 { display: block; }
+.tab_content input[id="tab04"]:checked ~ .con4 { display: block; }
+.tab_content input[id="tab05"]:checked ~ .con5 { display: block; }
+.tab_content input[id="tab06"]:checked ~ .con6 { display: block; }
+
+/* 이미지 */
+#imgC {
+	margin: 5px;
+	width: 350px; height: 150px;
+}
+#box01 {
+	border: 1px solid lightgray;
+	text-align: center;
+	padding: 21px;
+}
+#box01 a {
+	text-decoration: none;
+	color: inherit;
+}
+#box01:hover {
+	box-shadow: 0px 0px 20px 1px #1c2b37 inset;
+	
+}
+#box01 b {
+	font-size: 30px;
+}
+#box01 p {
+	text-align: right;
+	font-size: 25px;
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+#box01 hr {
+	width: 350px;
+	color: lightgray;
+}
+#box02 input {
+	border: 1px solid black;
+	padding: 15px 130px;
+	margin: 10px 0px;
+	background-color: #1c2b37;
+	color: white;
+	font-size: 20px; font-weight: bolder;
+}
+
+/* 예약페이지 */
+.carname {
+	margin-left: 153px;
+	margin-right: 153px;
+}
+.carname img {
+	width: 450px; height: 250px;
+	padding: 50px;
+}
+#sub {
+	text-align: left;
+	padding: 0px 20px;
+	background-color: white;
+	color: black;
+	font-size: 20px;
+	font-weight: bold;
+}
+#sub a {
+	background-color: #1c2b37;
+	float: right;
+	text-decoration: none;
+	color: white;
+	border: 1px solid black;
+	border-radius: 5px;
+	padding: 10px 20px;
+	margin-bottom: 20px;
+}
+#sub hr {
+	width: 610px;
+}
+.carname table {
+	width: 1000px;
+}
+#carpay {
+	width:1210px;
+	height: 500px;
+}
