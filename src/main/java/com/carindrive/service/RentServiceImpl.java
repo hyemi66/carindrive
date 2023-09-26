@@ -1,6 +1,8 @@
 package com.carindrive.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -80,11 +82,29 @@ public class RentServiceImpl implements RentService {
 	public void updateCok(String c_name) {
 		this.rentalDao.updateCok(c_name);
 	} // 예약된 차 이름으로 c_car테이블 c_ok 0으로 변경
-
+	
 	@Override
 	public void delCok(String c_name) {
-		this.rentalDao.delCok(c_name);
-	} // 결제 오류시 예약완료된 차 c_ok == 1으로 변경
+	this.rentalDao.delCok(c_name);
+	} // 결제오류시 예약완료된 차 c_ok == 1으로 변경
+
+    @Override
+    public boolean checkDate(String cr_cname, String cr_sdate, String cr_edate) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("cr_cname", cr_cname);
+        params.put("cr_sdate", cr_sdate);
+        params.put("cr_edate", cr_edate);
+
+        int count = rentalDao.checkDate(params);
+
+        return count > 0; 
+    }//날짜 중복 체크
+
+	@Override
+	public List<String> getDateCar(String c_name) {
+		return this.rentalDao.getDateCar(c_name);
+	}// 선택된 차량에 대한 예약된 날짜 목록을 가져옴
+	
 
 
 

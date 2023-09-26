@@ -38,21 +38,23 @@ create table c_rental(
     FOREIGN KEY (cr_cname) REFERENCES c_car(c_name)
 );
 --결제 정보 저장 테이블
-CREATE TABLE c_order_info (
-    ID NUMBER PRIMARY KEY,      -- 시퀀스
-    BUYER_NAME VARCHAR2(255),      -- 구매자 아이디
-    BUYER_PHONE VARCHAR2(20),      -- 구매자 폰번호
-    MEMBER_EMAIL VARCHAR2(255),      -- 구매자 이메일
-    BUYER_ADDRESS VARCHAR2(500),   -- 구매자 주소
-    BUY_DATE VARCHAR2(20),      -- 예약 일자
-    PRODUCT_NAME VARCHAR2(255),      -- 예약한 차량 이름
-    BUY_ID VARCHAR2(255),      -- 구매번호
-    MERCHANT_ID VARCHAR2(255),      -- 주문번호
-    PAY_PRICE NUMBER,         -- 가격
-    CARD_NUM VARCHAR2(255),      -- 카드번호
-    PAY_STATUS VARCHAR2(50),      -- 결제여부
-    POST_CODE NUMBER         -- 
+create table c_order_info (
+    id number primary key,
+    buyer_name varchar2(255),
+    buyer_phone varchar2(20),
+    member_email varchar2(255),
+    buyer_address varchar2(500),
+    buy_date varchar2(20),
+    product_name varchar2(255),
+    buy_id varchar2(255),
+    merchant_id varchar2(255),
+    pay_price number,
+    card_num varchar2(255),
+    pay_status varchar2(50),
+    post_code number,
+    refund varchar2(20)
 );
+ALTER TABLE c_order_info ADD (parent_merchant_id VARCHAR2(255));
 -- 공지사항 테이블
 CREATE TABLE C_SERVICE (
     "CS_NO" NUMBER(*,0),
@@ -169,5 +171,7 @@ select * from c_car;
 select * from c_rental;
 delete from c_rental;
 select * from c_service;
+select * from c_order_info;
+
 
 commit;

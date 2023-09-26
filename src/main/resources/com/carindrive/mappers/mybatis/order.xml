@@ -20,11 +20,12 @@
             CARD_NUM,
             PAY_STATUS,
             POST_CODE,
-            refund
+            refund,
+            parent_merchant_id
         ) 
         VALUES 
         (
-            order_seq.nextval,
+            co_seq.nextval,
             #{buyer_name, jdbcType=VARCHAR}, 
             #{buyer_phone, jdbcType=VARCHAR}, 
             #{member_email, jdbcType=VARCHAR}, 
@@ -37,7 +38,8 @@
             #{buyer_card_num, jdbcType=VARCHAR}, 
             #{buyer_pay_ok, jdbcType=VARCHAR}, 
             #{buyer_postcode, jdbcType=INTEGER},
-            '정상결제'
+            '정상결제',
+            #{parent_merchant_id, jdbcType=VARCHAR}
         )
     </insert>
     
@@ -67,13 +69,34 @@
 	    <result column="PAY_STATUS" property="buyer_pay_ok"/>
 	    <result column="POST_CODE" property="buyer_postcode"/>
 	    <result column="refund" property="refund"/>
+	    <result column="parent_merchant_id" property="parent_merchant_id"/>
 	</resultMap>
 	
+	
+	<!-- 결제 정보 조회(예약 내역) -->
+    <select id="getOrder2" resultMap="orderMap">
+    	select * from c_order_info where merchant_id = #{merchantId}
+    </select>
 	
 	<!-- 환불 완료시 주문번호 업데이트 -->
 	<update id="refundOK">
 		update c_order_info set refund = '환불완료' where merchant_Id = #{merchantId}
 	</update>
+	
+	<!-- 시간추가시 기존 예약 주문번호 업데이트 -->
+	<update id="addTime">
+		update c_order_info set refund = '시간연장' where merchant_Id = #{merchantId}
+	</update>
+	
+	<!-- 주문번호를 기준으로 결제내역을 가져옴 (추가결제용,환불용) -->
+	<select id="getPayInfo2" resultMap="orderMap">
+		select * from c_order_info where parent_merchant_id = #{merchantId}
+	</select>
+	
+	<!--주문번호를 기준으로 모든 결제내역을 가져옴 (추가결제용,환불용) -->
+	<select id="getAllChildOrders" resultMap="orderMap">
+		select * from c_order_info where parent_merchant_id = #{merchantId}
+	</select>
 
     
 </mapper>

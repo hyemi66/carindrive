@@ -67,10 +67,35 @@ VALUES (cr_seq.NEXTVAL, #{cr_mid}, #{cr_cname}, #{cr_rdate}, #{cr_sdate}, #{cr_e
 		update c_car set c_ok = 0 where c_name = #{c_name}
 	</update>
 	
-	<!-- 결제 오류시 예약완료된 차 c_ok == 1으로 변경 -->
+	<!-- 결제오류시 예약완료된 차 c_ok == 1으로 변경 -->
 	<update id="del_cok">
 		update c_car set c_ok = 1 where c_name = #{c_name}
 	</update>
+    
+    <!-- 차량 중복 날짜 확인 쿼리문 -->
+    <select id="checkDate" resultType="int" parameterType="map">
+		SELECT COUNT(*) 
+		FROM c_rental 
+		WHERE cr_cname = #{cr_cname} 
+		AND (
+		    cr_sdate BETWEEN #{cr_sdate, jdbcType=VARCHAR} AND #{cr_edate, jdbcType=VARCHAR}
+		    OR 
+		    cr_edate BETWEEN #{cr_sdate, jdbcType=VARCHAR} AND #{cr_edate, jdbcType=VARCHAR}
+		    OR 
+		    #{cr_sdate, jdbcType=VARCHAR} BETWEEN cr_sdate AND cr_edate
+		    OR 
+		    #{cr_edate, jdbcType=VARCHAR} BETWEEN cr_sdate AND cr_edate
+		)
+	</select>
+	
+	<select id="getDateCar" resultType="java.util.Map">
+		SELECT 
+		    TO_CHAR(TO_DATE(cr_sdate, 'YYYY-MM-DD HH24:MI'), 'YYYY-MM-DD HH24:MI') AS start_date, 
+		    TO_CHAR(TO_DATE(cr_edate, 'YYYY-MM-DD HH24:MI'), 'YYYY-MM-DD HH24:MI') AS end_date
+		FROM c_rental
+		WHERE cr_cname = #{cr_cname}
+		ORDER BY start_date
+	</select>
 	
     
 

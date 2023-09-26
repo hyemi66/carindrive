@@ -75,7 +75,7 @@
 		<div class=box>
 		<div class="infobox">
 		    <c:choose>												
-		       	<c:when test="${orderInfo.refund == '정상결제' || currentDateTime > rentalInfo.cr_edate}">
+		       	<c:when test="${orderInfo.refund == '정상결제' && formattedDate < rentalInfo.cr_edate}">
 		            <form action="/rent/timeUp" method="post">
 		                <input type="hidden" name="c_num" value="${carInfo.c_num}">
 		                <input type="hidden" name="cr_edate" value="${rentalInfo.cr_edate}">
@@ -91,16 +91,15 @@
 
 		
 		<div class="infobox">
-			<c:choose>								<%--조건식이 맞는지 한번더 확인할것 거의 다 구현했음 이제 메모장에있는거만 처리--%>
-				<c:when test="${orderInfo.refund == '환불완료' || currentDateTime > rentalInfo.cr_edate} }">
-			        <h2>환불불가</h2>
+			<c:choose>							<%--환불완료 상태이거나, 현재시간이 렌탈대여시간을 지났으면 --%>
+				<c:when test="${orderInfo.refund == '환불완료' || currentDateTime > rentalInfo.cr_sdate}">
+					<h2>환불불가</h2>
 				</c:when>
 				<c:otherwise>
 					<form action="/rent/refund" method="post" id="refundForm">
 			            <input type="hidden" name="order_number" value="${orderInfo.merchantId}">
 			            <button type="submit">환불하기</button>
 			        </form>
-					
 				</c:otherwise>
 			</c:choose>
 		</div>
