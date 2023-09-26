@@ -163,7 +163,7 @@ public class AdminController {
 		p.setStartrow((page-1)*7+1);//시작행번호
 		p.setEndrow(p.getStartrow()+limit-1);//끝행번호
 
-		List<CarVO> clist=this.adminService.getAdminCarList(p);
+		List<CarVO> clist = this.adminService.getAdminCarList(p);
 		
 		// 총페이지수
 		int maxpage=(int)((double)listcount/limit+0.95);

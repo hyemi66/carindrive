@@ -22,59 +22,51 @@
 				<li><a href="${path}/admin/admin_car_list">차량관리</a></li>
 			</ul>
 		</div>
-		<article id="admin_show">
+		<article id="admin_show2">
 			<h1>차 량 관 리</h1>
 			<div class="clear"></div>
-					<div id="Bag">
-						<h2>차량 추가</h2>
-						<table id="ag_t">
+					<div id="Bag2">
+						<h2>차량 상세정보</h2>
+						<table id="ag_t" border="1">
 							<tr>
-								<th>차량 코드</th>
-								<td>${c.c_num}</td>
+								<th>코드번호</th>
+								<td><p>${c.c_num}</p></td>
 							</tr>
 							<tr>
-								<th>차량 이름</th>
-								<td>${c.c_name}</td>
+								<th>이&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;름</th>
+								<td><p>${c.c_name}</p></td>
 							</tr>
 							<tr>
-								<th>차량 브랜드</th>
-								<td>${c.c_brand}</td>
+								<th>브&nbsp;랜&nbsp;드</th>
+								<td><p>${c.c_brand}</p></td>
 							</tr>
 							<tr>
-								<th>차량 년식</th>
-								<td>${c.c_year}</td>
+								<th>년&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;식</th>
+								<td><p>${c.c_year}</p></td>
 							</tr>
 							<tr>
-								<th>차량 색상</th>
-								<td>${c.c_color}</td>
+								<th>색&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;상</th>
+								<td><p>${c.c_color}</p></td>
 							</tr>
 							<tr>
-								<th>차량 상세차종</th>
-								<td>${c.c_type}</td>
+								<th>차&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;종</th>
+								<td><p>${c.c_type2}(${c.c_type})</p></td>
 							</tr>
 							<tr>
-								<th>차량 차종</th>
-								<td>${c.c_type2}</td>
+								<th>기&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;름</th>
+								<td><p>${c.c_oil}</p></td>
 							</tr>
 							<tr>
-								<th>차량 기름</th>
-								<td>${c.c_oil}</td>
+								<th>가&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;격</th>
+								<td><p>${c.c_price}</p></td>
 							</tr>
 							<tr>
-								<th>차량 가격</th>
-								<td>${c.c_price}</td>
-							</tr>
-							<tr>
-								<th>차량 가능 여부</th>
-								<td>${c.c_ok}</td>
-							</tr>
-							<tr>
-								<th>차량 이미지</th>
-								<td><img src="${path}/images/car/${c.c_img}" width="280" height="180" /></td>
+								<th>이&nbsp;미&nbsp;지</th>
+								<td><img src="${path}/images/car/${c.c_img}" width="600" height="230" /></td>
 							</tr>
 						</table>
 						
-						<div id="ag_button">
+						<div id="ag_button3">
 							 <input type="button" value="목록" onclick="location='admin_car_list?page=${page}';" />
 						</div>
 					</div>

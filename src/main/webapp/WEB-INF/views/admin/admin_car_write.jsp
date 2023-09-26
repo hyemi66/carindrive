@@ -9,6 +9,8 @@
 <title></title>
 <link rel="stylesheet" type="text/css" href="${path}/css/main.css" />
 <link rel="stylesheet" type="text/css" href="${path}/css/admin.css" />
+<script src="${path}/js/jquery.js"></script>
+<script type="text/javascript" src="${path}/js/admin.js"></script>
 </head>
 <body>
 <jsp:include page="../include/header.jsp"/>
@@ -28,29 +30,25 @@
 				<form method="post" action="admin_car_write_ok" onsubmit="return car_write_check();" enctype="multipart/form-data">
 					<div id="Bag">
 						<h2>차량 추가</h2>
-						<table id="ag_t">
+						<table id="ag_t" border="1">
 							<tr>
-								<th>차량 이름</th>
-								<td><input name="c_name" id="c_name" size="14" /></td>
+								<th>이&nbsp;&nbsp;&nbsp;름</th>
+								<td><input name="c_name" id="c_name" size="97" style="height: 32px;" /></td>
 							</tr>
 							<tr>
-								<th>차량 브랜드</th>
-								<td><input name="c_brand" id="c_brand" size="14" /></td>
+								<th>브랜드</th>
+								<td><input name="c_brand" id="c_brand"size="97" style="height: 32px;"/></td>
 							</tr>
 							<tr>
-								<th>차량 년식</th>
-								<td><input name="c_year" id="c_year" size="14" /></td>
+								<th>년&nbsp;&nbsp;&nbsp;식</th>
+								<td><input name="c_year" id="c_year" size="97" style="height: 32px;"/></td>
 							</tr>
 							<tr>
-								<th>차량 색상</th>
-								<td><input name="c_color" id="c_color" size="14" /></td>
+								<th>색&nbsp;&nbsp;&nbsp;상</th>
+								<td><input name="c_color" id="c_color" size="97" style="height: 32px;"/></td>
 							</tr>
 							<tr>
-								<th>차량 상세차종</th>
-								<td><input name="c_type" id="c_type" size="14" /></td>
-							</tr>
-							<tr>
-								<th>차량 차종</th>
+								<th>차&nbsp;&nbsp;&nbsp;종</th>
 								<td>
 									<div>
 										<select id="c_type2" name="c_type2" class="select">
@@ -65,20 +63,47 @@
 								</td>
 							</tr>
 							<tr>
-								<th>차량 기름</th>
-								<td><input name="c_oil" id="c_oil" size="14" /></td>
+								<th>상&nbsp;&nbsp;&nbsp;세</th>
+								<td><input name="c_type" id="c_type" size="97" style="height: 32px;"/></td>
 							</tr>
 							<tr>
-								<th>차량 가격</th>
-								<td><input name="c_price" id="c_price" size="14" /></td>
+								<th>기&nbsp;&nbsp;&nbsp;름</th>
+								<td><input name="c_oil" id="c_oil" size="97" style="height: 32px;"/></td>
 							</tr>
 							<tr>
-								<th>차량 이미지</th>
-								<td><input type="file" id="c_img" name="c_img" /></td>
+								<th>1분가격</th>
+								<td><input name="c_price" id="c_price" size="97" style="height: 32px;" /></td>
+							</tr>
+							<tr>
+								<th>이미지</th>
+								<td>
+									<div class="filebox">
+										<input class="upload-name" value="파일선택" disabled="disabled">
+										<label for="ex_filename">업로드</label> 
+										<input type="file" id="ex_filename" class="upload-hidden"> 
+									</div>
+									<script>
+										$(document).ready(function(){
+											var fileTarget = $('.filebox .upload-hidden');
+											
+											fileTarget.on('change', function(){ // 값이 변경되면
+												if(window.FileReader){ // modern browser
+													var filename = $(this)[0].files[0].name;
+												} 
+												else { // old IE
+													var filename = $(this).val().split('/').pop().split('\\').pop();  // 파일명만 추출
+												}
+												
+												// 추출한 파일명 삽입
+												$(this).siblings('.upload-name').val(filename);
+											});
+										}); 
+									</script>
+								</td>
 							</tr>
 						</table>
 						
-						<div id="ag_button">
+						<div id="ag_button2">
 							<input type="submit" value="추가" />
 							<input type="reset" value="취소" onclick="$('#c_name').focus();" />
 							<input type="button" value="목록" onclick="location='admin_car_list?page=${page}';" />

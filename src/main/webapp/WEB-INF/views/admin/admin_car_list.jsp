@@ -27,35 +27,52 @@
 			<div class="clear"></div>
 				<form method="get" action="admin_car_list">
 					<div id="Bag">
-						<h2>차량 목록</h2>
-						<table id="ag_t">
+						<h2>
+							등록차량 목록 ( 총 개수 : 
+							<c:if test="${listcount == null}">
+								0개
+							</c:if>
+							<c:if test="${listcount != null}">
+								${listcount}개
+							</c:if>
+							)
+						</h2>
+						
+						<%--검색 폼추가 --%>
+						<div id="ag_button">
+							<select name="find_field">
+								<option value="c_type2"
+									<c:if test="${find_field=='c_type2'}">
+									${'selected'}</c:if>>차종
+								</option>
+								<option value="c_brand"
+									<c:if test="${find_field=='c_brand'}">
+									${'selected'}</c:if>>브랜드
+								</option>
+							</select>
+							<input type="search" name="find_name" id="find_name" size="14" value="${find_name}" />
+							<input type="submit" value="검색" />
+							<c:if test="${(!empty find_field) && (!empty find_name)}">
+								<input type="button" value="전체목록" onclick="location='admin_car_list?page=${page}';" />
+							</c:if>
+							<input type="button" id="plus2" value="차량추가" onclick="location='admin_car_write?page=${page}';" />
+						</div>
+						
+						<table id="ag_t2" border="1">
 							<tr>
-								<td align="right" colspan="6" id="ag_count">
-									총 개수 : 
-									<c:if test="${listcount == null}">
-										0개
-									</c:if>
-									<c:if test="${listcount != null}">
-										${listcount}개
-									</c:if>
-								</td>
-							</tr>
-							<tr>
-								<th>번호</th>
-								<th>차량코드</th>
-								<th>차량 이름</th>
-								<th>차량 브랜드</th>
-								<th>차량 년식</th>
-								<th>차량 색상</th>
-								<th>차량 차종</th>
-								<th>차량 기름</th>										
-								<th>수정/삭제</th>
+								<th width="45">번호</th>
+								<th width="155">이름</th>
+								<th width="80">브랜드</th>
+								<th width="73">년식</th>
+								<th width="73">색상</th>
+								<th width="105">차종</th>
+								<th width="155">기름</th>										
+								<th width="110">수정/삭제</th>
 							</tr>
 							<c:if test="${!empty clist}">
 								<c:forEach var="c" items="${clist}" varStatus="status">
 									<tr>
 										<td align="center">${status.count}</td>
-										<td align="center">${c.c_num}</td>
 										<td align="center">
 											<a href="admin_car_cont?no=${c.c_num}&page=${page}&state=cont">
 												${c.c_name}
@@ -68,6 +85,7 @@
 										<td align="center">${c.c_oil}</td>
 										<td align="center">
 											<input type="button" value="수정" onclick="location= 'admin_car_cont?no=${c.c_num}&page=${page}&state=edit';" />
+											/
 											<input type="button" value="삭제"
 												onclick="if(confirm('정말로 삭제할까요?') == true){ location='admin_car_del?no=${c.c_num}&page=${page}';   
 											}else{ return ;}" />
@@ -87,17 +105,17 @@
 							<%-- 검색전 페이징 --%>
 							<c:if test="${(empty find_field) && (empty find_name)}">
 								<c:if test="${page<=1}">
-									[이전]&nbsp;
+									◁&nbsp;
 								</c:if>
 								<c:if test="${page>1}">
-									<a href="admin_car_list?page=${page-1}">[이전]</a>&nbsp;
+									<a href="admin_car_list?page=${page-1}">◀</a>&nbsp;
 								</c:if>
 							
 								<%--현재 쪽번호 출력--%>
 								<c:forEach var="a" begin="${startpage}" end="${endpage}" step="1">
 									<c:if test="${a == page}">
 										<%--현재 페이지가 선택되었다면--%>
-										<${a}>
+										<font style="font-weight:bold;">[${a}]</font>
 									</c:if>
 									<c:if test="${a != page}">
 										<%--현재 페이지가 선택되지 않았다면 --%>
@@ -106,10 +124,10 @@
 								</c:forEach>
 							
 								<c:if test="${page >= maxpage}">
-									[다음]
+									▷
 								</c:if>
 								<c:if test="${page<maxpage}">
-									<a href="admin_car_list?page=${page+1}">[다음]</a>
+									<a href="admin_car_list?page=${page+1}">▶</a>
 								</c:if>
 							</c:if>
 							
@@ -140,25 +158,6 @@
 								<c:if test="${page<maxpage}">
 									<a href="admin_car_list?page=${page+1}&find_field=${find_field}&find_name=${find_name}">[다음]</a>
 								</c:if>
-							</c:if>
-						</div>
-						
-						<%--검색 폼추가 --%>
-						<div id="ag_button2">
-							<select name="find_field">
-								<option value="c_type2"
-									<c:if test="${find_field=='c_type2'}">
-									${'selected'}</c:if>>차종
-								</option>
-							</select>
-							<input type="search" name="find_name" id="find_name" size="14" value="${find_name}" />
-							<input type="submit" value="검색" />
-						</div>
-						
-						<div id="ag_button">
-							<input type="button" value="추가" onclick="location='admin_car_write?page=${page}';" />
-							<c:if test="${(!empty find_field) && (!empty find_name)}">
-								<input type="button" value="전체목록" onclick="location='admin_car_list?page=${page}';" />
 							</c:if>
 						</div>
 					</div>

@@ -29,14 +29,14 @@
 			<div class="clear"></div>
 				<form method="post" action="admin_gongji_write_ok" onsubmit="return gongji_write_check();">
 					<div id="Bag">
-						<h2>공지사항 작성</h2>
-						<table id="ag_t">
+						<h2>공지사항 추가</h2>
+						<table id="ag_t" border="1">
 							<tr>
-								<th>공지제목</th>
-								<td><input name="cs_title" id="cs_title" size="59" /></td>
+								<th>제&nbsp;&nbsp;목</th>
+								<td><input name="cs_title" id="cs_title" size="97" style="height: 32px;" /></td>
 							</tr>
 							<tr>
-								<th>공지타입</th>
+								<th>타&nbsp;&nbsp;입</th>
 								<td>
 									<div>
 										<select id="cs_type" name="cs_type" class="select">
@@ -52,15 +52,14 @@
 									</div>
 								</td>
 							</tr>
-							<tr></tr>
 							<tr>
-								<th>공지내용</th>
-								<td><textarea name="cs_cont" id="cs_cont" rows="20" cols="57"></textarea>
+								<th>내&nbsp;&nbsp;용</th>
+								<td><textarea name="cs_cont" id="cs_cont" rows="25" cols="92"></textarea>
 								</td>
 							</tr>
 						</table>
 						
-						<div id="ag_button3">
+						<div id="ag_button2">
 							<input type="submit" value="등록" />
 							<input type="reset" value="취소" onclick="$('#cs_title').focus();" />
 							<input type="button" value="목록" onclick="location='admin_main?page=${page}';" />

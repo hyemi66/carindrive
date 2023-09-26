@@ -39,7 +39,7 @@
 						</h2>
 						
 						<%--검색 폼추가 --%>
-						<div id="ag_button2">
+						<div id="ag_button">
 							<select name="find_field">
 								<option value="cs_title"
 									<c:if test="${find_field=='cs_title'}">
@@ -52,6 +52,10 @@
 							</select>
 							<input type="search" name="find_name" id="find_name" size="14" value="${find_name}" />
 							<input type="submit" value="검색" />
+							<c:if test="${(!empty find_field) && (!empty find_name)}">
+								<input type="button" value="전체목록" onclick="location='admin_main?page=${page}';" />
+							</c:if>
+							<input type="button" id="plus" value="공지추가" onclick="location='admin_gongji_write?page=${page}';" />
 						</div>
 						
 						<table id="ag_t" border="1">
@@ -96,14 +100,6 @@
 									<th colspan="6">목록이 없습니다!</th>
 								</tr>
 							</c:if>
-							<tr>
-								<th colspan="6" align="right">
-									<input type="button" value="글쓰기" onclick="location='admin_gongji_write?page=${page}';" />
-									<c:if test="${(!empty find_field) && (!empty find_name)}">
-										<input type="button" value="전체목록" onclick="location='admin_main?page=${page}';" />
-									</c:if>
-								</th>
-							</tr>
 						</table>
 						
 						<%--페이징 즉 쪽나누기 추가 --%>
@@ -111,17 +107,17 @@
 							<%-- 검색전 페이징 --%>
 							<c:if test="${(empty find_field) && (empty find_name)}">
 								<c:if test="${page<=1}">
-									[이전]&nbsp;
+									◁&nbsp;
 								</c:if>
 								<c:if test="${page>1}">
-									<a href="admin_main?page=${page-1}">[이전]</a>&nbsp;
+									<a href="admin_main?page=${page-1}">◀</a>&nbsp;
 								</c:if>
 							
 								<%--현재 쪽번호 출력--%>
 								<c:forEach var="a" begin="${startpage}" end="${endpage}" step="1">
 									<c:if test="${a == page}">
 										<%--현재 페이지가 선택되었다면--%>
-										<${a}>
+										<font style="font-weight:bold;">[${a}]</font>
 									</c:if>
 									<c:if test="${a != page}">
 										<%--현재 페이지가 선택되지 않았다면 --%>
@@ -130,10 +126,10 @@
 								</c:forEach>
 							
 								<c:if test="${page >= maxpage}">
-									[다음]
+									▷
 								</c:if>
 								<c:if test="${page<maxpage}">
-									<a href="admin_main?page=${page+1}">[다음]</a>
+									<a href="admin_main?page=${page+1}">▶</a>
 								</c:if>
 							</c:if>
 							
@@ -165,10 +161,6 @@
 									<a href="admin_main?page=${page+1}&find_field=${find_field}&find_name=${find_name}">[다음]</a>
 								</c:if>
 							</c:if>
-						</div>
-						
-						<div id="ag_button">
-							
 						</div>
 					</div>
 				</form>

@@ -30,26 +30,26 @@
 				<form method="post" action="admin_gongji_write_ok" onsubmit="return gongji_write_check();">
 					<div id="Bag">
 						<h2>공지사항 내용</h2>
-						<table id="ag_t">
+						<table id="ag_t" border="1">
 							<tr>
 								<th>등록날짜</th>
-								<td>${fn:substring(s.cs_date,0,10)}</td>
+								<td><p>${fn:substring(s.cs_date,0,10)}</p></td>
 							</tr>
 							<tr>
-								<th>조회수</th>
-								<td>${s.cs_hit}</td>
+								<th>조 회 수</th>
+								<td><p>${s.cs_hit}</p></td>
 							</tr>
 							<tr>
-								<th>공지제목</th>
-								<td>${s.cs_title}</td>
+								<th>제&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;목</th>
+								<td><p>${s.cs_title}</p></td>
 							</tr>
 							<tr>
-								<th>공지타입</th>
-								<td>${s.cs_type}</td>
+								<th>타&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;입</th>
+								<td><p>${s.cs_type}</p></td>
 							</tr>
 							<tr>
-								<th>공지내용</th>
-								<td>${cs_cont}</td>
+								<th>내&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;용</th>
+								<td id="ag_cont"><p>${cs_cont}</p></td>
 							</tr>
 						</table>
 						

@@ -69,6 +69,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="find_field == 'c_type2'"> <!-- 차종기준 -->
 				c_type2 like #{find_name}
 			</if>
+			<if test="find_field == 'c_brand'">
+				c_brand like #{find_name}
+			</if>
 		</where>
 	</select>
 	
@@ -76,11 +79,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="car_list" resultType="car">
 		select * from (
 		select rowNum rNum, c_num, c_name,c_brand,c_year,
-		c_color,c_type,c_oil from (select * from c_car
+		c_color,c_type,c_type2, c_oil from (select * from c_car
 		<where>
 			<if test="find_field == ''"></if>
 			<if test="find_field == 'c_type2'">
 				c_type2 like #{find_name}
+			</if>
+			<if test="find_field == 'c_brand'">
+				c_brand like #{find_name}
 			</if>
 		</where>
 		order by c_num desc)) where rNum &gt;= #{startrow}
