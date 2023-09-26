@@ -96,16 +96,17 @@ public class RentCheckController {
 
 			List<RentalVO> allRentals = this.rentService.getRentList(memberInfo.getM_id());
 			for (RentalVO r : allRentals) {
-				if(r.getCr_order() == null) { //결제가 진행되었는데도 주문번호가 비어있다면 결제를 취소한것이므로 삭제해야함
+				if(r.getCr_order() == null) { //결제가 진행되었는데도 주문번호가 비어있다면 결제를 취소한것이므로 해당 컬럼 삭제
 					System.out.println(r);
 					this.rentService.delOrder(r.getCr_num());
 				}
 			}
 
 			System.out.println("null값 삭제 이후 코드동작");
-			//렌트한 차량 car_ok 1 -> 0으로 업데이트
 			System.out.println("현재 렌트하는 차량이름: "+rental.getCr_cname());
-			this.rentService.usedCar(rental.getCr_cname());
+			// 예약된 차 c_ok == 0으로 변경
+	        String c_name = rental.getCr_cname(); // 렌탈된 차 이름 가져오기
+	        this.rentService.updateCok(c_name); // primarykey 차 이름으로 c_car테이블 c_ok 컬럼 업데이트
 
 			map.put("orderInfo", orderInfo);
 			map.put("rental", rental);

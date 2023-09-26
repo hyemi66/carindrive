@@ -1,6 +1,7 @@
 package com.carindrive.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,9 +85,19 @@ public class RentalDAOImpl implements RentalDAO {
 	}//예약순을 기준으로 주문번호가 없으면 삭제시킴
 
 	@Override
-	public void usedCar(String cr_cname) {
-		this.sqlSession.update("usedCar",cr_cname);
-	}//렌트한 차량 car_ok 1 -> 0으로 업데이트
+	public void updateCok(String c_name) {
+		this.sqlSession.update("update_cok", c_name);
+	} // 예약된 차 이름으로 c_car테이블 c_ok 0으로 변경
+
+	@Override
+	public int checkDate(Map<String, Object> params) {
+		return this.sqlSession.selectOne("checkDate",params);
+	}
+
+	@Override
+	public List<String> getDateCar(String c_name) {
+		return this.sqlSession.selectList("getDateCar",c_name);
+	}// 선택된 차량에 대한 예약된 날짜 목록을 가져옴
 
 
 }

@@ -71,28 +71,48 @@ public class RentController {
 	
 		@GetMapping("/rentInfo")
 		public ModelAndView rentInfo(@RequestParam String cr_cname, HttpSession session, RedirectAttributes rttr, HttpServletRequest request) {
-			
-			System.out.println("rentInfo(GET)메서드 동작");
-			
-			ModelAndView model = new ModelAndView();
-			//if문을 사용하기위한 로그인 정보
-			MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
-			
-			//선택된 차량의 정보를 출력하기 위함
-			CarVO car = this.rentService.getCarInfo(cr_cname);
-
-			// 현재 날짜 설정 (렌트 신청일)
-			model.addObject("car",car);
-			model.addObject("cr_cname",cr_cname);
-			model.setViewName("rent/rentInfo");
-			return model;	// 리다이렉트할 URL로 수정 (매핑주소(메서드)를 찾아감)
+		    
+		    System.out.println("rentInfo(GET)메서드 동작");
+		    
+		    ModelAndView model = new ModelAndView();
+		    //if문을 사용하기위한 로그인 정보
+		    MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+		    
+		    //선택된 차량의 정보를 출력하기 위함
+		    CarVO car = this.rentService.getCarInfo(cr_cname);
+	
+		    // 선택된 차량에 대한 예약된 날짜 목록을 가져옴
+		    List<String> reservedDates = rentService.getDateCar(car.getC_name());
+		    model.addAttribute("reservedDates", reservedDates);
+	
+		    // 현재 날짜 설정 (렌트 신청일)
+		    model.addObject("car",car);
+		    model.addObject("cr_cname",cr_cname);
+		    model.setViewName("rent/rentInfo");
+		    return model;    // 리다이렉트할 URL로 수정 (매핑주소(메서드)를 찾아감)
 		}
 		
-		@PostMapping("/rentInfo")
+		@PostMapping("/rentInfo") //선택된 날짜를 처리
 		public ModelAndView rentInfo(RentalVO r, HttpSession session, RedirectAttributes rttr, HttpServletRequest request) {
 			ModelAndView model = new ModelAndView();
-			
 			System.out.println("rentInfo(POST)메서드 동작");
+			
+			/*렌트빌리는 날짜, 반납하는 날짜 기능*/
+			String cr_sdate = r.getCr_sdate();		//VO에 들어있는 날짜,시간 값들을 가져옴
+			String cr_edate = r.getCr_edate();
+
+			cr_sdate = cr_sdate.replace("T", " ");	//중간에 껴있는 T문자를 공백처리함
+			cr_edate = cr_edate.replace("T", " ");
+			
+			boolean isDuplicate = rentService.checkDate(r.getCr_cname(), cr_sdate, cr_edate);
+			System.out.println("렌트하는 차량이름: "+r.getCr_cname());
+			System.out.println("isDuplicate value: " + isDuplicate);
+			
+		    if (isDuplicate) {//중복되는 예약이 있으면 true를 반환
+		        rttr.addFlashAttribute("msg", "해당 시간대에는 이미 예약이 있습니다. 다시 예약을 진행해주세요.");
+		       return new ModelAndView("redirect:/rent/rent");
+		    }
+			
 			//로그인 정보 가져오기
 			MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
 			if (memberInfo != null) {//로그인이 되었을 때
@@ -105,12 +125,7 @@ public class RentController {
 			
 			System.out.println("렌트정보: " +r);
 			
-			/*렌트빌리는 날짜, 반납하는 날짜 기능*/
-			String cr_sdate = r.getCr_sdate();		//VO에 들어있는 날짜,시간 값들을 가져옴
-			String cr_edate = r.getCr_edate();
 
-			cr_sdate = cr_sdate.replace("T", " ");	//중간에 껴있는 T문자를 공백처리함
-			cr_edate = cr_edate.replace("T", " ");
 
 			r.setCr_sdate(cr_sdate);	//공백처리한 날짜,시간 값을 다시 저장
 			r.setCr_edate(cr_edate);

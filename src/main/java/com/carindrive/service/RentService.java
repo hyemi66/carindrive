@@ -1,6 +1,7 @@
 package com.carindrive.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.carindrive.vo.CarVO;
 import com.carindrive.vo.MemberVO;
@@ -46,5 +47,11 @@ public interface RentService {
 	void delOrder(int cr_num);
 
 	//렌트한 차량 car_ok 1 -> 0으로 업데이트
-	void usedCar(String cr_cname);
+	void updateCok(String c_name);
+	
+	//날짜 중복 체크 쿼리문
+	boolean checkDate(String carName, String startDate, String endDate);
+
+	// 선택된 차량에 대한 예약된 날짜 목록을 가져옴
+	List<String> getDateCar(String c_name);
 }

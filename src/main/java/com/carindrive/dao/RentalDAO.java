@@ -1,10 +1,10 @@
 package com.carindrive.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.carindrive.vo.CarVO;
 import com.carindrive.vo.MemberVO;
-import com.carindrive.vo.OrderVO;
 import com.carindrive.vo.RentalVO;
 
 public interface RentalDAO {
@@ -33,6 +33,11 @@ public interface RentalDAO {
 
 	void delOrder(int cr_num);
 
-	void usedCar(String cr_cname);
+	void updateCok(String c_name);
+	
+	int checkDate(Map<String, Object> params);
+
+	List<String> getDateCar(String c_name);
+
 
 }

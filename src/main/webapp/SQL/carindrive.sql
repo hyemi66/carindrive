@@ -18,6 +18,7 @@ delete from c_rental where cr_num = 107;
 
 
 --테스트ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+UPDATE c_car SET c_ok = 1 WHERE c_ok = 0;
 
 --차량 예약 가능 여부 확인
 SELECT c_ok FROM c_car WHERE c_name = '레이';
@@ -62,13 +63,71 @@ UPDATE c_car SET c_ok = 1 WHERE c_name = '레이';
 
 
 
+WITH date_range AS (
+    SELECT cr_sdate + LEVEL - 1 AS reserved_date
+    FROM c_rental
+    WHERE cr_cname = '레이'
+    START WITH cr_sdate IS NOT NULL
+    CONNECT BY PRIOR cr_sdate = cr_sdate
+    AND PRIOR cr_cname = cr_cname
+    AND PRIOR DBMS_RANDOM.VALUE IS NOT NULL
+    AND cr_sdate + LEVEL - 1 <= cr_edate
+)
+SELECT DISTINCT reserved_date
+FROM date_range
+ORDER BY reserved_date;
 
 
 
+    WITH date_range AS (
+        SELECT cr_sdate + LEVEL - 1 AS reserved_date
+        FROM c_rental
+        WHERE cr_cname = '레이'
+        CONNECT BY cr_sdate + LEVEL - 1 <= cr_edate
+        AND PRIOR cr_cname = cr_cname
+        AND PRIOR DBMS_RANDOM.VALUE IS NOT NULL
+    )
+    SELECT DISTINCT reserved_date
+    FROM date_range
+    ORDER BY reserved_date;
 
 
 
+WITH date_range AS (
+    SELECT 
+        TO_CHAR(
+            TO_DATE(cr_sdate, 'YYYY-MM-DD HH24:MI') + (LEVEL - 1) / 24, 
+            'YYYY-MM-DD HH24:MI'
+        ) AS reserved_date
+    FROM c_rental
+    WHERE cr_cname = '레이'
+    CONNECT BY 
+        PRIOR cr_sdate = cr_sdate
+        AND PRIOR cr_cname = cr_cname
+        AND PRIOR DBMS_RANDOM.VALUE IS NOT NULL
+        AND TO_DATE(cr_sdate, 'YYYY-MM-DD HH24:MI') + (LEVEL - 1) / 24 <= TO_DATE(cr_edate, 'YYYY-MM-DD HH24:MI')
+)
+SELECT DISTINCT reserved_date
+FROM date_range
+ORDER BY reserved_date;
 
+--ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+--날짜추출
+
+WITH date_range AS (
+    SELECT TO_DATE(cr_sdate, 'YYYY-MM-DD HH24:MI:SS') + LEVEL - 1 AS reserved_date
+    FROM c_rental
+    WHERE cr_cname = '레이'
+    START WITH cr_sdate IS NOT NULL
+    CONNECT BY PRIOR cr_sdate = cr_sdate
+    AND PRIOR cr_cname = cr_cname
+    AND PRIOR DBMS_RANDOM.VALUE IS NOT NULL
+    AND TO_DATE(cr_sdate, 'YYYY-MM-DD HH24:MI:SS') + LEVEL - 1 <= TO_DATE(cr_edate, 'YYYY-MM-DD HH24:MI:SS')
+)
+SELECT DISTINCT reserved_date
+FROM date_range
+ORDER BY reserved_date;
 
 
 

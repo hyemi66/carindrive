@@ -260,6 +260,12 @@
 
 <div class="clear"></div>
 
+<c:if test="${not empty msg}">
+    <script>
+        alert('${msg}');
+    </script>
+</c:if>
+
 
 <jsp:include page="../include/footer.jsp"/>
 </body>
