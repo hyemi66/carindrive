@@ -88,5 +88,10 @@ public class RentalDAOImpl implements RentalDAO {
 		this.sqlSession.update("update_cok", c_name);
 	} // 예약된 차 이름으로 c_car테이블 c_ok 0으로 변경
 
+	@Override
+	public void delCok(String c_name) {
+		this.sqlSession.update("del_cok", c_name);
+	} // 결제 오류시 예약완료된 차 c_ok == 1으로 변경
+
 
 }

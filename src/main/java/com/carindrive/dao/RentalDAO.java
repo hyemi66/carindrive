@@ -35,4 +35,6 @@ public interface RentalDAO {
 
 	void updateCok(String c_name);
 
+	void delCok(String c_name);
+
 }

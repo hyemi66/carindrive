@@ -47,4 +47,7 @@ public interface RentService {
 	
 	// 예약된 차 이름으로 c_car테이블 c_ok 0으로 변경
 	void updateCok(String c_name);
+	
+	// 결제 오류시 차 이름으로 c_car테이블 c_ok 1로 변경
+	void delCok(String c_name);
 }

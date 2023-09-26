@@ -118,7 +118,12 @@ public class RentCheckController {
 		} catch (Exception e) {//결제시 문제 발생
 			try {
 				// 환불 처리 시작
+				// 결제오류시 예약완료된 차 c_ok == 1으로 변경
 				String token = getImportToken();
+				MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+				RentalVO rental = this.rentService.getRentOne(memberInfo.getM_id());
+				String c_name = rental.getCr_cname(); // 렌탈된 차 이름 가져오기
+				this.rentService.delCok(c_name); // primarykey 차 이름으로 c_car테이블 c_ok 컬럼 업데이트
 
 				if (token == null || token.isEmpty()) {
 					log.error("인증 정보에 문제가 발생했습니다. 환불 처리를 위해 다시 시도해주세요.");

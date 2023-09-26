@@ -67,6 +67,11 @@ VALUES (cr_seq.NEXTVAL, #{cr_mid}, #{cr_cname}, #{cr_rdate}, #{cr_sdate}, #{cr_e
 		update c_car set c_ok = 0 where c_name = #{c_name}
 	</update>
 	
+	<!-- 결제 오류시 예약완료된 차 c_ok == 1으로 변경 -->
+	<update id="del_cok">
+		update c_car set c_ok = 1 where c_name = #{c_name}
+	</update>
+	
     
 
 </mapper>

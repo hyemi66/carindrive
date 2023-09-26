@@ -167,6 +167,7 @@ values('admin01','','','','','admin01',9,'',sysdate);
 select * from c_member;
 select * from c_car;
 select * from c_rental;
+delete from c_rental;
 select * from c_service;
 
 commit;
