@@ -1,11 +1,35 @@
 package com.carindrive.dao;
 
-import com.carindrive.vo.AdminVO;
+import java.util.List;
+
+import com.carindrive.vo.CarVO;
+import com.carindrive.vo.PageVO;
+import com.carindrive.vo.ServiceVO;
 
 public interface AdminDAO {
 
-	AdminVO adminLogin(String ca_id);
+	int getListCount(PageVO p);
 
-	void insertAdmin(AdminVO ab);
+	List<ServiceVO> getAdminGongjiList(PageVO p);
+
+	void agInsert(ServiceVO g);
+
+	ServiceVO getAgCont(int no);
+
+	void Agupdate(ServiceVO g);
+
+	void AgDel(int no);
+
+	int getCarCount(PageVO p);
+
+	List<CarVO> getAdminCarList(PageVO p);
+
+	void carInsert(CarVO c);
+
+	CarVO getAdminCarCont(int no);
+
+	void updateCar(CarVO c);
+
+	void carDel(int no);
 
 }

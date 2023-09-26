@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Admin">
+	
+	<!-- 공지사항 리스트 카운트 -->
+	<select id="list_count" resultType="int">
+		select count(cs_no) from c_service
+		<where>
+			<if test="find_field == ''"></if>
+			<if test="find_field == 'cs_title'"> <!-- 제목기준 -->
+				cs_title like #{find_name}
+			</if>
+			<if test="find_field == 'cs_cont'"> <!-- 내용기준 -->
+				cs_cont like #{find_name}     
+			</if>
+		</where>
+	</select>
+	
+	<!-- 공지사항 목록 -->
+	<select id="gongji_list" parameterType="page" resultType="service">
+		select * from (
+		select rowNum rNum, cs_no, cs_title, cs_hit, cs_date, cs_type from
+		(select * from c_service
+		<where>
+			<if test="find_field == ''"></if> <!-- 검색어를 입력하지 않은 경우 => 전체목록 -->
+			<if test="find_field == 'cs_title'"> <!-- 제목으로 검색한 경우 -->
+				cs_title like #{find_name} <!--  sql문에서 like는 ~와 비슷한 문자를 검색하는 검색연산자 -->
+			</if>
+			<if test="find_field == 'cs_cont'"> <!-- 내용으로 검색한 경우 -->
+				cs_cont like #{find_name}
+			</if>
+		</where>     
+		order by cs_no desc)) where rNum &gt;= #{startrow}
+		and rNum &lt;= #{endrow}
+	</select>
+	
+	<!-- 공지글추가 -->
+	<insert id="gongji_add">
+		insert into c_service (cs_no, cs_title, cs_cont, cs_type)
+		values (cs_seq.nextval, #{cs_title}, #{cs_cont}, #{cs_type})
+	</insert>
+	
+	<!-- 공지 글 내용 보기 -->
+	<select id="gongji_cont" resultType="service">
+		select * from c_service where cs_no = #{no}
+	</select>
+	
+	<!-- 공지 글 수정 -->
+	<update id="gongji_update">
+		update c_service set cs_title = #{cs_title}, cs_cont = #{cs_cont}, cs_type = #{cs_type}
+		where cs_no = #{cs_no}
+	</update>
+	
+	<!-- 공지 글 삭제 -->
+	<delete id="gongji_del">
+		delete from c_service where cs_no = #{no}
+	</delete>
+	
+	<!-- 차량관리 -->
+	<!-- 차 총 개수 -->
+	<select id="car_count" resultType="int">
+		select count(c_num) from c_car
+		<where>
+			<if test="find_field == ''"></if>
+			<if test="find_field == 'c_type2'"> <!-- 차종기준 -->
+				c_type2 like #{find_name}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 차 리스트 -->
+	<select id="car_list" resultType="car">
+		select * from (
+		select rowNum rNum, c_num, c_name,c_brand,c_year,
+		c_color,c_type,c_oil from (select * from c_car
+		<where>
+			<if test="find_field == ''"></if>
+			<if test="find_field == 'c_type2'">
+				c_type2 like #{find_name}
+			</if>
+		</where>
+		order by c_num desc)) where rNum &gt;= #{startrow}
+		and rNum &lt;= #{endrow}
+	</select>
+	
+	<!-- 차량 추가 -->
+	<insert id="car_insert">
+		insert into c_car(c_num, c_name, c_brand, c_year, c_color, c_type, c_type2, c_oil, c_price, c_img)
+		values(car_seq.nextval, #{c_name}, #{c_brand}, #{c_year}, #{c_color}, #{c_type}, #{c_type2}, #{c_oil},
+		#{c_price}, #{c_img})
+	</insert>
+	
+	<!-- 차량 내용보기 -->
+	<select id="car_cont" resultType="car">
+		select * from c_car where c_num = #{no}
+	</select>
+	
+	<!-- 차량 정보 수정 -->
+	<update id="car_update">
+		update c_car set c_name = #{c_name}, c_brand = #{c_brand}, c_year = #{c_year}, 
+		c_color = #{c_color}, c_type = #{c_type}, c_type2 = #{c_type2}, c_oil = #{c_oil}, 
+		c_price = #{c_price}, c_img = #{c_img} where c_num = #{c_num}
+	</update>
+	
+	<!-- 차량 삭제 -->
+	<delete id="car_del">
+		delete from c_car where c_num = #{no}
+	</delete>
+	
+</mapper>

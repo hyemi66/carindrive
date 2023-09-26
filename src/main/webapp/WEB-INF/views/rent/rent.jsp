@@ -112,6 +112,9 @@
 									24시간 : \ <fmt:formatNumber value="${c.c_price*60*24}" pattern="#,###"/>
 								</p>
 								<div id="box02">
+									<c:if test="${c.c_ok == 0}">
+										<input id="no" type="button" value="예 약 불 가" />
+									</c:if>
 									<input type="button" value="예 약 하 기" onclick="showCar(currentCar${status.index})" />
 								</div>
 							</div>

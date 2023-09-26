@@ -1,136 +1,83 @@
 @charset "UTF-8";
 
-#logo {
-	font-family: 'Inter', sans-serif;
-	width: 400px;
-	height: 100px;
-	font-size: 30px;
-	font-weight: bold;
-	text-align: center;
-	margin: 0 auto;
-	margin-top: 50px;
-	letter-spacing: 8px;
+.Badmin {
+	margin: 40px 60px;
 }
-#logo>hr {
-	width: 300px;
-	color: #dcdcdc;
+.Admin_menu {
+	float: left;
+	margin: 0px 70px 0px 30px;
+	font-size: 1em;
 }
-#Login_wrap {
-	width: 500px;
-	height: 600px;
-	background-color: white;
-	border-radius: 10px;
-	border: 1px solid #dcdcdc;
-	margin: 0 auto;
-	margin-top: 50px;
+.Admin_menu h2 {
+	margin-top: 20px;
+	margin-left: 20px;
 	margin-bottom: 50px;
+	font-size: 42px;
+	color: #1c2b37;
 }
-#btn1 {
-	width: 400px;
-	height: 50px;
-	background-color: #dcdcdc;
-	border: none;
-	border-radius: 10px;
-	color: #505050;
-	font-size: 20px;
-	letter-spacing: 15px;
-	cursor: pointer;
-}
-#ano {
-	margin-top: 30px;
+.Admin_menu img {
+	border: 1px solid #ccc;
+	border-radius: 200px;
 	padding: 20px;
+	width: 200px; height: 200px;
+	margin-left: 20px;
 }
-#ca_id, #ca_pwd{
-	background-image: url('../images/people.png');
-	background-repeat: no-repeat;
-	background-size: 30px 30px;
-	background-position: 20px center;
-	border-radius: 10px;
-	border: 1px solid #dcdcdc;
-	text-indent: 3em;
-	width: 400px;
-	height: 50px;
+.Admin_menu ul {
+	list-style: none;
+	margin: 20px 0px 0px 10px;
+}
+.Admin_menu a {
+	text-decoration: none;
+	color: #6b6b6b; display: block;
+	height: 20px; width: 150px; padding: 30px 20px 20px 5px;
 	font-size: 20px;
-	margin-top: 20px;
 }
-#ca_pwd {
-	background-image: url('../images/lock_icon.png');
-	background-size: 20px 20px;
+.Admin_menu a:hover {
+	font-weight: bold;
+	border-bottom: 1px solid #1c2b37;
+	width: 110px;
 }
-#id_form, #pwd_form, #button_form,#ano {
-	text-align: center;
+/* 관리자페이지 (공지사항) */
+#admin_show {
+	width: 850px; height: 700px;
+	float: right;
+	padding-left: 70px;
+	margin-right: 100px;
+	margin-bottom: 20px;
+	border-left: 2px solid #ccc;
+	color: #1c2b37;
 }
-input:focus {
-	outline: 2px solid #dcdcdc;
-}
-#button_form{
-	margin-top: 20px;
-}
-
-/*admin_main*/
-#aMain_wrap{
-	
-	
-}
-#aMain_header{
-  height: 80px;
-  background-color: #333;
-  padding: 10px;
-  display: flex;
-  align-items: center;
-}
-#aMain_logo{
-	flex: 0 0 auto;
-}
-#aMain_logo img{
-    width:80px; height:80px;
-    	
-}
-#aMain_menu{
-	flex: 1;
-  display: flex;
-  justify-content: center;
-}
-
-#aMain_menu ul li{
-   display: inline-block;
-  margin: 0px 100px;
-}
-#aMain_menu ul li a{
- display: flex;
-  height: 20px;
-  padding: 10px;
-  font-size: 20px;
-  font-weight: 100;
-  text-decoration: none;
-  color: #fff;
-  text-align: center;
-}
-#aMain_menu a:hover{
-	color: orange;
-  transition: all 0.25s;
-}
-#aMain_right{
+#admin_show h1 {
 	margin-top: 50px;
-	color: white;
+	padding-left: 20px;
+	padding-bottom: 30px;
+	font-size: 30px;
+	border-bottom: 2px solid #ccc;
 }
-.clear{
-	clear:both;
+#Bag h2 {
+	padding-left: 20px;
+	font-size: 25px;
+	color: #1c2b37;
 }
-#aMain_cont{
-    width:1500px; height:700px;
-    margin: 0 auto;
-    
-  
+#ag_t tr {
+	height: 40px;
 }
-#aMain_cont .aMainCont_title{
-	font-size:25px; text-align: center;
-	margin-top: 200px;
+#ag_t th {
+	padding: 0px 38px;
 }
-#aMain_footer{
-	background-color: #333;
-  color: #fff;
-  padding: 10px;
-  text-align: center;
-	
+#ag_paging {
+	margin-left: 320px;
+	margin-top: 20px;
 }
+#ag_button {
+	margin-top: 20px;
+}
+#ag_button2 {
+	margin-bottom: 10px;
+}
+/* 관리자페이지(공지사항 글쓰기) */
+#ag_button3 {
+	margin-top: 20px;
+	margin-left: 420px;
+}
+

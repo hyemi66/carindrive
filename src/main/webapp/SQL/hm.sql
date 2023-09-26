@@ -21,7 +21,7 @@ create table c_car(
     c_type2 varchar2(200) not null, -- 차량 차종
     c_oil varchar2(200) not null, -- 차량 기름
     c_price number not null, -- 차량 가격
-    c_ok int default 0, -- 차량 가능 여부
+    c_ok int default 1, -- 차량 가능 여부
     c_img varchar2(200) not null -- 차량 이미지
 );
 -- 예약 테이블
@@ -54,15 +54,13 @@ CREATE TABLE c_order_info (
     POST_CODE NUMBER         -- 
 );
 -- 공지사항 테이블
-create table c_service(
-    cs_no int,
-    cs_id VARCHAR2(20),
-    cs_pwd VARCHAR2(400),
-    cs_title VARCHAR2(200),
-    cs_cont VARCHAR2(3000),
-    cs_date DATE DEFAULT SYSDATE,
-    cs_hit INT,
-    FOREIGN KEY (cs_id) REFERENCES c_member(m_id)
+CREATE TABLE C_SERVICE (
+    "CS_NO" NUMBER(*,0),
+    "CS_TITLE" VARCHAR2(200 BYTE), 
+    "CS_CONT" VARCHAR2(4000 BYTE), 
+    "CS_DATE" DATE DEFAULT SYSDATE, 
+    "CS_TYPE" VARCHAR2(20 BYTE),
+    cs_hit int default 0
 );
 --Q&A 테이블
 create table c_qna(
@@ -169,6 +167,6 @@ values('admin01','','','','','admin01',9,'',sysdate);
 select * from c_member;
 select * from c_car;
 select * from c_rental;
-delete from c_retn
+select * from c_service;
 
 commit;

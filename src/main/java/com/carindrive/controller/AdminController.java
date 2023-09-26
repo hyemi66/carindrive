@@ -1,6 +1,7 @@
 package com.carindrive.controller;
 
-import java.io.PrintWriter;
+import java.io.File;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,87 +15,313 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.carindrive.service.AdminService;
-import com.carindrive.vo.AdminVO;
-
-import pwdchange.CarPwdCh;
+import com.carindrive.vo.CarVO;
+import com.carindrive.vo.PageVO;
+import com.carindrive.vo.ServiceVO;
+import com.oreilly.servlet.MultipartRequest;
 
 @Controller
+@RequestMapping("/admin/*")
 public class AdminController {
-
+	
 	@Autowired
 	private AdminService adminService;
 	
-	@RequestMapping("admin_login")
-	public ModelAndView admin_login() {
-		return new ModelAndView("admin/admin_login");
-	}//admin_login()
+	/* 공지사항 */
+	@RequestMapping("/admin_main")
+	public ModelAndView admin_gongji_list(ServiceVO g, HttpServletRequest request, HttpSession session, PageVO p) 
+			throws Exception{
+		
+		int page = 1; // 쪽번호
+		int limit = 7; // 한페이지에 보여지는 목록개수
+		
+		if(request.getParameter("page") != null) {
+			page=Integer.parseInt(request.getParameter("page"));    
+		}
+		
+		String find_name=request.getParameter("find_name");
+		String find_field=request.getParameter("find_field");
+		p.setFind_field(find_field);
+		p.setFind_name("%"+find_name+"%");
+		
+		int listcount = this.adminService.getListCount(p);
+		
+		p.setStartrow((page-1)*7+1); // 시작행번호
+		p.setEndrow(p.getStartrow()+limit-1); // 끝행번호
+		
+		List<ServiceVO> glist = this.adminService.getAdminGongjiList(p);
+		
+		// 총페이지수
+		int maxpage = (int)((double)listcount/limit+0.95);
+		int startpage = (((int)((double)page/10+0.9))-1)*10+1;
+		int endpage = maxpage;
+		if(endpage > startpage+10-1) endpage = startpage+10-1;
+
+		ModelAndView listM = new ModelAndView();
+		
+		listM.addObject("glist",glist);
+		listM.addObject("page",page);
+		listM.addObject("startpage",startpage);
+		listM.addObject("endpage",endpage);
+		listM.addObject("maxpage",maxpage);
+		listM.addObject("listcount",listcount);   
+		listM.addObject("find_field",find_field);
+		listM.addObject("find_name", find_name);
+		
+		listM.setViewName("admin/admin_main");
+		
+		return listM;
+	} // admin_gongji_list()
 	
-	@PostMapping("admin_login_ok")
-	public String admin_login_ok(AdminVO ab,HttpServletResponse response,
-			HttpServletRequest request,HttpSession session) throws Exception {
-		response.setContentType("text/html;charset=UTF-8");
-		PrintWriter out=response.getWriter();
-		ab.setCa_pwd(CarPwdCh.getPassWordToXEMD5String(ab.getCa_pwd()));
+	@GetMapping("/admin_gongji_write")
+	public ModelAndView admin_gongji_write(HttpServletRequest request) {
+		int page=1;
 		
-		//ab.setAdmin_no(1);
-		//this.adminService.insertAdmin(ab);
+		if(request.getParameter("page") != null) {
+			page=Integer.parseInt(request.getParameter("page"));
+		}
 		
-		AdminVO admin_info = this.adminService.adminLogin(ab.getCa_id());
+		ModelAndView wm = new ModelAndView();
+		wm.addObject("page",page); // 페이징에서 책갈피 기능때문에 추가
+		wm.setViewName("admin/admin_gongji_write");
 		
-		if(admin_info == null) {
-			out.println("<script>");
-			out.println("alert('관리자 정보가 없습니다!');");
-			out.println("history.back();");
-			out.println("</script>");
-		}else {
-			if(!admin_info.getCa_pwd().equals(ab.getCa_pwd())) {
-				out.println("<script>");
-				out.println("alert('관리자 비번이 다릅니다!');");
-				out.println("history.go(-1);");
-				out.println("</script>");
+		return wm;
+	} // admin_gongji_write()
+	
+	@PostMapping("/admin_gongji_write_ok")
+	public ModelAndView admin_gongji_write_ok(ServiceVO g) {
+			
+			this.adminService.agInsert(g);
+
+			return new ModelAndView("redirect:/admin/admin_main");
+	} // admin_gongji_write_ok()
+	
+	@RequestMapping("/admin_gongji_cont")
+	public ModelAndView admin_gongji_cont(int no, int page, String state,
+			HttpServletResponse response, HttpSession session) throws Exception{
+		
+		ServiceVO s = this.adminService.getAgCont(no);
+		String cs_cont = s.getCs_cont().replace("\n","<br>");
+		    
+		ModelAndView cm=new ModelAndView();
+		cm.addObject("s",s);
+		cm.addObject("cs_cont",cs_cont);
+		cm.addObject("page",page);
+		    
+		if(state.equals("cont")) { // 관리자 자료실 상세정보 보기
+			cm.setViewName("./admin/admin_gongji_cont");
+		} else if (state.equals("edit")) { // 관리자 자료실 수정폼
+			cm.setViewName("./admin/admin_gongji_edit");
+		}
+		
+		return cm;
+	} // admin_gongji_cont()
+	
+	@RequestMapping("/admin_gongji_edit_ok")
+	public ModelAndView admin_gongji_edit_ok(ServiceVO g, HttpServletRequest request) throws Exception{
+		
+		int page=1;
+		if(request.getParameter("page") != null) {
+			page=Integer.parseInt(request.getParameter("page"));
+		}
+		
+		this.adminService.Agupdate(g);
+	
+		ModelAndView em=new ModelAndView("redirect:/admin/admin_main?page="+page);
+
+		return em;
+	} // admin_gongji_edit_ok()
+	
+	@GetMapping("/admin_gongji_del")
+	public ModelAndView admin_gongji_del(int no,int page,HttpServletResponse response,
+			HttpSession session,HttpServletRequest request) throws Exception{
+		
+		this.adminService.AgDel(no);
+		
+		ModelAndView dm=new ModelAndView();
+		dm.setViewName("redirect:/admin/admin_main");
+		dm.addObject("page",page);
+		return dm;
+	}//admin_gongji_del()
+	
+	/* 차량관리 */
+	@RequestMapping("/admin_car_list")
+	public ModelAndView admin_car_list(CarVO c,HttpServletResponse response,
+			HttpServletRequest request,HttpSession session,PageVO p) throws Exception {
+		int page=1;
+		int limit=7;
+		if(request.getParameter("page") != null) {
+			page=Integer.parseInt(request.getParameter("page"));
+		}
+		String find_name=request.getParameter("find_name");
+		String find_field=request.getParameter("find_field");
+		p.setFind_field(find_field);
+		p.setFind_name("%"+find_name+"%");
+		
+		int listcount = this.adminService.getCarCount(p);
+		
+		p.setStartrow((page-1)*7+1);//시작행번호
+		p.setEndrow(p.getStartrow()+limit-1);//끝행번호
+
+		List<CarVO> clist=this.adminService.getAdminCarList(p);
+		
+		// 총페이지수
+		int maxpage=(int)((double)listcount/limit+0.95);
+		int startpage=(((int)((double)page/10+0.9))-1)*10+1;
+		int endpage=maxpage;
+		if(endpage > startpage+10-1) endpage=startpage+10-1;
+
+		ModelAndView listM=new ModelAndView();
+		
+		listM.addObject("clist",clist);
+		listM.addObject("page",page);
+		listM.addObject("startpage",startpage);
+		listM.addObject("endpage",endpage);
+		listM.addObject("maxpage",maxpage);
+		listM.addObject("listcount",listcount);   
+		listM.addObject("find_field",find_field);
+		listM.addObject("find_name", find_name);
+		
+		listM.setViewName("admin/admin_car_list");
+		return listM;
+	} // admin_car_list()
+	
+	@GetMapping("/admin_car_write")
+	public ModelAndView admin_car_write(HttpServletRequest request) throws Exception {
+		int page=1;
+		
+		if(request.getParameter("page") != null) {
+			page=Integer.parseInt(request.getParameter("page"));
+		}
+		
+		ModelAndView wm = new ModelAndView("admin/admin_car_write");
+		wm.addObject("page",page); // 페이징에서 책갈피 기능때문에 추가
+		
+		return wm;
+	} // admin_car_write()
+	
+	@PostMapping("/admin_car_write_ok")
+	public ModelAndView admin_car_write_ok(HttpServletRequest request, CarVO c) throws Exception {
+		String saveFolder=request.getRealPath("images/car");
+		//이진파일 업로드 서버경로
+		int fileSize=5*1024*1024;//이진파일 업로드 최대크기
+		MultipartRequest multi=null;//이진파일을 받을 참조변수
+
+		multi=new MultipartRequest(request,saveFolder,
+				fileSize,"UTF-8");
+		
+		String c_name=multi.getParameter("c_name");
+		String c_brand=multi.getParameter("c_brand");
+		String c_year=multi.getParameter("c_year");
+		String c_color=multi.getParameter("c_color");
+		String c_type=multi.getParameter("c_type");
+		String c_type2=multi.getParameter("c_type2");
+		String c_oil=multi.getParameter("c_oil");
+		double c_price=Double.parseDouble(multi.getParameter("c_price")) ;
+		
+		File upFile=multi.getFile("c_img");//첨부한 이진파일
+		//을 받아옴.
+		if(upFile != null) {//첨부한 이진파일이 있다면
+			String fileName=upFile.getName();//첨부한 파일명
+			
+			c.setC_img(fileName);
+		}
+		c.setC_brand(c_brand); c.setC_color(c_color);
+		c.setC_name(c_name); c.setC_oil(c_oil);
+		c.setC_price(c_price); c.setC_type(c_type);
+		c.setC_type2(c_type2); c.setC_year(c_year);
+		
+		this.adminService.carInsert(c);
+
+		return new ModelAndView("redirect:/admin/admin_car_list");
+	}
+	
+	@RequestMapping("/admin_car_cont")
+	public ModelAndView admin_car_cont(int no,int page,String state) {
+		CarVO c = this.adminService.getAdminCarCont(no);
+	    ModelAndView cm=new ModelAndView();
+	    cm.addObject("c",c);
+	    cm.addObject("page",page);
+	    
+	    if(state.equals("cont")) {//관리자 자료실 상세정보 보기
+	    	cm.setViewName("./admin/admin_car_cont");
+	    }else if(state.equals("edit")) {//관리자 자료실 수정폼
+	    	cm.setViewName("./admin/admin_car_edit");
+	    }
+	    return cm;
+	}//admin_car_cont()
+	
+	@RequestMapping("/admin_car_edit_ok")
+	public ModelAndView admin_car_edit_ok(HttpServletRequest request, CarVO c) throws Exception{
+		String saveFolder=request.getRealPath("images/car");//수정 첨부된 파일을 실제 업로드하는
+		//서버 폴더 경로
+		int fileSize=5*1024*1024;
+		
+		MultipartRequest multi=null;
+		multi=new MultipartRequest(request,saveFolder,fileSize,"UTF-8");
+		
+		int c_num=Integer.parseInt(multi.getParameter("c_num"));
+		int page=1;
+		if(multi.getParameter("page") != null) {
+			page=Integer.parseInt(multi.getParameter("page"));
+		}
+		String c_name=multi.getParameter("c_name");
+		String c_brand=multi.getParameter("c_brand");
+		String c_year=multi.getParameter("c_year");
+		String c_color=multi.getParameter("c_color");
+		String c_type=multi.getParameter("c_type");
+		String c_type2=multi.getParameter("c_type2");
+		String c_oil=multi.getParameter("c_oil");
+		double c_price=Double.parseDouble(multi.getParameter("c_price")) ;
+		
+		CarVO db_File = this.adminService.getAdminCarCont(c_num);
+		//DB로 부터 기존 첨부파일명을 구함
+		
+		File upFile=multi.getFile("c_img");//수정 첨부된 파일을 가져온다.
+		
+		if(upFile != null) { // 수정 첨부된 파일이 있는 경우 실행
+			String fileName=upFile.getName(); // 수정 첨부된 파일명을 구함.
+			
+			c.setC_img(fileName);
+		}else { // 수정 첨부파일이 없는 경우
+			String fileDBName="";
+			if(db_File.getC_img() != null) { // 기존 첨부파일이 있는 경우
+				c.setC_img(db_File.getC_img());
 			}else {
-				session.setAttribute("admin_id",ab.getCa_id());
-				return "redirect:/admin_index";
+				c.setC_img(fileDBName);
 			}
-		}
-		return null;
-	}//admin_login_ok()
+		} // if else
+		
+		c.setC_num(c_num);
+		c.setC_brand(c_brand); c.setC_color(c_color);
+		c.setC_name(c_name); c.setC_oil(c_oil);
+		c.setC_price(c_price); c.setC_type(c_type);
+		c.setC_type2(c_type2); c.setC_year(c_year);
+		
+		this.adminService.updateCar(c);
+		
+		ModelAndView em=new ModelAndView("redirect:/admin/admin_car_list?page="+page);
+		return em;
+	}//admin_car_edit_ok()
 	
-	@GetMapping("/admin_index")
-	public ModelAndView admin_index(HttpServletResponse response, HttpSession session)
-	throws Exception{
-		response.setContentType("text/html;charset=UTF-8");
-		PrintWriter out=response.getWriter();
+	@GetMapping("/admin_car_del")
+	public ModelAndView admin_car_del(int no, int page, HttpServletRequest request) throws Exception{
+		String delFolder = request.getRealPath("images/car");
 		
-		String admin_id=(String)session.getAttribute("admin_id");
+		CarVO db_File = this.adminService.getAdminCarCont(no);
 		
-		if(admin_id == null){
-			out.println("<script>");
-			out.println("alert('관리자 아이디로 로그인 하세요!');");
-			out.println("location='admin_login';");
-			out.println("</script>");
-		}else {
-			ModelAndView am=new ModelAndView();
-			am.setViewName("admin/admin_main");
-			return am;
+		this.adminService.carDel(no);
+
+		if(db_File.getC_img() != null) { // 파일존재시
+			File delFile = new File(delFolder + db_File.getC_img()); // 삭제할 파일 객체 생성
+			delFile.delete();
 		}
-		return null;
-	}//admin_index()
-	
-	@RequestMapping("/admin_logout")
-	public String admin_logout(HttpServletResponse response,HttpSession session)
-	throws Exception{
-		response.setContentType("text/html;charset=UTF-8");
-		PrintWriter out=response.getWriter();
 		
-		session.invalidate();
+		ModelAndView dm = new ModelAndView();
+		dm.setViewName("redirect:/admin/admin_car_list");
+		dm.addObject("page",page);
 		
-		out.println("<script>");
-		out.println("alert('관리자 로그아웃 되었습니다!');");
-		out.println("location='/';");
-		out.println("</script>");
-		
-		return null;
-	}//admin_logout()
+		return dm;
+	} // admin_car_del()
 	
 }

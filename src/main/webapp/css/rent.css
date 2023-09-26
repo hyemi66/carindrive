@@ -103,6 +103,14 @@ body {
 	color: white;
 	font-size: 20px; font-weight: bolder;
 }
+#no {
+	border: 1px solid black;
+	padding: 15px 130px;
+	margin: 10px 0px;
+	background-color: #808080;
+	color: white;
+	font-size: 20px; font-weight: bolder;
+}
 /* 차량 정보 */
 .carname {
 	margin-left: 153px;
