@@ -1,5 +1,7 @@
 package com.carindrive.vo;
 
+import java.time.LocalDateTime;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -17,5 +19,7 @@ public class RentalVO {
     private String cr_edate; // 반납일자
     private double cr_price; // 렌트비용
     private String cr_order; // 주문번호
+    private String cr_status;// 결제상태
+    private LocalDateTime cr_paytime; //결제제한시간
    
 }

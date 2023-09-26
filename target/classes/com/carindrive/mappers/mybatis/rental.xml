@@ -8,14 +8,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!-- 차량 예약 정보 저장 -->
 <insert id="rental_in" parameterType="rental">
-  INSERT INTO c_rental (cr_num, cr_mid, cr_cname, cr_rdate, cr_sdate, cr_edate, cr_price)
-VALUES (cr_seq.NEXTVAL, #{cr_mid}, #{cr_cname}, #{cr_rdate}, #{cr_sdate}, #{cr_edate}, #{cr_price})
+  INSERT INTO c_rental (cr_num, cr_mid, cr_cname, cr_rdate, cr_sdate, cr_edate, cr_price, cr_paytime)
+VALUES (cr_seq.NEXTVAL, #{cr_mid}, #{cr_cname}, #{cr_rdate}, #{cr_sdate}, #{cr_edate}, #{cr_price},CURRENT_TIMESTAMP)
 </insert>
 
 	<!-- 방금 렌트신청한것 가져오기 --> <!-- cr_mid를 기준으로 검색하는데 그중 cr_num이 가장 높은 레코드를 찾아옴  -->
-    <select id="get_rentCar" resultType="rental" parameterType="rental">
+    <select id="get_rentCar" resultMap="RentalVOMap" parameterType="rental">
     	SELECT *FROM c_rental WHERE cr_mid = #{cr_mid} AND cr_num = (SELECT MAX(cr_num) FROM c_rental WHERE cr_mid = #{cr_mid})
 	</select>
+	
+	<!-- 데이터베이스의 CR_PAYTIME과 RentalVO의 cr_paytime을 연결 데이터베이스의cr_paytime의 값이 vo파일의 cr_paytime으로 넘어감 -->
+	<resultMap id="RentalVOMap" type="rental">
+  		<result property="cr_paytime" column="CR_PAYTIME" javaType="java.time.LocalDateTime" jdbcType="TIMESTAMP"/>
+	</resultMap>
 	
 	<!-- 해당 차 정보 가져오기 -->
 	<select id="c_list" resultType="car" parameterType="car">
@@ -83,6 +88,7 @@ VALUES (cr_seq.NEXTVAL, #{cr_mid}, #{cr_cname}, #{cr_rdate}, #{cr_sdate}, #{cr_e
 		)
 	</select>
 	
+	<!-- 렌탈테이블의 해당차량의 렌탈대여일자를 가져오는 쿼리문 -->
 	<select id="getDateCar" resultType="rental">
 		SELECT 
 		    TO_CHAR(TO_DATE(cr_sdate, 'YYYY-MM-DD HH24:MI'), 'YYYY-MM-DD HH24:MI') AS cr_sdate, 
@@ -91,6 +97,28 @@ VALUES (cr_seq.NEXTVAL, #{cr_mid}, #{cr_cname}, #{cr_rdate}, #{cr_sdate}, #{cr_e
 		WHERE cr_cname = #{cr_cname}
 	</select>
 	
+	<!--주문번호를 기준으로 렌탈기간 초기화 -->
+	<update id="reValueDate">
+		UPDATE c_rental SET cr_sdate = '0001-01-01 01:01', cr_edate = '9999-01-01 01:01' WHERE cr_order = #{cr_order}
+	</update>
+	
+	<!--주문번호를 기준으로 렌탈완료시 c_rental 테이블 status를 wait -> clear로 설정 -->
+	<update id="rentalStatus">
+		update c_rental set cr_status = 'clear' where cr_order = #{cr_order}
+	</update>
+	
+    <!--5분안에 결제를 못하거나 안하고 취소를 하면 5분동안 해당차량 렌트 불가  -->
+    <delete id="rentalDel">
+    	DELETE FROM c_rental
+			WHERE cr_status = 'wait' 
+			AND EXTRACT(DAY FROM (SYSTIMESTAMP - cr_paytime)) * 24 * 60
+			  + EXTRACT(HOUR FROM (SYSTIMESTAMP - cr_paytime)) * 60
+			  + EXTRACT(MINUTE FROM (SYSTIMESTAMP - cr_paytime)) > 5
+    </delete>
     
-
+    <!--해당 아이디의 결제 중단 내역들을 전부 제거 -->
+    <delete id="rentalDel2">
+    DELETE FROM c_rental WHERE cr_mid = #{cr_mid} AND cr_status = 'wait'
+    </delete>
+    
 </mapper>

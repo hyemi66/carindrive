@@ -27,62 +27,58 @@
 <input type="hidden" name="cr_cname" id="cr_cname" value="${car.c_name}">
 
 <div class="mainmenu">
-
 <div id="menu01">
-
-	<p>
-		빌 리 는 날 짜&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<input type="datetime-local" name="cr_sdate" id="cr_sdate" onchange="setMinValue()" required>
-		<script type="text/javascript">
-			let dateElement = document.getElementById("cr_sdate");
-			let date = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, -8);
-	
-			let storedStartDate = "${cr_sdate}"; // JSP에서 Controller로부터 받은 값을 저장
-			if(storedStartDate && storedStartDate.length > 0) {
-			    dateElement.value = storedStartDate; // 저장된 값을 입력란에 설정
-			} else {
-			    dateElement.value = date;
-			}
+			<p>
+				빌 리 는 날 짜&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="datetime-local" name="cr_sdate" id="cr_sdate" onchange="updateStartValue()" required>
+			</p>
+		</div>
 		
-		dateElement.setAttribute("min", date);
-			
-			function setMinValue() {
-			    if(dateElement.value < date) {
-			        alert("현재 시간보다 이전의 날짜는 설정할 수 없습니다");
-			        dateElement.value = date;
-			    } else {
-			        document.forms[0].submit();
-			    }
-			}
-		</script>
-	</p>
-</div>
-<div id="menu02">
-	<p>
-		반 납 하 는 날 짜&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<input type="datetime-local" name="cr_edate" id="cr_edate" onchange="setMinValue2()" required>
+		<div id="menu02">
+			<p>
+				반 납 하 는 날 짜&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="datetime-local" name="cr_edate" id="cr_edate" onchange="updateEndValue()" required>
+			</p>
+		</div>
+		
 		<script type="text/javascript">
-			let dateElement2 = document.getElementById("cr_edate");
-			let date2 = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, -8);
-	
-			let storedEndDate = "${cr_edate}"; // JSP에서 Controller로부터 받은 값을 저장
-			if(storedEndDate && storedEndDate.length > 0) {
-			    dateElement2.value = storedEndDate; // 저장된 값을 입력란에 설정
-			} else {
-			    dateElement2.value = date2;
-			}
-			
-			function setMinValue2() {
-			    if(dateElement2.value < dateElement.value) {
-			        alert("빌리는 날짜보다 이전의 날짜는 설정할 수 없습니다");
-			        dateElement2.value = date2;
-			    } else {
-			        document.forms[0].submit();
-			    }
-			}
+		    let startDateInput = document.getElementById("cr_sdate");
+		    let endDateInput = document.getElementById("cr_edate");
+		    let currentDate = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, -8);
+		    
+		    startDateInput.setAttribute("min", currentDate);
+		    
+		    let savedStartDate = "${cr_sdate}";
+		    startDateInput.value = savedStartDate ? savedStartDate : currentDate;
+		
+		    let savedEndDate = "${cr_edate}";
+		    endDateInput.value = savedEndDate ? savedEndDate : currentDate;
+		
+		    function updateStartValue() {
+		        if (startDateInput.value < currentDate) {
+		            alert("현재 시간보다 이전의 날짜는 설정할 수 없습니다");
+		            startDateInput.value = currentDate;
+		        } else {
+		            document.forms[0].submit();
+		        }
+		        updateEndMinValue(); // 반납 날짜의 min 값을 업데이트
+		    }
+		
+		    function updateEndMinValue() {
+		        endDateInput.setAttribute("min", startDateInput.value);
+		    }
+		
+		    function updateEndValue() {
+		        if (endDateInput.value < startDateInput.value) {
+		            alert("빌리는 날짜보다 이전의 날짜는 설정할 수 없습니다");
+		            endDateInput.value = currentDate;
+		        } else {
+		            document.forms[0].submit();
+		        }
+		    }
+		
+		    updateEndMinValue(); // 페이지 로딩 시 반납 날짜의 min 값을 설정
 		</script>
-	</p>
-</div>
 </div>
 </form>
 <div class="clear"></div>
@@ -111,19 +107,23 @@
 	<label for="tab06">전기차</label>
 	
 	
-	<script>
-	function showCar(carname) {
-	    var cr_cname = carname.value;
-	    var cr_sdate = document.getElementById("cr_sdate").value;
-	    var cr_edate = document.getElementById("cr_edate").value;
-	    
-	    if (cr_cname) {
-	        window.location.href = "/rent/rentInfo?cr_cname=" + cr_cname + "&cr_sdate=" + cr_sdate + "&cr_edate=" + cr_edate;
-	    }
-	}
+		<script>
+		    function showCar(carname) {
+		        var cr_cname = carname.value;
+		        var cr_sdate = document.getElementById("cr_sdate").value;
+		        var cr_edate = document.getElementById("cr_edate").value;
+		        
+		        if (cr_sdate >= cr_edate) {
+		            alert("빌리는 날짜보다 반납하는 날짜가 더 늦어야 합니다.\n날짜를 다시 선택해주세요");
+		            return; // 함수의 실행을 중지
+		        }
+		
+		        if (cr_cname) {
+		            window.location.href = "/rent/rentInfo?cr_cname=" + cr_cname + "&cr_sdate=" + cr_sdate + "&cr_edate=" + cr_edate;
+		        }
+		    }
+		</script>
 
-
-	</script>
 	
 	<input type="hidden" name="cr_cname" id="cr_cname" value="${cr_cname}">
 	
@@ -331,6 +331,14 @@
 <br>
 <br>
 <br>
+<!-- JSP 파일 내에서 경고 메시지 표시하기 -->
+<c:if test="${not empty msg}">
+    <script>
+        ${msg}
+    </script>
+    <%-- 스크립트가 실행되었으므로 alertScript를 삭제 --%>
+    <c:remove var="alertScript" scope="page" />
+</c:if>
 
 <div class="clear"></div>
 

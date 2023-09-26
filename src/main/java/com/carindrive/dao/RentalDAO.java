@@ -39,5 +39,13 @@ public interface RentalDAO {
 
 	List<RentalVO> getDateCar(String c_name);
 
+	void reValueDate(String order_number);
+
+	void rentalStatus(String merchantId);
+
+	void rentalDel();
+
+	void rentalDel2(String m_id);
+
 
 }

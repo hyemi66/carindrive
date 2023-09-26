@@ -51,9 +51,18 @@
 				    <h2>${status.index == 0 ? '최근에 예약한 차량' : '예약 내역'}</h2>
 				
 				    <div class="info-line">
-				        <label>렌탈 대여/반납 일시 :</label>
-				        <span>${rentalMap[orderInfo.merchantId].cr_sdate} - ${rentalMap[orderInfo.merchantId].cr_edate}</span>
-				    </div>
+				    <label>렌탈 대여/반납 일시 :</label>
+					    <span>
+					        <c:choose>
+					            <c:when test="${rentalMap[orderInfo.merchantId].cr_sdate == '0001-01-01 01:01' && rentalMap[orderInfo.merchantId].cr_edate == '9999-01-01 01:01'}">
+					                -
+					            </c:when>
+					            <c:otherwise>
+					                ${rentalMap[orderInfo.merchantId].cr_sdate} - ${rentalMap[orderInfo.merchantId].cr_edate}
+					            </c:otherwise>
+					        </c:choose>
+					    </span>
+					</div>
 				    <div class="info-line">
 				        <label>예약한 차량:</label> 
 				        <span>${orderInfo.buy_product_name}</span>

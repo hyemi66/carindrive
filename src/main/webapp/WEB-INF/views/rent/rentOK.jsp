@@ -38,7 +38,7 @@
 				<p>차량색상 : ${car.c_color}</p>
 				<p>타입 : ${car.c_type}</p>
 				<p>연료 : ${car.c_oil}</p>
-				<p><a href="${path}/rent/rent">차량 다시 선택</a></p>
+				<p><a href="${path}/rent/rent">차량/날짜 다시 선택</a></p>
 			</td>
 		</tr>
 	</table>

@@ -40,15 +40,31 @@ public class RentController {
 	private MemberService memberService;
 
 	@RequestMapping("/rent") //처음에는 모든차량을 불러옴
-	public ModelAndView rent(HttpServletRequest request,CarVO cv) {
+	public ModelAndView rent(HttpServletRequest request,CarVO cv, HttpSession session, RedirectAttributes rttr) {
 		System.out.println("rent메서드 GET 동작");
+		
+		ModelAndView model = new ModelAndView();
+		
+		// 로그인 정보 가져오기
+		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+		if(memberInfo != null) {
+		
+		//해당 아이디의 결제 중단 내역들을 전부 제거	
+		this.rentService.rentalDel2(memberInfo.getM_id());
+		System.out.println("결제중단 내역들 삭제후 차량 출력");
+			
 		List<CarVO> clist = this.rentService.getCarList(cv); // 차량 리스트 불러오기
 
-		ModelAndView model = new ModelAndView("/rent/rent");
-
+		model.setViewName("/rent/rent");
 		model.addObject("clist", clist);
 
 		return model;
+		}else {
+			rttr.addFlashAttribute("LoginNull", "alert('로그인 이후 이용 가능합니다!');");
+			model.setViewName("redirect:/member/m_login");
+			return model;
+		}
+		
 	};
 
 	//날짜를 선택하면 그거에 맞춰서 예약할수있는 차량만 등장
@@ -66,7 +82,7 @@ public class RentController {
 
 		for(CarVO car : allCars) {
 
-			// 해당 차량이 선택된 날짜에 이미 예약되었는지 확인합니다.
+			// 해당 차량이 선택된 날짜에 이미 예약되었는지 확인
 			List<RentalVO> allRentalDate = this.rentService.getDateCar(car.getC_name());
 			if(allRentalDate == null) {
 				continue; // 해당 차량에 대한 예약 내역이 없다면 다음 차량의 예약 내역 검사
@@ -141,35 +157,34 @@ public class RentController {
 		ModelAndView model = new ModelAndView();
 		System.out.println("rentInfo(POST)메서드 동작");
 
-		/*렌트빌리는 날짜, 반납하는 날짜 기능*/
-		String cr_sdate = r.getCr_sdate();		//VO에 들어있는 날짜,시간 값들을 가져옴
+		//예약이 가능한지를 비교 하기 위해 렌트빌리는 날짜, 반납하는 날짜를 사용함
+		String cr_sdate = r.getCr_sdate();
 		String cr_edate = r.getCr_edate();
 
-		cr_sdate = cr_sdate.replace("T", " ");	//중간에 껴있는 T문자를 공백처리함
+		cr_sdate = cr_sdate.replace("T", " ");	//중간에 껴있는 T문자를 공백처리함 (전부다 이렇게 되있으므로 비교를위해 똑같이 T 제거)
 		cr_edate = cr_edate.replace("T", " ");
 
+		//혹시나 동시에 예약을 할 때 발생하는 메서드
 		boolean isDuplicate = rentService.checkDate(r.getCr_cname(), cr_sdate, cr_edate);
 		System.out.println("렌트하는 차량이름: "+r.getCr_cname());
 		System.out.println("isDuplicate value: " + isDuplicate);
 
-		if (isDuplicate) {//중복되는 예약이 있으면 true를 반환
-			rttr.addFlashAttribute("msg", "해당 시간대에는 이미 예약이 있습니다. 다시 예약을 진행해주세요.");
+		if (isDuplicate) {//날짜를 비교해서 해당차량이 현재 예약과 겹친다면 true를 반환
+			rttr.addFlashAttribute("msg", "다른 사용자가 결제를 진행중입니다. 다시 예약을 진행해주세요.");
 			return new ModelAndView("redirect:/rent/rent");
 		}
-
-		//로그인 정보 가져오기
-		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
-		if (memberInfo != null) {//로그인이 되었을 때
+		
+			//로그인 정보 가져오기
+			MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+			if (memberInfo != null) {//로그인이 되었을 때
+			
 			System.out.println("멤버정보: "+memberInfo);
 			r.setCr_mid(memberInfo.getM_id());
 
+			//차량의 정보
 			CarVO car = this.rentService.getCarInfo(r.getCr_cname()); //정상작동
 			System.out.println("차량정보: "+ car);
 			model.addObject("car",car);
-
-			System.out.println("렌트정보: " +r);
-
-
 
 			r.setCr_sdate(cr_sdate);	//공백처리한 날짜,시간 값을 다시 저장
 			r.setCr_edate(cr_edate);
@@ -236,6 +251,11 @@ public class RentController {
 
 			//렌트 비용을 c_rental 테이블에 추가
 			this.rentService.insertCost(rental.getCr_num(),one_price);
+			
+			//5분안에 결제를 진행안하고 취소를 하면 해당 렌트내역은 5분뒤에 사라지고, 5분동안 해당차량 렌트 불가
+			this.rentService.rentalDel();
+			
+			System.out.println("rentOK의 모든 메서드 동작완료");
 
 			model.addAttribute("rental", rental);						//렌탈정보
 			model.addAttribute("car",car);								//차정보

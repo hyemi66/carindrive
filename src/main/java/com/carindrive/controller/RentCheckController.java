@@ -93,16 +93,18 @@ public class RentCheckController {
 
 			// 데이터베이스에 OrderVO 결제정보 저장
 			this.orderService.saveOrder(orderInfo);
+			//결제 완료시 렌탈테이블의 wait를 clear로 변경 (주문번호 기준)
+			rentService.rentalStatus(orderInfo.getMerchantId());
 
-			List<RentalVO> allRentals = this.rentService.getRentList(memberInfo.getM_id());
-			for (RentalVO r : allRentals) {
-				if(r.getCr_order() == null) { //결제가 진행되었는데도 주문번호가 비어있다면 결제를 취소한것이므로 해당 컬럼 삭제
-					System.out.println(r);
-					this.rentService.delOrder(r.getCr_num());
-				}
-			}
-
-			System.out.println("null값 삭제 이후 코드동작");
+//			List<RentalVO> allRentals = this.rentService.getRentList(memberInfo.getM_id());
+//			for (RentalVO r : allRentals) {
+//				if(r.getCr_order() == null) { //결제가 진행되었는데도 주문번호가 비어있다면 결제를 취소한것이므로 해당 컬럼 삭제
+//					System.out.println(r);
+//					this.rentService.delOrder(r.getCr_num());
+//				}
+//			}
+//
+//			System.out.println("null값 삭제 이후 코드동작");
 			System.out.println("현재 렌트하는 차량이름: "+rental.getCr_cname());
 			// 예약된 차 c_ok == 0으로 변경
 	        String c_name = rental.getCr_cname(); // 렌탈된 차 이름 가져오기
@@ -161,8 +163,6 @@ public class RentCheckController {
 
 		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
 
-
-
 		try {
 			if (memberInfo != null) {//로그인시
 				List<RentalVO> rentals = this.rentService.getRentList(memberInfo.getM_id());//아이디를 기준으로 렌트정보를 다가져옴
@@ -183,7 +183,6 @@ public class RentCheckController {
 				for (OrderVO order : orders) {
 					OrderVO orderInfo = orderService.getOrder(order.getId());
 					orderInfos.add(orderInfo);
-
 				}
 
 				//정렬
@@ -206,7 +205,7 @@ public class RentCheckController {
 				mav.addObject("carInfos", carInfos);
 				mav.addObject("orderInfos", orderInfos);
 			} else {
-				rttr.addFlashAttribute("LoginNull", "로그인 이후 이용 가능합니다!");
+				rttr.addFlashAttribute("LoginNull", "alert('로그인 이후 이용 가능합니다!');");
 				mav.setViewName("redirect:/member/m_login");
 				return mav;
 			}
@@ -269,6 +268,7 @@ public class RentCheckController {
 		return model;
 	}
 
+	//시간 정보를 계산하는 메서드
 	@RequestMapping(value="/calculatePrice")
 	@ResponseBody
 	public double calculatePrice(@RequestParam int c_num, 
@@ -297,6 +297,7 @@ public class RentCheckController {
 		return price;
 	}
 
+	//시간추가 결제창
 	@RequestMapping(value="/timeUpPay", method=RequestMethod.POST)
 	public ModelAndView timeUpPay(
 			@RequestParam("c_num") int cNum, 
@@ -345,7 +346,7 @@ public class RentCheckController {
 	}
 
 
-	//렌탈 정보 저장
+	//렌탈 정보 저장 및 결제
 	@RequestMapping("/pay_Check")//timeUpPay.jsp에서 넘어온 데이터를 처리 
 	public ResponseEntity<Map<String, Object>> pay_Check(@RequestBody OrderVO order, HttpSession session) {
 		System.out.println("pay_Check메서드 동작");
@@ -369,7 +370,7 @@ public class RentCheckController {
 			System.out.println("기존 렌탈 정보: "+rental);
 
 			//결제된 품목에서 차량의 정보를 얻기위해 값을 추출
-			String productName = order.getBuy_product_name(); // "2019년식 BLACK A4 시간연장"
+			String productName = order.getBuy_product_name(); // 예를 들어서 "2019년식 BLACK A4 시간연장" 이 문자를
 			String[] parts = productName.split(" "); // 공백을 기준으로 문자열을 나눔
 
 			String year = parts[0]; // "2019년식"
@@ -383,10 +384,11 @@ public class RentCheckController {
 			CarVO car = this.rentService.getCarInfo(carName);
 			System.out.println("차량 정보 : "+car);
 
-
 			// 데이터베이스에 OrderVO 결제정보 저장
 			this.orderService.saveOrder(orderInfo);
 			this.orderService.addTime(orderInfo.getMerchantId());
+			//결제 완료시 렌탈테이블의 wait를 clear로 변경 (주문번호 기준)
+			rentService.rentalStatus(orderInfo.getMerchantId());
 			
 			System.out.println("시간추가 완료");
 			//주문번호 기준
@@ -661,6 +663,7 @@ public class RentCheckController {
 				cancelPay(token, order_number, refundAmount);
 				alertMessage(out, "환불 처리 되었으나, 환불 금액은 50%입니다.");
 				this.orderService.refundOK(order_number); //환불완료로 업데이트
+				this.rentService.reValueDate(order_number); //주문번호를 기준으로 해당 렌탈내역의 날짜를 초기화
 				
 				//order_number를 기준으로 parent_merchant_id 값이 주문번호와 동일한 레코드를 찾음
 				OrderVO order = this.orderService.getPayInfo2(order_number); //부모의 주문번호를 이용해서 그의 자식을 찾음
@@ -675,7 +678,7 @@ public class RentCheckController {
 					//환불처리 메서드 (토큰, 주문번호, 가격)
 					cancelPay(token2,orderNum,price);
 					this.orderService.refundOK(orderNum);
-					
+					this.rentService.reValueDate(orderNum); //주문번호를 기준으로 해당 렌탈내역의 날짜를 초기화
 					alertMessage(out, "시간추가된 결제도 환불되었습니다!");
 					out.println("<script>");
 					out.println("window.close()");	//현재창을 닫고
@@ -688,8 +691,13 @@ public class RentCheckController {
 			else {
 				refundAmount = rentalRefund.getCr_price(); //환불처리후 새로고침
 				cancelPay(token, order_number, refundAmount);
-				alertMessage(out, "환불이 완료 되었습니다!");
 				this.orderService.refundOK(order_number); //환불완료로 업데이트
+				this.rentService.reValueDate(order_number); //주문번호를 기준으로 해당 렌탈내역의 날짜를 초기화
+				alertMessage(out, "환불이 완료 되었습니다!");
+				out.println("<script>");
+				out.println("window.close()");	//현재창을 닫고
+				out.println("opener.location.reload();"); //부모창을 새로고침
+				out.println("</script>");
 				
 				// order_number를 기준으로 parent_merchant_id 값이 주문번호와 동일한 모든 레코드를 찾음
 				List<OrderVO> childOrders = this.orderService.getAllChildOrders(order_number);
@@ -704,7 +712,7 @@ public class RentCheckController {
 					//환불처리 메서드 (토큰, 주문번호, 가격)
 					cancelPay(token2,orderNum,price);
 					this.orderService.refundOK(orderNum);
-					
+					this.rentService.reValueDate(orderNum); //주문번호를 기준으로 해당 렌탈내역의 날짜를 초기화
 					alertMessage(out, "관련된 모든 예약이 취소 되었습니다 !");
 					out.println("<script>");
 					out.println("window.close()");	//현재창을 닫고

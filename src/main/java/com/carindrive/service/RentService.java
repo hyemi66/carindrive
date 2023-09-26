@@ -55,4 +55,16 @@ public interface RentService {
 	// 선택된 차량에 대한 예약된 날짜 목록을 가져옴
 	List<RentalVO> getDateCar(String c_name);
 
+	//환불시 렌탈 날짜를 초기화
+	void reValueDate(String order_number);
+
+	//주문번호를 기준으로 렌탈완료시 c_rental 테이블 status를 wait -> clear로 설정
+	void rentalStatus(String merchantId);
+
+	//5분안에 결제를 진행안하고 취소를 하면 5분동안 해당차량 렌트 불가
+	void rentalDel();
+
+	//해당 아이디의 결제 중단 내역들을 전부 제거
+	void rentalDel2(String m_id);
+
 }

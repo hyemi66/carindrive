@@ -70,7 +70,6 @@ WHERE cr_cname = '레이'
 ORDER BY start_date;
 
 
-
 --ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 --확인 코드
 select * from c_member order by m_name asc; -- 사용자 확인
@@ -126,7 +125,6 @@ delete from c_order_info; --결제 정보 삭제
 commit;--삭제후 커밋해야 웹에 적용됨
 
 
-select * from c_rental where cr_cname = 
 --ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 --유저 정보 테이블
 CREATE TABLE c_member (
@@ -189,17 +187,21 @@ create table c_car(
 
 -- 예약 테이블
 CREATE TABLE c_rental (
-    cr_num INT PRIMARY KEY,                    -- 예약번호
+    cr_num number PRIMARY KEY,                    -- 예약번호
     cr_mid VARCHAR2(30),                          -- 고객 아이디
     cr_cname VARCHAR2(200),                     --차 이름            --cr_cid를 cr_cname으로 바꿈
     cr_rdate VARCHAR2(200),                       --예약 일자
     cr_sdate VARCHAR2(200),                      --실제 대여일
     cr_edate VARCHAR2(200),                      --반납 일자
-    cr_price INT,                                       --렌트 비용
+    cr_price number,                                       --렌트 비용
     cr_order VARCHAR2(100),                       --주문 번호
+    cr_status VARCHAR2(30) DEFAULT 'wait' NOT NULL, --결제 상태 확인
+    cr_paytime TIMESTAMP,
     FOREIGN KEY (cr_mid) REFERENCES c_member(m_id),
     FOREIGN KEY (cr_cname) REFERENCES c_car(c_name)
 );
+
+
 
 
 --결제 정보 저장 테이블
@@ -217,9 +219,10 @@ create table c_order_info (
     card_num varchar2(255),
     pay_status varchar2(50),
     post_code number,
-    refund varchar2(20)
+    refund varchar2(20),
+    parent_merchant_id varchar2(255)
 );
-ALTER TABLE c_order_info ADD (parent_merchant_id VARCHAR2(255));
+
 
 
 --차량추가

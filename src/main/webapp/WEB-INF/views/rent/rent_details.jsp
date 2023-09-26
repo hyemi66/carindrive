@@ -66,8 +66,18 @@
 					결제상태: <span style="color: green;">${orderInfo.refund}</span>
 				</c:when>
 			</c:choose>
-			<p>대여일자: ${rentalInfo.cr_sdate}</p>
-			<p>반납일자: ${rentalInfo.cr_edate}</p>
+			<p>대여일자: 
+			    <c:choose>
+			        <c:when test="${rentalInfo.cr_sdate eq '0001-01-01 01:01'}">-</c:when>
+			        <c:otherwise>${rentalInfo.cr_sdate}</c:otherwise>
+			    </c:choose>
+			</p>
+			<p>반납일자: 
+			    <c:choose>
+			        <c:when test="${rentalInfo.cr_edate eq '9999-01-01 01:01'}">-</c:when>
+			        <c:otherwise>${rentalInfo.cr_edate}</c:otherwise>
+			    </c:choose>
+			</p>
 		</div>
 	</div>	
 	
