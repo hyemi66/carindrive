@@ -62,6 +62,11 @@ VALUES (cr_seq.NEXTVAL, #{cr_mid}, #{cr_cname}, #{cr_rdate}, #{cr_sdate}, #{cr_e
 		delete from c_rental where cr_num = #{cr_num}
 	</delete>
 	
+	<!--렌트한 차량 car_ok 1 -> 0으로 업데이트  -->
+	<update id ="usedCar">
+		UPDATE c_car SET c_ok = 0 WHERE c_name = #{cr_cname}
+	</update>
+	
     
 
 </mapper>

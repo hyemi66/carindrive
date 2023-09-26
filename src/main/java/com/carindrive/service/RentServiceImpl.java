@@ -76,6 +76,11 @@ public class RentServiceImpl implements RentService {
 		this.rentalDao.delOrder(cr_num);
 	}
 
+	@Override
+	public void usedCar(String cr_cname) {
+		this.rentalDao.usedCar(cr_cname);
+	}//렌트한 차량 car_ok 1 -> 0으로 업데이트
+
 
 
 }

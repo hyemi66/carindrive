@@ -14,6 +14,67 @@ UPDATE c_rental SET cr_cname = 'RAY' WHERE cr_mid = '고객 아이디';
 UPDATE c_rental SET cr_cname = '차이름' WHERE cr_mid = '고객 아이디';
 
 delete from c_rental where cr_num = 107;
+
+
+
+--테스트ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+--차량 예약 가능 여부 확인
+SELECT c_ok FROM c_car WHERE c_name = '레이';
+
+--특정 시간대에 차량 예약 중복 여부 확인
+SELECT COUNT(*) FROM c_rental WHERE '레이' = :selectedCarName AND 
+      ((cr_sdate BETWEEN :desiredStartDate AND :desiredEndDate) OR 
+       (cr_edate BETWEEN :desiredStartDate AND :desiredEndDate) OR
+       (:desiredStartDate BETWEEN cr_sdate AND cr_edate) OR 
+       (:desiredEndDate BETWEEN cr_sdate AND cr_edate));
+       
+--특정 시간대에 차량 예약 중복 여부 확인 4가지 조건중 1개라도 참이면 중복예약이므로 예약을 못함 중복예약일시 값이 0이어야 차량 렌트가능
+SELECT COUNT(*) FROM c_rental WHERE cr_cname = '레이' AND 
+      ((cr_sdate BETWEEN '2023-09-28 09:00' AND '2023-09-28 11:00') OR 
+       (cr_edate BETWEEN '2023-09-28 09:00' AND '2023-09-28 11:00') OR
+       ('2023-09-28 09:00' BETWEEN cr_sdate AND cr_edate) OR 
+       ('2023-09-28 11:00' BETWEEN cr_sdate AND cr_edate));
+    
+       
+--   <select id="getOverlappingRentals" resultType="int">
+--        SELECT COUNT(*) 
+--        FROM c_rental 
+--        WHERE cr_cname = #{carName} AND 
+--              ((cr_sdate BETWEEN #{startDate} AND #{endDate}) OR 
+--               (cr_edate BETWEEN #{startDate} AND #{endDate}) OR
+--               (#{startDate} BETWEEN cr_sdate AND cr_edate) OR 
+--               (#{endDate} BETWEEN cr_sdate AND cr_edate))
+--    </select>
+
+
+--차량 예약 진행
+  INSERT INTO c_rental (cr_num, cr_mid, cr_cname, cr_rdate, cr_sdate, cr_edate, cr_price)
+VALUES (cr_seq.NEXTVAL, 'zzzz', '레이', '2023년 09월 26일 오전 10시 13분', '2023-09-29 10:13', '2023-09-30 10:13', 200000);
+
+--차량 대여 상태 업데이트 c_ok를 0으로 변환
+UPDATE c_car SET c_ok = 0 WHERE c_name = '레이';
+
+--차량 반납 c_ok를 1로 되돌림
+UPDATE c_car SET c_ok = 1 WHERE c_name = '레이';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 --ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 --확인 코드
 select * from c_member order by m_name asc; -- 사용자 확인
@@ -29,7 +90,10 @@ select * from c_order_info where parent_merchant_id = 'merchant_1695632654275'; 
 select * from c_rental where cr_order = 'merchant_1695632654275';
 select * from c_rental where cr_order = 'merchant_1695632899760';
 
-select * from c_order_info where parent_merchant_id =
+UPDATE c_car SET c_ok = 1 WHERE c_ok = 0;
+UPDATE c_car SET c_ok = 1 WHERE c_name = '캐스퍼' AND c_ok = 0;
+UPDATE c_car SET c_ok = 0 WHERE c_name = '캐스퍼';
+
 
 --시퀀스 생성
 CREATE SEQUENCE cs_seq START WITH 1 INCREMENT BY 1 NOCACHE;  -- 공지사항 테이블 시퀀스
@@ -121,7 +185,7 @@ create table c_car(
     c_type2 varchar2(200) not null, -- 차량 차종
     c_oil varchar2(200) not null, -- 차량 기름
     c_price number not null, -- 차량 가격
-    c_ok int default 0, -- 차량 가능 여부
+    c_ok int default 1, -- 차량 가능 여부
     c_img varchar2(200) not null -- 차량 이미지
 );
 

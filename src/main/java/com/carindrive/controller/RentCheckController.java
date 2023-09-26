@@ -75,6 +75,7 @@ public class RentCheckController {
 	//렌탈 정보 저장
 	@RequestMapping("/rent_Check")//rentOK.jsp에서 넘어온 데이터
 	public ResponseEntity<Map<String, Object>> rent_Check(@RequestBody OrderVO order,HttpSession session) {
+		System.out.println("rent_Check 메서드 동작");
 
 		Map<String, Object> map = new HashMap<>();
 
@@ -90,7 +91,7 @@ public class RentCheckController {
 			// 결제정보 getPayInfo 메서드에 주문번호를 넣고 OrderVO에 값들을 셋팅
 			OrderVO orderInfo = getPayInfo(merchantId);
 
-			// 데이터베이스에 OrderVO 결제정보 저장	//setBuy_date만 저장해서 넣어야될수도있다.
+			// 데이터베이스에 OrderVO 결제정보 저장
 			this.orderService.saveOrder(orderInfo);
 
 			List<RentalVO> allRentals = this.rentService.getRentList(memberInfo.getM_id());
@@ -102,6 +103,9 @@ public class RentCheckController {
 			}
 
 			System.out.println("null값 삭제 이후 코드동작");
+			//렌트한 차량 car_ok 1 -> 0으로 업데이트
+			System.out.println("현재 렌트하는 차량이름: "+rental.getCr_cname());
+			this.rentService.usedCar(rental.getCr_cname());
 
 			map.put("orderInfo", orderInfo);
 			map.put("rental", rental);
@@ -181,15 +185,8 @@ public class RentCheckController {
 
 				}
 
-				// 정렬 전의 데이터 출력
-				System.out.println("Before sorting: " + orderInfos);
-
 				//정렬
 				Collections.sort(orderInfos, Comparator.comparing(OrderVO::getBuy_date).reversed());
-
-
-				// 정렬 후의 데이터 출력
-				System.out.println("After sorting: " + orderInfos);
 
 				//결제정보를 한개씩 추출함
 				for (OrderVO order : orderInfos) {

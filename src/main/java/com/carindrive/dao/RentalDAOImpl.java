@@ -52,8 +52,8 @@ public class RentalDAOImpl implements RentalDAO {
 	@Override
 	public void insertMerchantId(String merchantId, int cr_num) {
 	    RentalVO rentalVO = new RentalVO();
-	    rentalVO.setCr_order(merchantId);  // RentalVO에 해당하는 메서드명으로 변경해야 합니다.
-	    rentalVO.setCr_num(cr_num);       // RentalVO에 해당하는 메서드명으로 변경해야 합니다.
+	    rentalVO.setCr_order(merchantId);
+	    rentalVO.setCr_num(cr_num);
 	    this.sqlSession.update("insertMerchantId", rentalVO);
 	}//주문번호를 렌탈정보 데이터베이스에 추가
 
@@ -82,6 +82,11 @@ public class RentalDAOImpl implements RentalDAO {
 	public void delOrder(int cr_num) {
 		this.sqlSession.delete("delOrder",cr_num);
 	}//예약순을 기준으로 주문번호가 없으면 삭제시킴
+
+	@Override
+	public void usedCar(String cr_cname) {
+		this.sqlSession.update("usedCar",cr_cname);
+	}//렌트한 차량 car_ok 1 -> 0으로 업데이트
 
 
 }

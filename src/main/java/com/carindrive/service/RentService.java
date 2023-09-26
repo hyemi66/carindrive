@@ -44,4 +44,7 @@ public interface RentService {
 
 	//주문순서를 기준으로 주문번호가 null인것을 지우기
 	void delOrder(int cr_num);
+
+	//렌트한 차량 car_ok 1 -> 0으로 업데이트
+	void usedCar(String cr_cname);
 }

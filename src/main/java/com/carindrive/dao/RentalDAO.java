@@ -33,4 +33,6 @@ public interface RentalDAO {
 
 	void delOrder(int cr_num);
 
+	void usedCar(String cr_cname);
+
 }
