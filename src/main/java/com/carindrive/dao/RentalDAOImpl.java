@@ -68,7 +68,6 @@ public class RentalDAOImpl implements RentalDAO {
 		return this.sqlSession.selectList("findAllCar");
 	}//모든 차량 불러오기
 	
-	
 	@Override
 	public List<CarVO> getCarList(CarVO cv) {
 		return this.sqlSession.selectList("carList", cv);
@@ -95,7 +94,7 @@ public class RentalDAOImpl implements RentalDAO {
 	}
 
 	@Override
-	public List<String> getDateCar(String c_name) {
+	public List<RentalVO> getDateCar(String c_name) {
 		return this.sqlSession.selectList("getDateCar",c_name);
 	}// 선택된 차량에 대한 예약된 날짜 목록을 가져옴
 

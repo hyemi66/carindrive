@@ -82,6 +82,15 @@ VALUES (cr_seq.NEXTVAL, #{cr_mid}, #{cr_cname}, #{cr_rdate}, #{cr_sdate}, #{cr_e
 		    #{cr_edate, jdbcType=VARCHAR} BETWEEN cr_sdate AND cr_edate
 		)
 	</select>
+	
+	<select id="getDateCar" resultType="rental">
+		SELECT 
+		    TO_CHAR(TO_DATE(cr_sdate, 'YYYY-MM-DD HH24:MI'), 'YYYY-MM-DD HH24:MI') AS cr_sdate, 
+		    TO_CHAR(TO_DATE(cr_edate, 'YYYY-MM-DD HH24:MI'), 'YYYY-MM-DD HH24:MI') AS cr_edate
+		FROM c_rental
+		WHERE cr_cname = #{cr_cname}
+	</select>
+	
     
 
 </mapper>

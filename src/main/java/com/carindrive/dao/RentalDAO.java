@@ -37,7 +37,7 @@ public interface RentalDAO {
 	
 	int checkDate(Map<String, Object> params);
 
-	List<String> getDateCar(String c_name);
+	List<RentalVO> getDateCar(String c_name);
 
 
 }

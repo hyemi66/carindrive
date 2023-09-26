@@ -1,5 +1,6 @@
 package com.carindrive.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -96,11 +97,9 @@ public class RentServiceImpl implements RentService {
     }//날짜 중복 체크
 
 	@Override
-	public List<String> getDateCar(String c_name) {
+	public List<RentalVO> getDateCar(String c_name) {
 		return this.rentalDao.getDateCar(c_name);
 	}// 선택된 차량에 대한 예약된 날짜 목록을 가져옴
 	
-
-
 
 }

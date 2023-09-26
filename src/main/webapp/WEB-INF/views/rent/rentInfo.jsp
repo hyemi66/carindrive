@@ -30,39 +30,14 @@
 <div id="menu01">
 	<p>
 		빌 리 는 날 짜&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<input type="datetime-local" name="cr_sdate" id="cr_sdate" onchange="setMinValue()" required>
-		<script type="text/javascript">
-			let dateElement = document.getElementById("cr_sdate");
-			let date = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, -8);
-			dateElement.value = date;
-			dateElement.setAttribute("min", date);
-			
-			function setMinValue() {
-				if(dateElement.value < date) {
-					alert("현재 시간보다 이전의 날짜는 설정할 수 없습니다");
-					dateElement.value = date;
-				}
-			}
-		</script>
+		<input type="datetime-local" name="cr_sdate" id="cr_sdate" value="${cr_sdate}" required readOnly>
+
 	</p>
 </div>
 <div id="menu02">
 	<p>
 		반 납 하 는 날 짜&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<input type="datetime-local" name="cr_edate" id="cr_edate" onchange="setMinValue2()" required>
-		<script type="text/javascript">
-			let dateElement2 = document.getElementById("cr_edate");
-			let date2 = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, -8);
-			dateElement2.value = date2;
-			dateElement2.setAttribute("min2", date2);
-			
-			function setMinValue2() {
-				if(dateElement2.value < dateElement.value) {
-					alert("빌리는 날짜보다 이전의 날짜는 설정할 수 없습니다")
-					dateElement2.value = date2;
-				}
-			}
-		</script>
+		<input type="datetime-local" name="cr_edate" id="cr_edate" value="${cr_edate}" required readOnly>
 	</p>
 </div>
 </div>
@@ -84,7 +59,7 @@
 				<p>차량색상 : ${car.c_color}</p>
 				<p>타입 : ${car.c_type}</p>
 				<p>연료 : ${car.c_oil}</p>
-				<span><a href="${path}/rent/rent">차량 다시 선택</a></span>
+				<span><a href="${path}/rent/rent">차량/날짜 다시 선택</a></span>
 				<input type="submit" value="예 약 하 기">
 			</td>
 		</tr>
@@ -102,6 +77,7 @@
 </div>
 
 </form>
+
 
 
 <div class="clear"></div>

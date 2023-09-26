@@ -1,24 +1,94 @@
-<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="path" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title></title>
+<title>날짜 선택</title>
 <script src="${path}/js/jquery.js"></script>
+<script src="${path}/js/payment.js"></script> <!-- 결제 코드 js -->
+<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 <link href="${path}/css/main.css" rel="stylesheet"/>
 <link href="${path}/css/rent.css" rel="stylesheet"/>
+<link href="${path}/css/rent_Wait.css" rel="stylesheet" />
+
 </head>
 <body>
   <jsp:include page="../include/header.jsp"/>
   
   <div class="clear"></div>
-  
-<form method="post">
-<!-- 로그인 아이디 값을 히든으로 넘김 -->
+<%-- 예약 선택 메뉴 --%>
+<form action="/rent/rent" method="post">
 <input type="hidden" name="cr_mid" id="cr_mid" value="${memberInfo.m_id}" required><br>
+
+<input type="hidden" name="cr_cname" id="cr_cname" value="${car.c_name}">
+
+<div class="mainmenu">
+
+<div id="menu01">
+
+	<p>
+		빌 리 는 날 짜&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<input type="datetime-local" name="cr_sdate" id="cr_sdate" onchange="setMinValue()" required>
+		<script type="text/javascript">
+			let dateElement = document.getElementById("cr_sdate");
+			let date = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, -8);
+	
+			let storedStartDate = "${cr_sdate}"; // JSP에서 Controller로부터 받은 값을 저장
+			if(storedStartDate && storedStartDate.length > 0) {
+			    dateElement.value = storedStartDate; // 저장된 값을 입력란에 설정
+			} else {
+			    dateElement.value = date;
+			}
+		
+		dateElement.setAttribute("min", date);
+			
+			function setMinValue() {
+			    if(dateElement.value < date) {
+			        alert("현재 시간보다 이전의 날짜는 설정할 수 없습니다");
+			        dateElement.value = date;
+			    } else {
+			        document.forms[0].submit();
+			    }
+			}
+		</script>
+	</p>
+</div>
+<div id="menu02">
+	<p>
+		반 납 하 는 날 짜&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<input type="datetime-local" name="cr_edate" id="cr_edate" onchange="setMinValue2()" required>
+		<script type="text/javascript">
+			let dateElement2 = document.getElementById("cr_edate");
+			let date2 = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, -8);
+	
+			let storedEndDate = "${cr_edate}"; // JSP에서 Controller로부터 받은 값을 저장
+			if(storedEndDate && storedEndDate.length > 0) {
+			    dateElement2.value = storedEndDate; // 저장된 값을 입력란에 설정
+			} else {
+			    dateElement2.value = date2;
+			}
+			
+			function setMinValue2() {
+			    if(dateElement2.value < dateElement.value) {
+			        alert("빌리는 날짜보다 이전의 날짜는 설정할 수 없습니다");
+			        dateElement2.value = date2;
+			    } else {
+			        document.forms[0].submit();
+			    }
+			}
+		</script>
+	</p>
+</div>
+</div>
+</form>
+<div class="clear"></div>
+
+<!-- 로그인 아이디 값을 히든으로 넘김 -->
+
 <!-- 차 이름값을 히든으로 넘김 -->
 <%-- 예약 선택 메뉴 --%>
 <div class="clear"></div>
@@ -42,12 +112,16 @@
 	
 	
 	<script>
-		function showCar(carname) {
-		    var cr_cname = carname.value;
-		    if (cr_cname) {
-		        window.location.href = "/rent/rentInfo?cr_cname=" + cr_cname;
-		    }
-		}
+	function showCar(carname) {
+	    var cr_cname = carname.value;
+	    var cr_sdate = document.getElementById("cr_sdate").value;
+	    var cr_edate = document.getElementById("cr_edate").value;
+	    
+	    if (cr_cname) {
+	        window.location.href = "/rent/rentInfo?cr_cname=" + cr_cname + "&cr_sdate=" + cr_sdate + "&cr_edate=" + cr_edate;
+	    }
+	}
+
 
 	</script>
 	
@@ -77,7 +151,7 @@
 									24시간 : \ <fmt:formatNumber value="${c.c_price*60*24}" pattern="#,###"/>
 								</p>
 								<div id="box02">
-									<input type="button" value="예 약 하 기" onclick="showCar(currentCar${status.index})" />
+								    <input type="button" value="예 약 하 기" onclick="showCar(currentCar${status.index})" />
 								</div>
 							</div>
 						</td>
@@ -259,12 +333,6 @@
 <br>
 
 <div class="clear"></div>
-
-<c:if test="${not empty msg}">
-    <script>
-        alert('${msg}');
-    </script>
-</c:if>
 
 
 <jsp:include page="../include/footer.jsp"/>

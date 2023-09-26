@@ -25,7 +25,7 @@
         ) 
         VALUES 
         (
-            order_seq.nextval,
+            co_seq.nextval,
             #{buyer_name, jdbcType=VARCHAR}, 
             #{buyer_phone, jdbcType=VARCHAR}, 
             #{member_email, jdbcType=VARCHAR}, 

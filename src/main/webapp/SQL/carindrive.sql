@@ -18,7 +18,7 @@ delete from c_rental where cr_num = 107;
 
 
 --테스트ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-UPDATE c_car SET c_ok = 1 WHERE c_ok = 0;
+UPDATE c_car SET c_ok = 1 WHERE c_ok = 0; --차량의 상태를 모두 렌탈가능으로 되돌림
 
 --차량 예약 가능 여부 확인
 SELECT c_ok FROM c_car WHERE c_name = '레이';
@@ -59,78 +59,15 @@ UPDATE c_car SET c_ok = 0 WHERE c_name = '레이';
 --차량 반납 c_ok를 1로 되돌림
 UPDATE c_car SET c_ok = 1 WHERE c_name = '레이';
 
-
-
-
-
-WITH date_range AS (
-    SELECT cr_sdate + LEVEL - 1 AS reserved_date
-    FROM c_rental
-    WHERE cr_cname = '레이'
-    START WITH cr_sdate IS NOT NULL
-    CONNECT BY PRIOR cr_sdate = cr_sdate
-    AND PRIOR cr_cname = cr_cname
-    AND PRIOR DBMS_RANDOM.VALUE IS NOT NULL
-    AND cr_sdate + LEVEL - 1 <= cr_edate
-)
-SELECT DISTINCT reserved_date
-FROM date_range
-ORDER BY reserved_date;
-
-
-
-    WITH date_range AS (
-        SELECT cr_sdate + LEVEL - 1 AS reserved_date
-        FROM c_rental
-        WHERE cr_cname = '레이'
-        CONNECT BY cr_sdate + LEVEL - 1 <= cr_edate
-        AND PRIOR cr_cname = cr_cname
-        AND PRIOR DBMS_RANDOM.VALUE IS NOT NULL
-    )
-    SELECT DISTINCT reserved_date
-    FROM date_range
-    ORDER BY reserved_date;
-
-
-
-WITH date_range AS (
-    SELECT 
-        TO_CHAR(
-            TO_DATE(cr_sdate, 'YYYY-MM-DD HH24:MI') + (LEVEL - 1) / 24, 
-            'YYYY-MM-DD HH24:MI'
-        ) AS reserved_date
-    FROM c_rental
-    WHERE cr_cname = '레이'
-    CONNECT BY 
-        PRIOR cr_sdate = cr_sdate
-        AND PRIOR cr_cname = cr_cname
-        AND PRIOR DBMS_RANDOM.VALUE IS NOT NULL
-        AND TO_DATE(cr_sdate, 'YYYY-MM-DD HH24:MI') + (LEVEL - 1) / 24 <= TO_DATE(cr_edate, 'YYYY-MM-DD HH24:MI')
-)
-SELECT DISTINCT reserved_date
-FROM date_range
-ORDER BY reserved_date;
-
 --ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
---날짜추출
-
-WITH date_range AS (
-    SELECT TO_DATE(cr_sdate, 'YYYY-MM-DD HH24:MI:SS') + LEVEL - 1 AS reserved_date
-    FROM c_rental
-    WHERE cr_cname = '레이'
-    START WITH cr_sdate IS NOT NULL
-    CONNECT BY PRIOR cr_sdate = cr_sdate
-    AND PRIOR cr_cname = cr_cname
-    AND PRIOR DBMS_RANDOM.VALUE IS NOT NULL
-    AND TO_DATE(cr_sdate, 'YYYY-MM-DD HH24:MI:SS') + LEVEL - 1 <= TO_DATE(cr_edate, 'YYYY-MM-DD HH24:MI:SS')
-)
-SELECT DISTINCT reserved_date
-FROM date_range
-ORDER BY reserved_date;
-
-
-
+--렌트 시간 추출 (해당차량)
+SELECT 
+    TO_CHAR(TO_DATE(cr_sdate, 'YYYY-MM-DD HH24:MI'), 'YYYY-MM-DD HH24:MI') AS start_date, 
+    TO_CHAR(TO_DATE(cr_edate, 'YYYY-MM-DD HH24:MI'), 'YYYY-MM-DD HH24:MI') AS end_date
+FROM c_rental
+WHERE cr_cname = '레이'
+ORDER BY start_date;
 
 
 
@@ -160,6 +97,7 @@ CREATE SEQUENCE cq_seq START WITH 1 INCREMENT BY 1 NOCACHE;  -- Q&A 테이블 �
 CREATE SEQUENCE car_seq START WITH 1 INCREMENT BY 1 NOCACHE; -- 차 정보 테이블 시퀀스
 CREATE SEQUENCE cr_seq START WITH 1 INCREMENT BY 1 NOCACHE; -- 예약(렌탈) 테이블 시퀀스
 CREATE SEQUENCE co_seq START WITH 1 INCREMENT BY 1 NOCACHE; -- 결제 정보 테이블 시퀀스
+
 
 
 --시퀀스 삭제

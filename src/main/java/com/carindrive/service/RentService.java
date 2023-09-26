@@ -53,5 +53,6 @@ public interface RentService {
 	boolean checkDate(String carName, String startDate, String endDate);
 
 	// 선택된 차량에 대한 예약된 날짜 목록을 가져옴
-	List<String> getDateCar(String c_name);
+	List<RentalVO> getDateCar(String c_name);
+
 }
