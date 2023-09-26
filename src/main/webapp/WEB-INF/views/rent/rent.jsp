@@ -115,7 +115,9 @@
 									<c:if test="${c.c_ok == 0}">
 										<input id="no" type="button" value="예 약 불 가" />
 									</c:if>
-									<input type="button" value="예 약 하 기" onclick="showCar(currentCar${status.index})" />
+									<c:if test="${c.c_ok == 1 }">
+										<input  id="yes" type="button" value="예 약 하 기" onclick="showCar(currentCar${status.index})" />
+									</c:if>
 								</div>
 							</div>
 						</td>
@@ -148,7 +150,12 @@
 										24시간 : \ <fmt:formatNumber value="${c.c_price*60*24}" pattern="#,###"/>
 									</p>
 									<div id="box02">
-										<input type="button" value="예 약 하 기" onclick="showCar2(currentCar2${status.index})" />
+										<c:if test="${c.c_ok == 0}">
+											<input id="no" type="button" value="예 약 불 가" />
+										</c:if>
+										<c:if test="${c.c_ok == 1 }">
+											<input  id="yes" type="button" value="예 약 하 기" onclick="showCar(currentCar${status.index})" />
+										</c:if>
 									</div>
 								</div>
 							</td>
@@ -182,7 +189,12 @@
 										24시간 : \ <fmt:formatNumber value="${c.c_price*60*24}" pattern="#,###"/>
 									</p>
 									<div id="box02">
-										<input type="button" value="예 약 하 기" onclick="showCar3(currentCar3${status.index})" />
+										<c:if test="${c.c_ok == 0}">
+											<input id="no" type="button" value="예 약 불 가" />
+										</c:if>
+										<c:if test="${c.c_ok == 1 }">
+											<input  id="yes" type="button" value="예 약 하 기" onclick="showCar(currentCar${status.index})" />
+										</c:if>
 									</div>
 								</div>
 							</td>
@@ -216,7 +228,12 @@
 										24시간 : \ <fmt:formatNumber value="${c.c_price*60*24}" pattern="#,###"/>
 									</p>
 									<div id="box02">
-										<input type="button" value="예 약 하 기" onclick="showCar4(currentCar4${status.index})" />
+										<c:if test="${c.c_ok == 0}">
+											<input id="no" type="button" value="예 약 불 가" />
+										</c:if>
+										<c:if test="${c.c_ok == 1 }">
+											<input  id="yes" type="button" value="예 약 하 기" onclick="showCar(currentCar${status.index})" />
+										</c:if>
 									</div>
 								</div>
 							</td>
@@ -247,7 +264,12 @@
 										24시간 : \ <fmt:formatNumber value="${c.c_price*60*24}" pattern="#,###"/>
 									</p>
 									<div id="box02">
-										<input type="button" value="예 약 하 기" onclick="showCar5(currentCar5${status.index})" />
+										<c:if test="${c.c_ok == 0}">
+											<input id="no" type="button" value="예 약 불 가" />
+										</c:if>
+										<c:if test="${c.c_ok == 1 }">
+											<input  id="yes" type="button" value="예 약 하 기" onclick="showCar(currentCar${status.index})" />
+										</c:if>
 									</div>
 								</div>
 							</td>
@@ -284,7 +306,12 @@
 										24시간 : \ <fmt:formatNumber value="${c.c_price*60*24}" pattern="#,###"/>
 									</p>
 									<div id="box02">
-										<input type="button" value="예 약 하 기" onclick="showCar6(currentCar6${status.index})" />
+										<c:if test="${c.c_ok == 0}">
+											<input id="no" type="button" value="예 약 불 가" />
+										</c:if>
+										<c:if test="${c.c_ok == 1 }">
+											<input  id="yes" type="button" value="예 약 하 기" onclick="showCar(currentCar${status.index})" />
+										</c:if>
 									</div>
 								</div>
 							</td>

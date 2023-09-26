@@ -37,8 +37,8 @@ VALUES (cr_seq.NEXTVAL, #{cr_mid}, #{cr_cname}, #{cr_rdate}, #{cr_sdate}, #{cr_e
     	update c_rental set cr_order = #{cr_order} where cr_num = #{cr_num}
     </update>
     
-    <!-- 주문번호를 기준으로 해당 렌탈내역을 가져옴 (환불에 사용) -->
-    <select id="getRentRefund" resultType="rental">
+    <!-- 주문번호를 기준으로 해당 렌탈내역을 가져옴 -->
+    <select id="getRentCar" resultType="rental">
     	select * from c_rental where cr_order = #{cr_order}
     </select>
     
@@ -46,6 +46,27 @@ VALUES (cr_seq.NEXTVAL, #{cr_mid}, #{cr_cname}, #{cr_rdate}, #{cr_sdate}, #{cr_e
     <select id="findAllCar" resultType="car">
         SELECT * FROM c_car
     </select>
+    
+   	<!-- 차 리스트 가져오기 -->
+	<select id="carList" resultType="car">
+		select * from c_car
+	</select>
+	
+	<!-- 차량코드번호를 기준으로 차량정보 가져오기 -->
+	<select id="getCarInfo2" resultType="car">
+		select * from c_car where c_num = #{c_num} 
+	</select>
+	
+	<!-- 예약순을 기준으로 주문번호가 없으면 삭제시킴-->
+	<delete id="delOrder">
+		delete from c_rental where cr_num = #{cr_num}
+	</delete>
+	
+	<!-- 예약된 차 이름으로 c_car테이블 c_ok 0으로 변경 -->
+	<update id="update_cok">
+		update c_car set c_ok = 0 where c_name = #{c_name}
+	</update>
+	
     
 
 </mapper>

@@ -95,6 +95,7 @@ public class RentController {
 			System.out.println("rentInfo(POST)메서드 동작");
 			//로그인 정보 가져오기
 			MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+			if (memberInfo != null) {//로그인이 되었을 때
 			System.out.println("멤버정보: "+memberInfo);
 			r.setCr_mid(memberInfo.getM_id());
 			
@@ -123,11 +124,16 @@ public class RentController {
 			// 현재 날짜 설정 (렌트 신청일)
 			r.setCr_rdate(cr_rdate);	//클라이언트에게 입력받는것이 아닌 코드가 동작하는 순간 시간 저장
 			System.out.println("데이터베이스에 저장");
+			System.out.println("저장전 값 RentalVO값: "+r);
 			this.rentService.insertRental(r);			//모든 값들이 준비되었으면 데이터베이스에 저장
 
 			rttr.addFlashAttribute("msg", "success"); //성공시 메세지띄우기
-			//model.setViewName("rent/rentOK");
 			return new ModelAndView("redirect:/rent/rentOK");
+			}else {
+				session.setAttribute("prevPage", request.getHeader("Referer"));	//로그인후 다시 원래 페이지로 돌아가게 해주는 코드 
+				rttr.addFlashAttribute("LoginNull", "alert('로그인 이후 이용 가능합니다!');");
+				return new ModelAndView("redirect:/member/m_login");
+			}
 		}
 
 		//차 예약 완료전 결제창
@@ -150,9 +156,10 @@ public class RentController {
 				//고객 정보 가져오기 (렌트 내역에 필요)
 				MemberVO mem = this.memberService.getMemberInfo(memberInfo.getM_id());
 
-				// 렌트 기간 계산
 				//DateTimeFormatter를 이용하여 날짜와 시간 문자열을 파싱하여 LocalDateTime 객체로 변환
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+				System.out.println("렌트시작시간: "+rental.getCr_sdate());
+				System.out.println("렌트반납시간: "+rental.getCr_edate());
 				LocalDateTime stard_date = LocalDateTime.parse(rental.getCr_sdate(), formatter);
 				LocalDateTime end_date = LocalDateTime.parse(rental.getCr_edate(), formatter);
 
@@ -166,6 +173,7 @@ public class RentController {
 				//DecimalFormat 는 숫자의 출력형태를 변환한다.
 				DecimalFormat decimalFormat = new DecimalFormat("#"); //소수점 제외
 				String total_price = decimalFormat.format(one_price);
+				System.out.println("렌탈가격: "+total_price);
 
 				//렌트 비용을 c_rental 테이블에 추가
 				this.rentService.insertCost(rental.getCr_num(),one_price);

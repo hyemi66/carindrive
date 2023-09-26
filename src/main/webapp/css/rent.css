@@ -95,7 +95,7 @@ body {
 	width: 350px;
 	color: lightgray;
 }
-#box02 input {
+#yes {
 	border: 1px solid black;
 	padding: 15px 130px;
 	margin: 10px 0px;
@@ -107,7 +107,7 @@ body {
 	border: 1px solid black;
 	padding: 15px 130px;
 	margin: 10px 0px;
-	background-color: #808080;
+	background-color: #400000;
 	color: white;
 	font-size: 20px; font-weight: bolder;
 }

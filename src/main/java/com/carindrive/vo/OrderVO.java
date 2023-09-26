@@ -21,6 +21,7 @@ public class OrderVO {
     private String buyer_pay_ok;    // 결제정보
     private Integer buyer_postcode; // (수정예정)
     private String refund;	//환불여부
+    private String parent_merchant_id;	//추가 결제시 원래의 주문번호를 저장하는 공간
     
     public OrderVO() {}
 
@@ -36,7 +37,8 @@ public class OrderVO {
                       long amount, 
                       String buyer_card_num, 
                       String buyer_pay_ok, 
-                      Integer buyer_postcode
+                      Integer buyer_postcode,
+                      String parent_merchant_id
     				  ) {
         this.id = id;
         this.buyer_name = buyer_name;
@@ -51,6 +53,7 @@ public class OrderVO {
         this.buyer_card_num = buyer_card_num;
         this.buyer_pay_ok = buyer_pay_ok;
         this.buyer_postcode = buyer_postcode;
+        this.parent_merchant_id = parent_merchant_id;
     }
 
  
@@ -71,7 +74,14 @@ public class OrderVO {
                 ", cardNum='" + buyer_card_num + '\'' +
                 ", payStatus='" + buyer_pay_ok + '\'' +
                 ", postcode=" + buyer_postcode +
+                ", parent_merchant_id=" + parent_merchant_id +
                 '}';
     }
+	
+    public void setPMerchantId(OrderVO order) {
+        this.parent_merchant_id = order.getParent_merchant_id();
+    }
 }
+
+
 

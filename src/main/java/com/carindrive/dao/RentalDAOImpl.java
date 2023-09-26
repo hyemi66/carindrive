@@ -58,8 +58,8 @@ public class RentalDAOImpl implements RentalDAO {
 	}//주문번호를 렌탈정보 데이터베이스에 추가
 
 	@Override
-	public RentalVO getRentRefund(String cr_order) {
-		return this.sqlSession.selectOne("getRentRefund",cr_order);
+	public RentalVO getRentCar(String cr_order) {
+		return this.sqlSession.selectOne("getRentCar",cr_order);
 	}//주문번호를 기준으로 렌트내역을 가져옴
 
 	@Override
@@ -72,6 +72,21 @@ public class RentalDAOImpl implements RentalDAO {
 	public List<CarVO> getCarList(CarVO cv) {
 		return this.sqlSession.selectList("carList", cv);
 	} // 차 리스트 불러오기
+
+	@Override
+	public CarVO getCarInfo2(int c_num) {
+		return this.sqlSession.selectOne("getCarInfo2",c_num);
+	}//차량 코드번호로 차 정보 가져오기
+
+	@Override
+	public void delOrder(int cr_num) {
+		this.sqlSession.delete("delOrder",cr_num);
+	}//예약순을 기준으로 주문번호가 없으면 삭제시킴
+
+	@Override
+	public void updateCok(String c_name) {
+		this.sqlSession.update("update_cok", c_name);
+	} // 예약된 차 이름으로 c_car테이블 c_ok 0으로 변경
 
 
 }

@@ -31,11 +31,20 @@ public interface RentService {
 	void insertMerchantId(String merchantId, int cr_num);
 
 	//주문번호를 기준으로 해당 예약내역을 선택
-	RentalVO getRentRefund(String cr_order);
+	RentalVO getRentCar(String cr_order);
 
 	//모든 차 정보를 가져오기
 	List<CarVO> findAllCar();
 	
 	// 차 리스트 가져오기
 	List<CarVO> getCarList(CarVO cv);
+
+	//차량코드번호(프라이머리키)로 차정보 가져오기
+	CarVO getCarInfo2(int c_num);
+
+	//주문순서를 기준으로 주문번호가 null인것을 지우기
+	void delOrder(int cr_num);
+	
+	// 예약된 차 이름으로 c_car테이블 c_ok 0으로 변경
+	void updateCok(String c_name);
 }

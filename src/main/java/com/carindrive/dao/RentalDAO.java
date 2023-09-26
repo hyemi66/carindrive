@@ -23,10 +23,16 @@ public interface RentalDAO {
 
 	void insertMerchantId(String merchantId, int cr_num);
 
-	RentalVO getRentRefund(String cr_order);
+	RentalVO getRentCar(String cr_order);
 
 	List<CarVO> findAllCar();
 	
 	List<CarVO> getCarList(CarVO cv);
+
+	CarVO getCarInfo2(int c_num);
+
+	void delOrder(int cr_num);
+
+	void updateCok(String c_name);
 
 }
