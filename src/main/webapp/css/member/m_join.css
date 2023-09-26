@@ -2,7 +2,7 @@
 
 #wrap {
 	width: 500px;
-	height: 800px;
+	height: 850px;
 	background-color: white;
 	border-radius: 10px;
 	border: 1px solid #dcdcdc;
@@ -39,11 +39,18 @@
 }
 
 #idform, #pwdform, #nameform, #birthform, #phoneform, #emailform,
-	#genderform, #telform, #pwdCKform, #checkid {
-	width: 400px;
+	#genderform, #telform, #pwdCKform, #checkid,#email_select_form {
+	width: 400px; 
 	height: 50px;
 	margin: 0 auto;
 	margin-top: 20px;
+}
+
+#idform{
+	margin-bottom: 35px;
+}
+#idcheck{
+	margin-left: 10px; 
 }
 
 input:focus {
@@ -52,7 +59,7 @@ input:focus {
 
 #m_id, #m_pwd, #m_name, #m_birth, #m_phone, #m_email, #m_gender, #pwd_ck
 	{
-	background-image: url('../images/people.png');
+	background-image: url('../../images/member/people.png');
 	background-repeat: no-repeat;
 	background-size: 30px 30px;
 	background-position: 20px center;
@@ -66,23 +73,23 @@ input:focus {
 }
 
 #m_pwd, #pwd_ck {
-	background-image: url('../images/lock_icon.png');
+	background-image: url('../../images/member/lock_icon.png');
 }
 
 #m_name {
-	background-image: url('../images/people.png');
+	background-image: url('../../images/member/people.png');
 }
 
 #m_birth {
-	background-image: url('../images/calender.png');
+	background-image: url('../../images/member/calender.png');
 }
 
 #m_phone {
-	background-image: url('../images/phone.png');
+	background-image: url('../../images/member/phone.png');
 }
 
-#m_email {
-	background-image: url('../images/email.png');
+#m_email, #m_email_se {
+	background-image: url('../../images/member/email.png');
 }
 
 #form3 {
@@ -124,7 +131,7 @@ input:focus {
 	color: #464646;
 }
 
-#telform>#user_hp_type {
+#telform>#m_tel {
 	margin: 0 auto;
 	width: 400px;
 	height: 50px;
@@ -136,13 +143,30 @@ input:focus {
 	color: #969696;
 }
 
-#telform>#user_hp_type>option {
+#email_select_form > #m_email_se{
+	margin: 0 auto;
+	width: 400px;
+	height: 50px;
+	border-radius: 10px;
+	border: 1px solid #dcdcdc;
+	margin-top: 20px;
+	font-size: 20px;
+	cursor: pointer;
+	color: #969696;
+}
+
+#email_select_form > #m_email_se>option{
+	
+}
+
+
+#telform>#m_tel>option,#email_select_form > #m_email_se>option {
 	text-align: center;
 	cursor: pointer;
 }
 
 .select {
-	background: url('../images/tel.png') calc(100% - 350px) center no-repeat;
+	background: url('../../images/member/tel.png') calc(100% - 350px) center no-repeat;
 	background-size: 30px;
 }
 

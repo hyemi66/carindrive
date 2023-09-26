@@ -8,7 +8,7 @@ import com.carindrive.vo.OrderVO;
 import com.carindrive.vo.RentalVO;
 
 public interface RentService {
-
+	
 	//차량 예약 요청
 	void insertRental(RentalVO r);
 
@@ -22,10 +22,10 @@ public interface RentService {
 	void getMemberList(MemberVO m);
 
 	//차 정보 가져오기
-	CarVO getCarInfo(int car_id);
+	CarVO getCarInfo(String cr_cid);
 
 	//렌트 비용을 데이터베이스에 추가
-	int insertCost(int rental_id, double rental_cost);
+	void insertCost(int cr_num, double one_price);
 
 	//주문번호를 렌탈정보 데이터베이스에 추가
 	void insertMerchantId(String merchantId, int rental_id);
@@ -35,7 +35,9 @@ public interface RentService {
 
 	//주문내역 가져오기
 	List<OrderVO> getOrder(String buyer_name);
-
 	
-
+	// 차 리스트 가져오기
+	List<CarVO> getCarList(CarVO cv);
+	
+	
 }

@@ -5,13 +5,13 @@
 }
 
 body {
-	background-color: #dcdcdc;
+	background-color: white;
 }
 
 #wrap {
 	margin: 0 auto;
 	margin-top: 0px;
-	background-color: #dcdcdc;
+	background-color: white;
 	width: 1500;
 	height: 100%;
 }
@@ -47,6 +47,7 @@ hr {
 	font-size: 50px;
 	color: black;
 	font-weight: bold;
+	margin-bottom: 50px;
 }
 
 #form_2>img {

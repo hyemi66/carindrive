@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="Social">
+ 	
+ 	<!-- 카카오 회원가입 -->
+ 	<insert id="insertKakao" >
+		insert into social(Id,username,password,email,role,create_date,k_state) 
+		values(DEFAULT,#{username},#{password},#{email},'user',sysdate,1)
+ 	</insert>
+ 	
+ 	<!-- 카카오 회원 찾기 -->
+ 	<select id="serchKakao" resultType="social">
+ 		select * from social where email =#{userEmail}
+ 	</select>
+ 	
+ </mapper>
+ 

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.carindrive.dao.RentDAO;
 import com.carindrive.dao.RentalDAO;
 import com.carindrive.vo.CarVO;
 import com.carindrive.vo.MemberVO;
@@ -17,6 +18,9 @@ public class RentServiceImpl implements RentService {
 	@Autowired
 	private RentalDAO rentalDao;
 	
+	@Autowired
+	private RentDAO rentDao;
+	
 	@Override
 	public void insertRental(RentalVO r) {
 		this.rentalDao.insertRental(r);
@@ -28,8 +32,8 @@ public class RentServiceImpl implements RentService {
 	}
 	
 	@Override
-	public RentalVO getRentOne(String m_id) {
-		return this.rentalDao.getRentOne(m_id);
+	public RentalVO getRentOne(String cr_mid) {
+		return this.rentalDao.getRentOne(cr_mid);
 	}
 
 	@Override
@@ -38,18 +42,18 @@ public class RentServiceImpl implements RentService {
 	}
 
 	@Override
-	public CarVO getCarInfo(int car_id) {
-		return this.rentalDao.getCarInfo(car_id);
+	public CarVO getCarInfo(String cr_cid) {
+		return this.rentalDao.getCarInfo(cr_cid);
 	}
 
 	@Override
-	public int insertCost(int rental_id, double rental_cost) {
-	    return this.rentalDao.insertCost(rental_id, rental_cost);
+	public void insertCost(int cr_num, double one_price) {
+	    this.rentalDao.insertCost(cr_num, one_price);
 	}
 
 	@Override
-	public void insertMerchantId(String merchantId, int rental_id) {
-		this.rentalDao.insertMerchantId(merchantId, rental_id);
+	public void insertMerchantId(String merchantId, int cr_num) {
+		this.rentalDao.insertMerchantId(merchantId, cr_num);
 	}
 
 	@Override
@@ -62,8 +66,10 @@ public class RentServiceImpl implements RentService {
 		return this.rentalDao.getOrder(buyer_name);
 	}
 
-
-
+	@Override
+	public List<CarVO> getCarList(CarVO cv) {
+		return this.rentDao.getCarList(cv);
+	}
 
 
 }

@@ -1,16 +1,10 @@
-/**
- * 
- */
- 
- function id_ck(){
-	  if($.trim($("#m_id").val())== ""){
-		  alert("아이디를 입력하세요!");
-		  $("#m_id").val("").focus();
+
+ function serch_email(){
+	  if($.trim($("#m_name").val())== ""){
+		  alert("이름을 입력하세요!");
+		  $("#m_name").val("").focus();
 		  return false;
 	  }
-	 
-}
-function info_ck(){
 	  if($.trim($("#m_email").val())== ""){
 		  alert("이메일을 입력하세요!");
 		  $("#m_email").val("").focus();
@@ -19,9 +13,9 @@ function info_ck(){
 	 
 }
 function last_ck(){
-	  if($.trim($("#m_id").val())== ""){
-		  alert("아이디를 입력하세요!");
-		  $("#m_id").val("").focus();
+	  if($.trim($("#m_name").val())== ""){
+		  alert("이름을 입력하세요!");
+		  $("#m_name").val("").focus();
 		  return false;
 	  }
 	  if($.trim($("#m_email").val())== ""){

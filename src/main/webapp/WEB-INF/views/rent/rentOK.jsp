@@ -1,6 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:set var="path" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,80 +12,79 @@
 <link href="${path}/css/rent.css" rel="stylesheet"/>
 <link href="${path}/css/rent_Check.css" rel="stylesheet" />
 <script>
-function cardPay(rental_m_id, mem_m_phone, mem_m_name, car_car_name, car_car_color, car_car_year, rental_cost_total) {
-    IMP.init('imp87360186'); //iamport 대신 자신의 "가맹점 식별코드"를 사용
-    
-    var showName = car_car_year+'년식 ' + car_car_color + ' ' + car_car_name;
-    IMP.request_pay({
-      pg: "html5_inicis",
-      pay_method: "card",
-      merchant_uid : 'merchant_'+new Date().getTime(),
-      name : showName,
-      amount : rental_cost_total,
-      buyer_name : rental_m_id,
-      buyer_tel : mem_m_phone,
-    }, function (rsp) { // callback
-        if (rsp.success) {
-        	alert("결제가 완료되었습니다 !");
-        	// Ajax로 서버에 결제 정보 전송
-            $.ajax({
-                url: "/rent/savePaymentInfo", // 서버의 URL
-                method: "POST",
-                data: {
-                    merchant_uid: rsp.merchant_uid,
-                    amount: rsp.amount,
-                    buyer_name: rsp.buyer_name,
-                    buyer_tel: rsp.buyer_tel,
-                    item_name: rsp.item_name
-                },
-                success: function(response) {
-                    if (response.success) {
-                        alert("결제 정보가 저장되었습니다.");
-                        localStorage.setItem('payment_tid', rsp.imp_uid);
-
-                    } else {
-                        alert("결제 정보 저장에 실패했습니다.");
-                    }
-                }
-            });
-         	 location.href='/rent/rent_Check?m_id=${rental.m_id}';
-        } else {
-          alert("결제에 실패했습니다.");
-        }
-    });
-}
-function kakaoPay(rental_m_id, mem_m_phone, mem_m_name, car_car_name, car_car_color, car_car_year, rental_cost_total) {
-	IMP.init('imp87360186');
-
-	 var showName = car_car_year+'년식 ' + car_car_color + ' ' + car_car_name;
-	IMP.request_pay({
-	    pg : 'kakaopay',
-	    pay_method : 'card', //카드결제
-	    merchant_uid : 'merchant_' + new Date().getTime(),
-	    name : showName,
-	    amount : rental_cost_total *1000, //판매가격
-	    buyer_name : rental_m_id,
-	    buyer_tel : mem_m_phone,
-	}, function(rsp) {
-	    if ( rsp.success ) {
-		var msg = '결제가 완료되었습니다.';
-		msg += '고유ID : ' + rsp.imp_uid;
-		msg += '상점 거래ID : ' + rsp.merchant_uid;
-		msg += '결제 금액 : ' + rsp.paid_amount;
-		msg += '카드 승인번호 : ' + rsp.apply_num;
-		   
-		pay_info(rsp);
+	function cardPay(rental_cr_mid, mem_m_phone, mem_m_name, car_c_name, car_c_color, car_c_year, total_price) {
+		IMP.init('imp87360186'); // iamport 대신 자신의 "가맹점 식별코드"를 사용
 		
-	    } else {
-		var msg = '결제에 실패하였습니다.';
-		msg += '에러내용 : ' + rsp.error_msg;
+		var showName = car_c_year+'년식 ' + car_c_color + ' ' + car_c_name;
+		IMP.request_pay({
+		pg: "html5_inicis",
+		pay_method: "card",
+		merchant_uid : 'merchant_'+new Date().getTime(),
+		name : showName,
+		amount : total_price,
+		buyer_name : rental_cr_mid,
+		buyer_tel : mem_m_phone,
+		}, function (rsp) { // callback
+			if (rsp.success) {
+				alert("결제가 완료되었습니다 !");
+				// Ajax로 서버에 결제 정보 전송
+				$.ajax({
+				url: "/rent/savePaymentInfo", // 서버의 URL
+				method: "POST",
+				data: {
+				merchant_uid: rsp.merchant_uid,
+				amount: rsp.amount,
+				buyer_name: rsp.buyer_name,
+				buyer_tel: rsp.buyer_tel,
+				item_name: rsp.item_name
+				},
+				success: function(response) {
+				if (response.success) {
+					alert("결제 정보가 저장되었습니다.");
+					localStorage.setItem('payment_tid', rsp.imp_uid);
+				} else {
+					alert("결제 정보 저장에 실패했습니다.");
+				}
+			}
+		});
+		location.href='/rent/rent_Check?cr_mid=${rental.cr_mid}';
+		} else {
+			alert("결제에 실패했습니다.");
+		}
+		});
+	}
+	
+	function kakaoPay(rental_cr_mid, mem_m_phone, mem_m_name, car_c_name, car_c_color, car_c_year, total_price) {
+		IMP.init('imp87360186');
 		
-		location.href="goods_pay_fail.do?error_msg="+rsp.error_msg;
-	    }
-
-	});
-}
-	//비공개 방식으로 서버로 결제정보 전달
+		var showName = car_c_year+'년식 ' + car_c_color + ' ' + car_c_name;
+		IMP.request_pay({
+		pg : 'kakaopay',
+		pay_method : 'card', // 카드결제
+		merchant_uid : 'merchant_' + new Date().getTime(),
+		name : showName,
+		amount : total_price *1000, // 판매가격
+		buyer_name : rental_cr_mid,
+		buyer_tel : mem_m_phone,
+		}, function(rsp) {
+			if ( rsp.success ) {
+				var msg = '결제가 완료되었습니다.';
+				msg += '고유ID : ' + rsp.imp_uid;
+				msg += '상점 거래ID : ' + rsp.merchant_uid;
+				msg += '결제 금액 : ' + rsp.paid_amount;
+				msg += '카드 승인번호 : ' + rsp.apply_num;
+				   
+				pay_info(rsp);
+			} else {
+				var msg = '결제에 실패하였습니다.';
+				msg += '에러내용 : ' + rsp.error_msg;
+				
+				location.href="goods_pay_fail.do?error_msg="+rsp.error_msg;
+			}
+		});
+	}
+	
+	// 비공개 방식으로 서버로 결제정보 전달
 	function pay_info(rsp){
 	      var form = document.createElement('form');
 	      var objs;
@@ -127,11 +125,13 @@ function kakaoPay(rental_m_id, mem_m_phone, mem_m_name, car_car_name, car_car_co
 	      objs.setAttribute('value', rsp.imp_uid);
 	      form.appendChild(objs);
 	      
-	      /*objs = document.createElement('input');
+	      /*
+	      objs = document.createElement('input');
 	      objs.setAttribute('type', 'hidden');
 	      objs.setAttribute('name', 'buyer_merid');
-	      objs.setAttribute('value', rsp.merchant_uid); //삭제하거나 수정예정
-	      form.appendChild(objs);*/
+	      objs.setAttribute('value', rsp.merchant_uid); // 삭제하거나 수정예정
+	      form.appendChild(objs);
+	      */
 	      
 	      objs = document.createElement('input');
 	      objs.setAttribute('type', 'hidden');
@@ -157,14 +157,14 @@ function kakaoPay(rental_m_id, mem_m_phone, mem_m_name, car_car_name, car_car_co
 	      objs.setAttribute('value', rsp.buyer_postcode);
 	      form.appendChild(objs);
 	      
-	      objs = document.createElement('input');	//삭제하거나 수정 예정
+	      objs = document.createElement('input'); // 삭제하거나 수정 예정
 	      objs.setAttribute('type', 'hidden');
-	      objs.setAttribute('name', 'merchantId');  // 폼의 필드 이름을 'merchantId'로 설정
-	      objs.setAttribute('value', rsp.merchant_uid);  // 결제 응답에서 merchant_uid 값을 가져옵니다.
+	      objs.setAttribute('name', 'merchantId'); // 폼의 필드 이름을 'merchantId'로 설정
+	      objs.setAttribute('value', rsp.merchant_uid); // 결제 응답에서 merchant_uid 값을 가져옵니다.
 	      form.appendChild(objs);
 
 	      form.setAttribute('method', 'post');
-	      form.setAttribute('action', "/rent/rent_Check");	// /rent/rent_Check_List() 메서드 동작
+	      form.setAttribute('action', "/rent/rent_Check"); // /rent/rent_Check_List() 메서드 동작
 	      document.body.appendChild(form);
 	      form.submit();
 	}
@@ -178,31 +178,33 @@ function kakaoPay(rental_m_id, mem_m_phone, mem_m_name, car_car_name, car_car_co
 <%-- 예약 선택 메뉴 --%>
 <div class="mainmenu">
 <div id="menu01">
-	<input type="checkbox" name="accordian" id="car01">
-	<label for="car01">2023.07.17 | 09:00</label>
-	<div><p><input type="date"></p></div>
+	<p>
+		빌리는 날짜 | 
+		<input type="datetime-local" name="cr_sdate" id="cs_edate" required>
+	</p>
 </div>
 <div  id="menu02">
-	<input type="checkbox" name="accordian" id="car02">
-	<label for="car02">2023.07.17 | 09:00</label>
-	<div><p><input type="date"></p></div>
+	<p>
+		반납하는 날짜 | 
+		<input type="datetime-local" name="cr_edate" id="cr_edate" required>
+	</p>
 </div>
 <div  id="menu03">
-	<input type="checkbox" name="accordian" id="car03">
-	<label for="car03">전체</label>
+	<input type="checkbox" name="accordian" id="car">
+	<label for="car">전체</label>
 	<div>
-		<p><a href="#">전체</a></p><br>
-		<p><a href="#">경형</a></p><br>
-		<p><a href="#">소형</a></p><br>
-		<p><a href="#">중형(세단)</a></p><br>
-		<p><a href="#">중형(SUV)</a></p><br>
-		<p><a href="#">전기차</a></p><br>
+		<p><a href="${path}/rent/rent">전체</a></p><br>
+		<p><a href="${path}/rent/rent">경형</a></p><br>
+		<p><a href="${path}/rent/rent">소형</a></p><br>
+		<p><a href="${path}/rent/rent">중형(세단)</a></p><br>
+		<p><a href="${path}/rent/rent">중형(SUV)</a></p><br>
+		<p><a href="${path}/rent/rent">전기차</a></p><br>
 	</div>
 </div>
 <div  id="menu04">
-	<input type="checkbox" name="accordian" id="car04">
-	<label for="car04">대여시간</label>
-	<div><p><input type="time">&nbsp;&nbsp;&nbsp;~&nbsp;&nbsp;&nbsp;<input type="time"></p></div>
+	<p>
+		대여시간 |
+	</p>
 </div>
 </div>
 

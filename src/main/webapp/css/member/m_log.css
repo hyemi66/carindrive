@@ -17,7 +17,7 @@ input[type="checkbox"]:checked {
 
 #wrap {
 	width: 500px;
-	height: 700px;
+	height: 650px;
 	background-color: white;
 	border-radius: 10px;
 	border: 1px solid #dcdcdc;
@@ -59,7 +59,7 @@ input:focus {
 }
 
 #m_id, #m_pwd, #m_name, #m_birth, #m_phone, #m_email, #m_gender {
-	background-image: url('../images/people.png');
+	background-image: url('../../images/member/people.png');
 	background-repeat: no-repeat;
 	background-size: 30px 30px;
 	background-position: 20px center;
@@ -73,7 +73,7 @@ input:focus {
 }
 
 #m_pwd {
-	background-image: url('../images/lock_icon.png');
+	background-image: url('../../images/member/lock_icon.png');
 	background-size: 20px 20px;
 }
 
@@ -129,14 +129,21 @@ label[for="checkbox"] {
 	margin: auto;
 	text-align: center;
 	margin: 10px;
-	margin-left: 70px;
+	margin-left: 55px;
 }
 
-#social>a>img {
+#social>a>#kakao,#naver {
 	margin-right: 50px;
-	width: 60px;
-	height: 60px;
+	width: 390px;
+	height: 50px;
+	background-color: #FEE500;
+	border-radius: 10px;
+	background-image: url('../../images/member/btnkakao.png');
+	background-size: 250px 60px;
+	background-repeat: no-repeat;
+	background-position: center;
 }
+
 
 #ano {
 	margin-top: 30px;

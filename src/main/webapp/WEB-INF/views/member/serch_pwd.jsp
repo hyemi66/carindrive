@@ -5,52 +5,35 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>비밀번호 찾기 페이지</title>
-<link rel="stylesheet" type="text/css" href="${path}/css/serch_pwd.css">
+<title></title>
+<link rel="stylesheet" type="text/css" href="${path}/css/member/serch.css">
 <script src="${path}/js/jquery.js"></script>
-<script src="${path}/js/s_pwd.js"></script>
+<script src="${path}/js/member/s_pwd.js"></script>
 </head>
 <body>
 <%-- include : main --%>
 <%@ include file="../include/header.jsp" %>
+
+<form action="serch_pwd_email_ck" method="post">
 <div id="wrap">
-	<div id="serchform"> 
+	<div id="serchform" style="height: 450px;"> 
 		<div id="logo">
-			
 			<p id="logoP">비밀번호 찾기</p>
 			비밀번호는 가입시 입력하신 <br>
-			아이디와 이메일을 통해 찾을 수 있습니다.
-			
+			이메일을 통해 찾을 수 있습니다.
 		</div>
 		<div id="id_form">
-				<div id="id_name">
-					<input id="m_id" name="m_id" placeholder="아이디"
-					onfocus="this.placeholder=''" onblur="this.placeholder='아이디'">
-				</div>
-				<div id="idcheck_form">
-					<input type="button" id="btn01" value="아이디 인증" onclick="return id_ck();">
-					<%--이메일 인증 안 되면 alert 이메일을 먼저 인증해주세요. --%>
-				</div>
 				<div id="email_form">
 					<input id="m_email" name="m_email" placeholder="이메일"
-					onfocus="this.placeholder=''" onblur="this.placeholder='이메일'">
+					onfocus="this.placeholder=''" onblur="this.placeholder='이메일'" autocomplete="off">
 				</div>
 				<div id="button_form1">
-					<input type="button" id="btn02"  value="인증번호받기" onclick="return info_ck();">
-				</div>
-				
-				<div id="ck_form">
-					<input id="ck_email" name="ck_email" placeholder="인증번호"
-					onfocus="this.placeholder=''" onblur="this.placeholder='인증번호'">
-				</div>
-				<div id="button_form">
-					<input type="button" id="btn03" value="찾기" onclick="return last_ck();">
-					<%--이메일 인증 안 되면 alert 이메일을 먼저 인증해주세요. --%>
+					<input type="submit" id="btn02"  value="인증번호받기" onclick="return info_ck();">
 				</div>
 			</div>
 	</div>
 </div>
-
+</form>
 
 <%-- include : footer --%>
 <%@ include file="../include/footer.jsp" %>
