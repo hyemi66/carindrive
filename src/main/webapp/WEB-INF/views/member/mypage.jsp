@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="path" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html>
@@ -51,7 +52,7 @@
 					</tr>
 					<tr>
 						<th>가입날짜</th>
-						<td>${m.m_regdate}</td>
+						<td>${fn:substring(m.m_regdate,0,10)}</td>
 					</tr>
 					<tr>
 						<th>면허 등록 여부</th>
