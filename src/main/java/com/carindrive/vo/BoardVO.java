@@ -1,24 +1,25 @@
 package com.carindrive.vo;
 
-import lombok.Data;
+import java.util.Date;
 
-@Data
-public class BoardVO {
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-	private int bno;			//게시판 번호
-	private String writer;		//글쓴이
-	private String title;		//글제목
-	private String content;		//글내용
-	private int viewcnt;		//조회수
-	private String regdate;		//등록날짜
-	
-	private int replycnt;		//댓글 개수 카운터
-	
-	//페이징 => 쪽나누기
-	private int startrow;		//시작행 번호
-	private int endrow;			//끝행 번호
-	
-	public BoardVO() {}
-	
-	
+@Getter
+@Setter
+@ToString
+public class BoardVO { // c_service 테이블
+
+	private String cs_no;	// 작성자 아이디
+	private String cs_id; 		// 작성자 아이디
+	private String cs_pwd; 		// 작성자 비밀번호
+	private String cs_title; 	// 글제목
+	private String cs_cont; 		// 글내용
+	private Date cs_date; 		// 등록날짜(수정일 포함)
+	private int cs_hit; 			// 조회수
+	private int startrow; //시작행 번호
+	private int endrow;   //끝행 번호
+
+
 }

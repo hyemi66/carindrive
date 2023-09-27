@@ -1,6 +1,7 @@
 package com.carindrive.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.carindrive.vo.CarVO;
 import com.carindrive.vo.MemberVO;
@@ -8,11 +9,11 @@ import com.carindrive.vo.OrderVO;
 import com.carindrive.vo.RentalVO;
 
 public interface RentService {
-	
-	//차량 예약 요청
+
+	//차량 예약 정보 저장
 	void insertRental(RentalVO r);
 
-	//차량 렌트 내역 확인
+	//해당 고객의 모든차량 렌트 내역 확인
 	List<RentalVO> getRentList(String m_id);
 
 	//방금 예약한목록 가져오기
@@ -21,23 +22,42 @@ public interface RentService {
 	//회원 정보 확인(가져오기)
 	void getMemberList(MemberVO m);
 
-	//차 정보 가져오기
-	CarVO getCarInfo(String cr_cid);
+	//선택된 차 정보 가져오기
+	CarVO getCarInfo(String cr_cname);
 
 	//렌트 비용을 데이터베이스에 추가
 	void insertCost(int cr_num, double one_price);
 
 	//주문번호를 렌탈정보 데이터베이스에 추가
-	void insertMerchantId(String merchantId, int rental_id);
+	void insertMerchantId(String merchantId, int cr_num);
 
-	//주문내역 저장
-	void saveOrder(OrderVO order);
+	//주문번호를 기준으로 해당 예약내역을 선택
+	RentalVO getRentCar(String cr_order);
 
-	//주문내역 가져오기
-	List<OrderVO> getOrder(String buyer_name);
+	//모든 차 정보를 가져오기
+	List<CarVO> findAllCar();
 	
 	// 차 리스트 가져오기
 	List<CarVO> getCarList(CarVO cv);
+
+	//차량코드번호(프라이머리키)로 차정보 가져오기
+	CarVO getCarInfo2(int c_num);
+
+	//주문순서를 기준으로 주문번호가 null인것을 지우기
+	void delOrder(int cr_num);
+
+	//렌트한 차량 car_ok 1 -> 0으로 업데이트
+	//void updateCok(String c_name);
 	
+	//날짜 중복 체크 쿼리문
+	boolean checkDate(String carName, String startDate, String endDate);
+
+	// 선택된 차량에 대한 예약된 날짜 목록을 가져옴
+	List<String> getDateCar(String c_name);
 	
+	// 예약된 차 이름으로 c_car테이블 c_ok 0으로 변경
+	void updateCok(String c_name);
+		
+	// 결제오류시 차 이름으로 c_car테이블 c_ok 1로 변경
+	void delCok(String c_name);
 }

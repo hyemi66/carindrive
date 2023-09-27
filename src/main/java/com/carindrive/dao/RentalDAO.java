@@ -1,10 +1,10 @@
 package com.carindrive.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.carindrive.vo.CarVO;
 import com.carindrive.vo.MemberVO;
-import com.carindrive.vo.OrderVO;
 import com.carindrive.vo.RentalVO;
 
 public interface RentalDAO {
@@ -13,21 +13,31 @@ public interface RentalDAO {
 
 	List<RentalVO> getRentList(String m_id);
 	
-	RentalVO getRentOne(String m_id);
+	RentalVO getRentOne(String cr_mid);
 
 	void getMemberList(MemberVO m);
 
-	CarVO getCarInfo(int car_id);
+	CarVO getCarInfo(String cr_cname);
 
-	int insertCost(int rental_id, double rental_cost);
+	void insertCost(int cr_num, double one_price);
 
-	void insertMerchantId(String merchantId, int rental_id);
+	void insertMerchantId(String merchantId, int cr_num);
 
-	void saveOrder(OrderVO order);
+	RentalVO getRentCar(String cr_order);
 
-	List<OrderVO> getOrder(String buyer_name);
-
-
+	List<CarVO> findAllCar();
 	
+	List<CarVO> getCarList(CarVO cv);
+
+	CarVO getCarInfo2(int c_num);
+
+	void delOrder(int cr_num);
+
+	void updateCok(String c_name);
+	
+	int checkDate(Map<String, Object> params);
+
+	List<String> getDateCar(String c_name);
+
 
 }

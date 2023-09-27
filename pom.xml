@@ -23,8 +23,12 @@
 	
 	<dependencies>
 	
-		<!-- Mail설정 -->
-		
+		<!-- 포트원 라이브러리 사용에 필요한 도구 -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+		</dependency>
+	
 	
 		<!--  jsp 실행 가능하게 함. -->
        <dependency>
@@ -50,7 +54,6 @@
 	    <dependency>
 	        <groupId>org.springframework.boot</groupId>
 	        <artifactId>spring-boot-starter-mail</artifactId>
-	      
 	    </dependency>
 		
 		<dependency>

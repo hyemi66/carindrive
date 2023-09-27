@@ -1,15 +1,15 @@
 package com.carindrive.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.carindrive.dao.RentDAO;
 import com.carindrive.dao.RentalDAO;
 import com.carindrive.vo.CarVO;
 import com.carindrive.vo.MemberVO;
-import com.carindrive.vo.OrderVO;
 import com.carindrive.vo.RentalVO;
 
 @Service
@@ -18,58 +18,97 @@ public class RentServiceImpl implements RentService {
 	@Autowired
 	private RentalDAO rentalDao;
 	
-	@Autowired
-	private RentDAO rentDao;
-	
 	@Override
 	public void insertRental(RentalVO r) {
 		this.rentalDao.insertRental(r);
-	}
+	}//차량 예약 정보 저장
 
 	@Override
 	public List<RentalVO> getRentList(String m_id) {
 		return rentalDao.getRentList(m_id);
-	}
+	}//해당 고객의 모든차량 렌트 내역 확인
 	
 	@Override
-	public RentalVO getRentOne(String cr_mid) {
-		return this.rentalDao.getRentOne(cr_mid);
-	}
+	public RentalVO getRentOne(String m_id) {
+		return this.rentalDao.getRentOne(m_id);
+	}//방금 예약한목록 가져오기
 
 	@Override
 	public void getMemberList(MemberVO m) {
 		this.rentalDao.getMemberList(m);
-	}
+	}//회원 정보 확인(가져오기)
 
 	@Override
-	public CarVO getCarInfo(String cr_cid) {
-		return this.rentalDao.getCarInfo(cr_cid);
-	}
+	public CarVO getCarInfo(String cr_cname) {
+		return this.rentalDao.getCarInfo(cr_cname);
+	}//차 정보 가져오기
 
 	@Override
 	public void insertCost(int cr_num, double one_price) {
 	    this.rentalDao.insertCost(cr_num, one_price);
-	}
+	}//렌트 비용을 데이터베이스에 추가
 
 	@Override
 	public void insertMerchantId(String merchantId, int cr_num) {
 		this.rentalDao.insertMerchantId(merchantId, cr_num);
-	}
+	}//주문번호를 렌탈정보 데이터베이스에 추가
 
 	@Override
-	public void saveOrder(OrderVO order) {
-		this.rentalDao.saveOrder(order);
-	}
+	public RentalVO getRentCar(String cr_order) {
+		return this.rentalDao.getRentCar(cr_order);
+	}//주문번호를 기준으로 렌트내역을 가져옴
 
 	@Override
-	public List<OrderVO> getOrder(String buyer_name) {
-		return this.rentalDao.getOrder(buyer_name);
-	}
-
+	public List<CarVO> findAllCar() {
+		return this.rentalDao.findAllCar();
+	}//모든 차 정보를 가져오기
+	
 	@Override
 	public List<CarVO> getCarList(CarVO cv) {
-		return this.rentDao.getCarList(cv);
+		return this.rentalDao.getCarList(cv);
+	}//모든 차 정보를 가져오기
+
+	@Override
+	public CarVO getCarInfo2(int c_num) {
+		return this.rentalDao.getCarInfo2(c_num);
 	}
+
+	@Override
+	public void delOrder(int cr_num) {
+		this.rentalDao.delOrder(cr_num);
+	}
+
+	@Override
+	public void updateCok(String c_name) {
+		this.rentalDao.updateCok(c_name);
+	} // 예약된 차 이름으로 c_car테이블 c_ok 0으로 변경
+
+    @Override
+    public boolean checkDate(String cr_cname, String cr_sdate, String cr_edate) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("cr_cname", cr_cname);
+        params.put("cr_sdate", cr_sdate);
+        params.put("cr_edate", cr_edate);
+
+        int count = rentalDao.checkDate(params);
+
+        return count > 0; 
+    }//날짜 중복 체크
+
+	@Override
+	public List<String> getDateCar(String c_name) {
+		return this.rentalDao.getDateCar(c_name);
+	}// 선택된 차량에 대한 예약된 날짜 목록을 가져옴
+	
+	@Override
+	public void updateCok(String c_name) {
+	this.rentalDao.updateCok(c_name);
+	} // 예약된 차 이름으로 c_car테이블 c_ok 0으로 변경
+
+	@Override
+	public void delCok(String c_name) {
+	this.rentalDao.delCok(c_name);
+	} // 결제오류시 예약완료된 차 c_ok == 1으로 변경
 
 
 }

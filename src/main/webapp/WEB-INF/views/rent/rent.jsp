@@ -15,31 +15,12 @@
   <jsp:include page="../include/header.jsp"/>
   
   <div class="clear"></div>
+  
 <form method="post">
 <!-- 로그인 아이디 값을 히든으로 넘김 -->
-<input type="hidden" name="cr_mid" id="cr_mid" value="${loggedInUser.m_id}" required><br>
+<input type="hidden" name="cr_mid" id="cr_mid" value="${memberInfo.m_id}" required><br>
 <!-- 차 이름값을 히든으로 넘김 -->
 <%-- 예약 선택 메뉴 --%>
-<div class="mainmenu">
-<div id="menu01">
-	<p>
-		빌리는 날짜 | 
-		<input type="datetime-local" name="cr_sdate" id="cs_edate" required>
-	</p>
-</div>
-<div id="menu02">
-	<p>
-		반납하는 날짜 | 
-		<input type="datetime-local" name="cr_edate" id="cr_edate" required>
-	</p>
-</div>
-<div id="menu03">
-	<p>
-		대여시간 | 
-	</p>
-</div>
-</div>
-
 <div class="clear"></div>
 
 <br><br>
@@ -59,11 +40,26 @@
 	<input type="radio" name="tabmenu" id="tab06">
 	<label for="tab06">전기차</label>
 	
+	
+	<script>
+		function showCar(carname) {
+		    var cr_cname = carname.value;
+		    if (cr_cname) {
+		        window.location.href = "/rent/rentInfo?cr_cname=" + cr_cname;
+		    }
+		}
+
+	</script>
+	
+	<input type="hidden" name="cr_cname" id="cr_cname" value="${cr_cname}">
+	
 	<div class="conbox con1"> <!-- 전체 -->
+	<form>
 		<table>
 			<c:if test="${!empty clist}">
 				<tr>
 					<c:forEach var="c" items="${clist}" varStatus="status">
+						<input type="hidden" name=currentCar${status.index} value="${c.c_name}" >
 						<c:if test="${status.index % 3 == 0}">
 							</tr><tr>
 						</c:if>
@@ -80,20 +76,23 @@
 									<br>
 									24시간 : \ <fmt:formatNumber value="${c.c_price*60*24}" pattern="#,###"/>
 								</p>
-								<div id="box02"><input type="submit" value="예 약 하 기"></div>
+								<div id="box02">
+								    <c:choose>
+								        <c:when test="${c.c_ok == 0}">
+								            <span>대여중</span>
+								        </c:when>
+								        <c:otherwise>
+								            <input type="button" value="예 약 하 기" onclick="showCar(currentCar${status.index})" />
+								        </c:otherwise>
+								    </c:choose>
+								</div>
 							</div>
 						</td>
 					</c:forEach>
 				</tr>
 			</c:if>
-			<c:if test="${empty clist}">
-				<tr>
-					<td>
-						없음
-					</td>
-				</tr>
-			</c:if>
 		</table>
+	</form>
 	</div>
 	<div class="conbox con2"> <!-- 경형 -->
 		<table>
@@ -117,7 +116,9 @@
 										<br>
 										24시간 : \ <fmt:formatNumber value="${c.c_price*60*24}" pattern="#,###"/>
 									</p>
-									<div id="box02"><input type="submit" value="예 약 하 기"></div>
+									<div id="box02">
+										
+									</div>
 								</div>
 							</td>
 						</c:if>
@@ -148,7 +149,8 @@
 										<br>
 										24시간 : \ <fmt:formatNumber value="${c.c_price*60*24}" pattern="#,###"/>
 									</p>
-									<div id="box02"><input type="submit" value="예 약 하 기"></div>
+									<div id="box02">
+									</div>
 								</div>
 							</td>
 						</c:if>
@@ -176,11 +178,12 @@
 										<br>
 										24시간 : \ <fmt:formatNumber value="${c.c_price*60*24}" pattern="#,###"/>
 									</p>
-									<div id="box02"><input type="submit" value="예 약 하 기"></div>
+									<div id="box02">
+									</div>
 								</div>
 							</td>
 						</c:if>
-						<c:if test="${c.c_num == 8}">
+						<c:if test="${c.c_name == '3 시리즈'}">
 							</tr><tr>
 						</c:if>
 					</c:forEach>
@@ -207,7 +210,8 @@
 										<br>
 										24시간 : \ <fmt:formatNumber value="${c.c_price*60*24}" pattern="#,###"/>
 									</p>
-									<div id="box02"><input type="submit" value="예 약 하 기"></div>
+									<div id="box02">
+									</div>
 								</div>
 							</td>
 						</c:if>
@@ -241,7 +245,8 @@
 										<br>
 										24시간 : \ <fmt:formatNumber value="${c.c_price*60*24}" pattern="#,###"/>
 									</p>
-									<div id="box02"><input type="submit" value="예 약 하 기"></div>
+									<div id="box02">
+									</div>
 								</div>
 							</td>
 						</c:if>
