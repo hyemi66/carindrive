@@ -1,43 +1,49 @@
 @charset "UTF-8";
 
 .intro_main {
-	margin: 0px 20px;
+	margin: 10px 60px;
 }
 .intro_ceo {
-	width: 238px; float: left; margin: 20px;
-	border: 0px solid #ccc;
+	float: left;
+	margin: 0px 70px 0px 30px;
 	font-size: 1em;
 }
-
 .intro_ceo ul {
 	list-style: none;
 	margin: 20px 0px 0px 10px;
 }
 .intro_ceo a {
 	text-decoration: none;
-	color: black; display: block;
-	height: 15px; width: 150px; padding: 20px;
-	border-bottom-width: 1px;
-	border-bottom-color: #999;
-	border-bottom-style: dotted;
+	color: #6b6b6b; display: block;
+	height: 20px; width: 150px; padding: 30px 20px 20px 5px;
+	font-size: 18px;
 }
 .intro_ceo a:hover {
-	font-weight: 900;
+	font-weight: bold;
+	border-bottom: 1px solid #1c2b37;
+	width: 110px;
 }
 #intro_ceo_cont {
-	width: 1000px;
-	border: 0px solid #ccc;
+	border-left: 2px solid #ccc;
+	width: 900px;
 	float: right;
+	padding-left: 70px;
 	margin-right: 100px;
-	margin-bottom: 200px;
+	margin-bottom: 50px;
+}
+#intro_ceo_cont img {
+	width: 280px; height: 380px;
+	margin: 10px 20px;
 }
 #intro_ceo_cont h1 {
 	font-size: 45px; font-weight: bold;
 	color: #1c2b37;
 	margin: 20px 0px;
+	margin-bottom: 30px;
 }
 #intro_ceo_cont p {
 	padding-left: 10px;
+	font-size: 16.5px;
 }
 figure.ceo {
 	float: right; margin: 5px;
@@ -45,5 +51,12 @@ figure.ceo {
 figcaption {
 	text-align: center;
 	color: #1c2b37; font-weight: bolder;
-	font-size: 20px;
+	font-size: 18px;
+}
+#intro_img {
+	font-weight: bold;
+	color: #2b4153;
+}
+#intro_img img {
+	width: 850px; height: 600px;
 }

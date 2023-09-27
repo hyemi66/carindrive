@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>CarInDrive</title>
-<link rel="stylesheet" type="text/css" href="../../css/main.css">
+<link rel="stylesheet" type="text/css" href="${path}/css/main.css">
 </head>
 <body>
 <header>
@@ -32,11 +32,11 @@
 		<%-- 일반, 관리자 로그인 분리 임시 --%>    	
 		<c:choose>  
 			<c:when test="${id eq 'admin01'}"> 
-				 <b><span style="color: #1c2b37;">${id}님</span><a href="${path}/"> 관리자페이지</a></b> | <b><a href="${path}/member/m_logout">로그아웃</a></b> 
+				 <b><span style="color: #1c2b37;">${id}님</span><a href="${path}/admin/admin_main"> 관리자페이지</a></b> | <b><a href="${path}/member/m_logout">로그아웃</a></b> 
 			</c:when> 
 			
 			<c:when test="${!empty id}">
-				<b><span style="color: #1c2b37;">${id}님</span><a href="${path}/"> 마이페이지</a></b> | <b><a href="${path}/member/m_logout">로그아웃</a></b> 
+				<b><span style="color: #1c2b37;">${id}님</span><a href="${path}/member/mypage"> 마이페이지</a></b> | <b><a href="${path}/member/m_logout">로그아웃</a></b> 
 			</c:when>
 			
 			<c:otherwise>

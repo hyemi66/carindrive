@@ -9,11 +9,8 @@
 <meta charset="UTF-8">
 <title>날짜 선택</title>
 <script src="${path}/js/jquery.js"></script>
-<script src="${path}/js/payment.js"></script> <!-- 결제 코드 js -->
-<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 <link href="${path}/css/main.css" rel="stylesheet"/>
 <link href="${path}/css/rent.css" rel="stylesheet"/>
-<link href="${path}/css/rent_Wait.css" rel="stylesheet" />
 
 </head>
 <body>
@@ -108,27 +105,25 @@
 	
 	
 		<script>
-		    function showCar(carname) {
-		        var cr_cname = carname.value;
-		        var cr_sdate = document.getElementById("cr_sdate").value;
-		        var cr_edate = document.getElementById("cr_edate").value;
-		        
-		        if (cr_sdate >= cr_edate) {
-		            alert("빌리는 날짜보다 반납하는 날짜가 더 늦어야 합니다.\n날짜를 다시 선택해주세요");
-		            return; // 함수의 실행을 중지
-		        }
-		
-		        if (cr_cname) {
-		            window.location.href = "/rent/rentInfo?cr_cname=" + cr_cname + "&cr_sdate=" + cr_sdate + "&cr_edate=" + cr_edate;
-		        }
+		function showCar(carInput) {
+		    var cr_cname = carInput.value; // 변경 없음
+		    var cr_sdate = document.getElementById("cr_sdate").value;
+		    var cr_edate = document.getElementById("cr_edate").value;
+		    
+		    if (cr_sdate >= cr_edate) {
+		        alert("빌리는 날짜보다 반납하는 날짜가 더 늦어야 합니다.\n날짜를 다시 선택해주세요");
+		        return; // 함수의 실행을 중지
 		    }
+
+		    if (cr_cname) {
+		        window.location.href = "/rent/rentInfo?cr_cname=" + cr_cname + "&cr_sdate=" + cr_sdate + "&cr_edate=" + cr_edate;
+		    }
+		}
+
 		</script>
 
 	
-	<input type="hidden" name="cr_cname" id="cr_cname" value="${cr_cname}">
-	
 	<div class="conbox con1"> <!-- 전체 -->
-	<form>
 		<table>
 			<c:if test="${!empty clist}">
 				<tr>
@@ -151,7 +146,12 @@
 									24시간 : \ <fmt:formatNumber value="${c.c_price*60*24}" pattern="#,###"/>
 								</p>
 								<div id="box02">
-								    <input type="button" value="예 약 하 기" onclick="showCar(currentCar${status.index})" />
+								    <c:if test="${c.c_ok == 0}">
+											<input id="no" type="button" value="예 약 불 가" />
+										</c:if>
+										<c:if test="${c.c_ok == 1 }">
+										<input id="yes" type="button" value="예 약 하 기" onclick="showCar(document.getElementsByName('currentCar${status.index}')[0])" />
+									</c:if>
 								</div>
 							</div>
 						</td>
@@ -159,8 +159,8 @@
 				</tr>
 			</c:if>
 		</table>
-	</form>
 	</div>
+	
 	<div class="conbox con2"> <!-- 경형 -->
 		<table>
 			<c:if test="${!empty clist}">
@@ -170,6 +170,7 @@
 							</tr><tr>
 						</c:if>
 						<c:if test="${c.c_type2.equals('경형')}">
+							<input type="hidden" name=currentCar${status.index} value="${c.c_name}" >
 							<td>
 								<div id="box01">
 									<br><br><br>
@@ -184,7 +185,12 @@
 										24시간 : \ <fmt:formatNumber value="${c.c_price*60*24}" pattern="#,###"/>
 									</p>
 									<div id="box02">
-										
+										<c:if test="${c.c_ok == 0}">
+											<input id="no" type="button" value="예 약 불 가" />
+										</c:if>
+										<c:if test="${c.c_ok == 1 }">
+											<input id="yes" type="button" value="예 약 하 기" onclick="showCar(document.getElementsByName('currentCar${status.index}')[0])" />
+										</c:if>
 									</div>
 								</div>
 							</td>
@@ -203,6 +209,7 @@
 							</tr><tr>
 						</c:if>
 						<c:if test="${c.c_type2.equals('소형')}">
+							<input type="hidden" name=currentCar${status.index} value="${c.c_name}" >
 							<td>
 								<div id="box01">
 									<br><br><br>
@@ -217,8 +224,14 @@
 										24시간 : \ <fmt:formatNumber value="${c.c_price*60*24}" pattern="#,###"/>
 									</p>
 									<div id="box02">
+										<c:if test="${c.c_ok == 0}">
+											<input id="no" type="button" value="예 약 불 가" />
+										</c:if>
+										<c:if test="${c.c_ok == 1 }">
+											<input id="yes" type="button" value="예 약 하 기"
+												onclick="showCar(document.getElementsByName('currentCar${status.index}')[0])" />
+										</c:if>
 									</div>
-								</div>
 							</td>
 						</c:if>
 					</c:forEach>
@@ -232,6 +245,7 @@
 				<tr>
 					<c:forEach var="c" items="${clist}">
 						<c:if test="${c.c_type2.equals('중형 세단')}">
+							<input type="hidden" name=currentCar${status.index} value="${c.c_name}" >
 							<td>
 								<div id="box01">
 									<br><br><br>
@@ -246,8 +260,14 @@
 										24시간 : \ <fmt:formatNumber value="${c.c_price*60*24}" pattern="#,###"/>
 									</p>
 									<div id="box02">
+										<c:if test="${c.c_ok == 0}">
+											<input id="no" type="button" value="예 약 불 가" />
+										</c:if>
+										<c:if test="${c.c_ok == 1 }">
+											<input id="yes" type="button" value="예 약 하 기"
+												onclick="showCar(document.getElementsByName('currentCar${status.index}')[0])" />
+										</c:if>
 									</div>
-								</div>
 							</td>
 						</c:if>
 						<c:if test="${c.c_name == '3 시리즈'}">
@@ -264,6 +284,7 @@
 				<tr>
 					<c:forEach var="c" items="${clist}" varStatus="status">
 						<c:if test="${c.c_type2.equals('중형 SUV')}">
+							<input type="hidden" name=currentCar${status.index} value="${c.c_name}" >
 							<td>
 								<div id="box01">
 									<br><br><br>
@@ -278,8 +299,14 @@
 										24시간 : \ <fmt:formatNumber value="${c.c_price*60*24}" pattern="#,###"/>
 									</p>
 									<div id="box02">
+										<c:if test="${c.c_ok == 0}">
+											<input id="no" type="button" value="예 약 불 가" />
+										</c:if>
+										<c:if test="${c.c_ok == 1 }">
+											<input id="yes" type="button" value="예 약 하 기"
+												onclick="showCar(document.getElementsByName('currentCar${status.index}')[0])" />
+										</c:if>
 									</div>
-								</div>
 							</td>
 						</c:if>
 						<c:if test="${status.index % 3 == 0}">
@@ -299,6 +326,7 @@
 							</tr><tr>
 						</c:if>
 						<c:if test="${c.c_type2.equals('전기차')}">
+							<input type="hidden" name=currentCar${status.index} value="${c.c_name}" >
 							<td>
 								<div id="box01">
 									<br><br><br>
@@ -313,8 +341,14 @@
 										24시간 : \ <fmt:formatNumber value="${c.c_price*60*24}" pattern="#,###"/>
 									</p>
 									<div id="box02">
+										<c:if test="${c.c_ok == 0}">
+											<input id="no" type="button" value="예 약 불 가" />
+										</c:if>
+										<c:if test="${c.c_ok == 1 }">
+											<input id="yes" type="button" value="예 약 하 기"
+												onclick="showCar(document.getElementsByName('currentCar${status.index}')[0])" />
+										</c:if>
 									</div>
-								</div>
 							</td>
 						</c:if>
 					</c:forEach>
@@ -323,7 +357,6 @@
 		</table>
 	</div>
 </div>
-</form>
 
 
 <br>

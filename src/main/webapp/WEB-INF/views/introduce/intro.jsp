@@ -25,7 +25,7 @@
 </div>
 
 <article id="intro_ceo_cont">
-	<h1>| 회사소개 |</h1>
+	<h1>회사소개</h1>
 	<p>
 		&nbsp;&nbsp;동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려 강산 대한 사람 대한으로 
 		길이 보전하세 남산 위에 저 소나무 철갑을 두른 듯 바람 서리 불변함은 우리 기상일세 무궁화 삼천리 화려 강산 대한 사람 대한으로 길이
@@ -64,32 +64,8 @@
 		한 움큼씩 나눴던 진심도 너무 쉬웠던 대답도 못 잊게 사랑한 여러 번의 계절도 안녕 모두 안녕 전부 알 것 같아도 더 이상의 이해는 없었음 좋겠어
 		묻고 싶지만 끝내 그 대답을 듣지 못했음 좋겠어 변함없이 정직한 두 눈도 약속한 겨울바다도 못 잊게 행복했던 어린 날의 나도 안녕 모두 안녕 안녕 모두
 	</p>
-	<p style="float:right">
-		<b>CARINDRIVE CEO HOOLL</b>
-	</p>
+	<div class="clear"></div>
 </article>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
 </div>
 
 <jsp:include page="../include/footer.jsp"/>

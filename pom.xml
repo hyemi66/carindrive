@@ -22,6 +22,12 @@
 		<java.version>1.8</java.version>
 	</properties>
 	<dependencies>
+	
+			 <!-- SpringBoot mailService -->
+		<dependency>
+			 <groupId>org.springframework.boot</groupId>
+			  <artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
 
 		<!-- 포트원 라이브러리 사용에 필요한 도구 -->
 		<dependency>

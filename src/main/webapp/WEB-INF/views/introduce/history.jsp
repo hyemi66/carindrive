@@ -25,7 +25,7 @@
 </div>
 
 <article id="intro_ceo_cont">
-	<h1>| 회사연혁 |</h1>
+	<h1>회사연혁</h1>
 	<div class="y2023">
 	<h3>2023</h3>
 	<dl>
@@ -89,32 +89,6 @@
 		<div class="clear"></div>
 	</div>
 </article>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
 </div>
 
 <jsp:include page="../include/footer.jsp"/>

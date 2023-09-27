@@ -16,7 +16,7 @@
 <!-- 페이지 내용 -->
 
 <div class="mainimg">
-	<h1>메인 사진</h1>
+	<img alt="메인사진" src="${path}/images/MAINIMG.jpg">
 </div>
 
 <div class="main_car">
@@ -32,18 +32,27 @@
 	</div>
 </div>
 <hr id="m_hr">
-<div id="m_event">
-	<p id="me_font">CARINDRIVE MAIN EVENT</p>
-	<p id="me_font2">
-		<a href="${path}/event/event">▷ 이벤트 전체보기</a>
-	</p>
-	<div id="me_ev">
-		<p>메인 이벤트1</p>
-		<p>메인 이벤트2</p>
-		<br>
-		<p>메인 이벤트3</p>
-		<p>메인 이벤트4</p>
+<div class="m_event">
+	<p id="m_font1">CARINDRIVE EVENT</p>
+	<div class="m_tab_content">
+		<input type="radio" name="m_tabmenu" id="tab01" checked>
+		<input type="radio" name="m_tabmenu" id="tab02">
+		<input type="radio" name="m_tabmenu" id="tab03">
+		
+		<div class="m_conbox con1">이벤트 1</div>
+		<div class="m_conbox con2">이벤트 2</div>
+		<div class="m_conbox con3">이벤트 3</div>
+		
+		<div class="m_btn">
+			<label for="tab01"></label>
+			<label for="tab02"></label>
+			<label for="tab03"></label>
+			<p id="m_fullev">
+				<a href="${path}/event/event">▶이벤트 전체 보기</a>
+			</p>
+		</div>
 	</div>
+	
 </div>
 <div class="m_ser">
 	<input type="button" value="고객센터" onclick="location='${path}/service/service_center'">

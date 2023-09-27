@@ -37,7 +37,7 @@ nav ul li {
 nav a {
   display: flex;
   height: 20px;
-  padding: 20px;
+  padding: 10px;
   font-size: 20px;
   font-weight: bold;
   text-decoration: none;
@@ -74,12 +74,11 @@ footer {
 }
 /* 메인 이미지 */
 .mainimg {
-	background-color: #ccc;
-	height: 600px;
-	margin: 10px 100px 0px 100px;
+	margin: 20px 100px 0px 100px;
 }
-.mainimg h1 {
-	text-align: center;
+.mainimg img {
+	width: 1320px;
+	height: 600px;
 }
 /* 메인이미지 밑에 */
 .main_car {
@@ -117,37 +116,63 @@ footer {
 	width: 550px; height: 350px;
 	margin-top: 20px;
 }
-/* 이벤트 */
 #m_hr {
 	width: 1450px;
 }
-#m_event {
-	margin: 50px 100px;
-	height: 1300px;
+/* 이벤트 넘기기 */
+.m_event {
 	text-align: center;
+	margin: 0px 100px;
+	margin-bottom: 50px;
 }
-#me_font {
-	font-size: 60px;
-	font-weight: bold;
-	color: #1c2b37;
+.m_tab_content input[type="radio"] {
+	display: none;
 }
-#me_font2 {
-	font-size: 15px;
-	font-weight: bold;
-	margin-left: 1130px;
+.m_conbox {
+	width: 1200px;
+	height: 600px;
+	background: #aaa;
+	display: none;
+	margin-left: 70px;
 }
-#me_font2 a {
+.m_btn {
+	padding: 20px;
+	margin-left: 220px;
+}
+label[for*="tab"] {
+	display: inline-block;
+	padding: 10px;
+	background: #ccc;
+	cursor: pointer;
+	margin: 5px;
+	border-radius: 100%;
+}
+input[id="tab01"]:checked ~ .con1 {
+	display: block;
+}
+input[id="tab02"]:checked ~ .con2 {
+	display: block;
+}
+input[id="tab03"]:checked ~ .con3 {
+	display: block;
+}
+input[id="tab01"]:checked ~ .m_btn > label[for="tab01"] {
+	background: #1c2b37;
+}
+input[id="tab02"]:checked ~ .m_btn > label[for="tab02"] {
+	background: #1c2b37;
+}
+input[id="tab03"]:checked ~ .m_btn > label[for="tab03"] {
+	background: #1c2b37;
+}
+#m_fullev {
+	float: right;
+	margin-right: 40px;
+}
+#m_fullev a {
 	text-decoration: none;
 	color: #1c2b37;
-}
-#me_ev {
-	margin-left: 23px;
-}
-#me_ev p {
-	border: 1px solid #1c2b37;
-	width: 600px; height: 500px;
-	float: left;
-	margin: 20px;
+	font-weight: bold;
 }
 /* 안내서비스 */
 .m_ser {

@@ -99,9 +99,6 @@ public class RentCheckController {
 			this.rentService.waitTime(orderInfo.getMerchantId());
 		
 			System.out.println("현재 렌트하는 차량이름: "+rental.getCr_cname());
-			// 예약된 차 c_ok == 0으로 변경
-			String c_name = rental.getCr_cname(); // 렌탈된 차 이름 가져오기
-			this.rentService.updateCok(c_name); // primarykey 차 이름으로 c_car테이블 c_ok 컬럼 업데이트
 
 			map.put("orderInfo", orderInfo);
 			map.put("rental", rental);

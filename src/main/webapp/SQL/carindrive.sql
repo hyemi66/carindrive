@@ -96,6 +96,7 @@ UPDATE c_car SET c_ok = 0 WHERE c_name = '캐스퍼';
 
 
 --시퀀스 생성
+create SEQUENCE social_seq INCREMENT by 1 START WITH 1 NOCACHE; --이메일 관련 시퀀스
 CREATE SEQUENCE cs_seq START WITH 1 INCREMENT BY 1 NOCACHE;  -- 공지사항 테이블 시퀀스
 CREATE SEQUENCE cq_seq START WITH 1 INCREMENT BY 1 NOCACHE;  -- Q&A 테이블 시퀀스
 CREATE SEQUENCE car_seq START WITH 1 INCREMENT BY 1 NOCACHE; -- 차 정보 테이블 시퀀스
@@ -141,6 +142,18 @@ CREATE TABLE c_member (
     m_phone VARCHAR2(30),
     m_state NUMBER,
     m_regdate DATE
+);
+
+--이메일 테이블
+create table social(
+ id NUMBER(19) DEFAULT social_seq.nextval primary key ,
+ username VARCHAR2(400) not null,
+ password VARCHAR2(200) not null,
+ email VARCHAR2(400) not null,
+ role  VARCHAR2(255 CHAR) DEFAULT 'user',
+ create_date DATE DEFAULT SYSDATE,
+ k_state NUMBER(38)
+
 );
 
 

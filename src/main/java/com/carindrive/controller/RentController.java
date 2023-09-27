@@ -64,7 +64,6 @@ public class RentController {
 			model.setViewName("redirect:/member/m_login");
 			return model;
 		}
-		
 	};
 
 	//날짜를 선택하면 그거에 맞춰서 예약할수있는 차량만 등장
@@ -103,8 +102,16 @@ public class RentController {
 			    // getCr_waittime() 값이 null이나 "(null)"인 경우 "9999-01-01 01:01"로 대체
 			    String waitTime = rentalDate.getCr_waittime();
 			    if (waitTime == null || waitTime.equals("(null)")) {
-			        waitTime = "9999-01-01 01:01";
+			        // cr_edate를 LocalDateTime 객체로 변환
+			        LocalDateTime dateTime = LocalDateTime.parse(cr_edate, formatter);
+			        
+			        // 3시간 더하기
+			        dateTime = dateTime.plusHours(3);
+			        
+			        // LocalDateTime 객체를 다시 문자열로 변환
+			        waitTime = dateTime.format(formatter);
 			    }
+
 			    LocalDateTime usedEdate = LocalDateTime.parse(waitTime, formatter);
 
 			    //사용자가 선택한 날짜
