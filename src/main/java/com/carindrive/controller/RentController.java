@@ -1,5 +1,6 @@
 package com.carindrive.controller;
 
+import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -10,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,23 +44,23 @@ public class RentController {
 	@RequestMapping("/rent") //처음에는 모든차량을 불러옴
 	public ModelAndView rent(HttpServletRequest request,CarVO cv, HttpSession session, RedirectAttributes rttr) {
 		System.out.println("rent메서드 GET 동작");
-		
+
 		ModelAndView model = new ModelAndView();
-		
+
 		// 로그인 정보 가져오기
 		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
 		if(memberInfo != null) {
-		
-		//해당 아이디의 결제 중단 내역들을 전부 제거	
-		this.rentService.rentalDel2(memberInfo.getM_id());
-		System.out.println("결제중단 내역들 삭제후 차량 출력");
-			
-		List<CarVO> clist = this.rentService.getCarList(cv); // 차량 리스트 불러오기
 
-		model.setViewName("/rent/rent");
-		model.addObject("clist", clist);
+			//해당 아이디의 결제 중단 내역들을 전부 제거	
+			this.rentService.rentalDel2(memberInfo.getM_id());
+			System.out.println("결제중단 내역들 삭제후 차량 출력");
 
-		return model;
+			List<CarVO> clist = this.rentService.getCarList(cv); // 차량 리스트 불러오기
+
+			model.setViewName("/rent/rent");
+			model.addObject("clist", clist);
+
+			return model;
 		}else {
 			rttr.addFlashAttribute("LoginNull", "alert('로그인 이후 이용 가능합니다!');");
 			model.setViewName("redirect:/member/m_login");
@@ -69,8 +71,8 @@ public class RentController {
 	//날짜를 선택하면 그거에 맞춰서 예약할수있는 차량만 등장
 	@RequestMapping(value="/rent", method=RequestMethod.POST)
 	public ModelAndView rent(@RequestParam String cr_sdate, 
-							 @RequestParam String cr_edate, 
-							 HttpSession session, RedirectAttributes rttr, HttpServletRequest request) {
+			@RequestParam String cr_edate, 
+			HttpSession session, RedirectAttributes rttr, HttpServletRequest request) {
 		System.out.println("rent메서드 POST 동작");
 		ModelAndView model = new ModelAndView("/rent/rent");
 
@@ -83,41 +85,41 @@ public class RentController {
 
 			// 해당 차량이 선택된 날짜에 이미 예약되었는지 확인
 			List<RentalVO> allRentalDate = this.rentService.getDateCar(car.getC_name());
-			
+
 			if(allRentalDate == null) {
 				continue; // 해당 차량에 대한 예약 내역이 없다면 다음 차량의 예약 내역 검사
 			}
 
 			boolean rentOk = true;
-			
+
 			//String으로 날짜를 비교하기 위해 날짜형식을 전부 다 동일하게 맞춤
 			cr_sdate = cr_sdate.replace("T", " "); // 중간에 껴있는 T문자를 공백처리함
 			cr_edate = cr_edate.replace("T", " ");
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
 			for(RentalVO rentalDate : allRentalDate) {
-			    //예약이 되어있는 날짜
-			    LocalDateTime usedSdate = LocalDateTime.parse(rentalDate.getCr_sdate(), formatter);
-			    
-			    // getCr_waittime() 값이 null이나 "(null)"인 경우 "9999-01-01 01:01"로 대체
-			    String waitTime = rentalDate.getCr_waittime();
-			    if (waitTime == null || waitTime.equals("(null)")) {
-			        // cr_edate를 LocalDateTime 객체로 변환
-			        LocalDateTime dateTime = LocalDateTime.parse(cr_edate, formatter);
-			        
-			        // 3시간 더하기
-			        dateTime = dateTime.plusHours(3);
-			        
-			        // LocalDateTime 객체를 다시 문자열로 변환
-			        waitTime = dateTime.format(formatter);
-			    }
+				//예약이 되어있는 날짜
+				LocalDateTime usedSdate = LocalDateTime.parse(rentalDate.getCr_sdate(), formatter);
 
-			    LocalDateTime usedEdate = LocalDateTime.parse(waitTime, formatter);
+				// getCr_waittime() 값이 null이나 "(null)"인 경우 "9999-01-01 01:01"로 대체
+				String waitTime = rentalDate.getCr_waittime();
+				if (waitTime == null || waitTime.equals("(null)")) {
+					// cr_edate를 LocalDateTime 객체로 변환
+					LocalDateTime dateTime = LocalDateTime.parse(cr_edate, formatter);
 
-			    //사용자가 선택한 날짜
-			    LocalDateTime selectSdate = LocalDateTime.parse(cr_sdate, formatter);
-			    LocalDateTime selectEdate = LocalDateTime.parse(cr_edate, formatter);
-			
+					// 3시간 더하기
+					dateTime = dateTime.plusHours(3);
+
+					// LocalDateTime 객체를 다시 문자열로 변환
+					waitTime = dateTime.format(formatter);
+				}
+
+				LocalDateTime usedEdate = LocalDateTime.parse(waitTime, formatter);
+
+				//사용자가 선택한 날짜
+				LocalDateTime selectSdate = LocalDateTime.parse(cr_sdate, formatter);
+				LocalDateTime selectEdate = LocalDateTime.parse(cr_edate, formatter);
+
 				//날짜 충돌 확인
 				if (																			//하나라도 만족하면 false
 						(selectSdate.isAfter(usedSdate) && selectSdate.isBefore(usedEdate)) ||  // 사용자가 선택한 시작 날짜가 예약된 기간 내에 있는 경우. 
@@ -146,31 +148,40 @@ public class RentController {
 
 	@GetMapping("/rentInfo")
 	public ModelAndView rentInfo(@RequestParam String cr_cname, 
-								 @RequestParam String cr_sdate,
-								 @RequestParam String cr_edate,
-								 HttpSession session, RedirectAttributes rttr, HttpServletRequest request) {
+			@RequestParam String cr_sdate,
+			@RequestParam String cr_edate,
+			HttpSession session, RedirectAttributes rttr, HttpServletRequest request) {
 
 		System.out.println("rentInfo(GET)메서드 동작");
-
 		ModelAndView model = new ModelAndView();
-		//if문을 사용하기위한 로그인 정보
-		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+		try {
+			
+			//if문을 사용하기위한 로그인 정보
+			MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
 
-		//선택된 차량의 정보를 출력하기 위함
-		CarVO car = this.rentService.getCarInfo(cr_cname);
+			//선택된 차량의 정보를 출력하기 위함
+			CarVO car = this.rentService.getCarInfo(cr_cname);
 
-		model.addObject("car",car);
-		model.addObject("cr_cname",cr_cname);
-		model.addObject("cr_sdate", cr_sdate);
-		model.addObject("cr_edate", cr_edate);
-		model.setViewName("rent/rentInfo");
-		return model;
+			model.addObject("car",car);
+			model.addObject("cr_cname",cr_cname);
+			model.addObject("cr_sdate", cr_sdate);
+			model.addObject("cr_edate", cr_edate);
+			model.setViewName("rent/rentInfo");
+			return model;
+		}catch (Exception e) {
+			e.printStackTrace();
+			return new ModelAndView("redirect:/rent/rent");
+		}
 	}
 
 	@PostMapping("/rentInfo") //선택된 날짜를 처리
-	public ModelAndView rentInfo(RentalVO r, HttpSession session, RedirectAttributes rttr, HttpServletRequest request) {
+	public ModelAndView rentInfo(RentalVO r, HttpSession session, RedirectAttributes rttr, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
 		ModelAndView model = new ModelAndView();
 		System.out.println("rentInfo(POST)메서드 동작");
+
+		response.setContentType("text/html;charset=UTF-8");
+		PrintWriter out = response.getWriter();
 
 		//예약이 가능한지를 비교 하기 위해 렌트빌리는 날짜, 반납하는 날짜를 사용함
 		String cr_sdate = r.getCr_sdate();
@@ -185,14 +196,16 @@ public class RentController {
 		System.out.println("isDuplicate value: " + isDuplicate);
 
 		if (isDuplicate) {//날짜를 비교해서 해당차량이 현재 예약과 겹친다면 true를 반환
-			rttr.addFlashAttribute("msg", "다른 사용자가 결제를 진행중입니다. 다시 예약을 진행해주세요.");
+			out.println("<script>");
+			out.println("alert('다른 사용자가 결제를 진행중입니다. 다시 예약을 진행해주세요.');");
+			out.println("</script>");
 			return new ModelAndView("redirect:/rent/rent");
 		}
-		
-			//로그인 정보 가져오기
-			MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
-			if (memberInfo != null) {//로그인이 되었을 때
-			
+
+		//로그인 정보 가져오기
+		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+		if (memberInfo != null) {//로그인이 되었을 때
+
 			System.out.println("멤버정보: "+memberInfo);
 			r.setCr_mid(memberInfo.getM_id());
 
@@ -223,6 +236,7 @@ public class RentController {
 			rttr.addFlashAttribute("LoginNull", "alert('로그인 이후 이용 가능합니다!');");
 			return new ModelAndView("redirect:/member/m_login");
 		}
+
 	}
 
 	//차 예약 완료전 결제창
@@ -266,10 +280,10 @@ public class RentController {
 
 			//렌트 비용을 c_rental 테이블에 추가
 			this.rentService.insertCost(rental.getCr_num(),one_price);
-			
+
 			//5분안에 결제를 진행안하고 취소를 하면 해당 렌트내역은 5분뒤에 사라지고, 5분동안 해당차량 렌트 불가
 			this.rentService.rentalDel();
-			
+
 			System.out.println("rentOK의 모든 메서드 동작완료");
 
 			model.addAttribute("rental", rental);						//렌탈정보

@@ -237,14 +237,12 @@ public class RentCheckController {
 	@RequestMapping(value="/timeUp")
 	public ModelAndView timeUp(@RequestParam int c_num,
 							   @RequestParam String order_number, 
-							   HttpServletResponse response, HttpSession session, RedirectAttributes rttr) 
+							   HttpSession session, RedirectAttributes rttr) 
 							   throws Exception {
 		System.out.println("timeUp메서드 동작");
 		System.out.println("차량 코드번호: "+c_num);//차량코드번호
 		System.out.println("결제 주문번호: "+order_number);//차량코드번호
 
-		response.setContentType("text/html;charset=UTF-8");
-		PrintWriter out = response.getWriter();
 		ModelAndView model = new ModelAndView();
 
 		// 로그인 정보 가져오기
