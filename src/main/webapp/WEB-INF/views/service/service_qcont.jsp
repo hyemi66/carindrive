@@ -54,8 +54,6 @@
 		</c:if>
 	</table>
 	<div  class="write-menu">
-		<input type="button" value="답변"
-			onclick="location='service_qcont?cq_no=${q.cq_no}&page=${page}&state=reply';" />
 		<input type="button" value="수정"
 			onclick="location='service_qcont?cq_no=${q.cq_no}&page=${page}&state=edit';" />
 		<input type="button" value="삭제"

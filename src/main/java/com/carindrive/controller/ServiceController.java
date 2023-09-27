@@ -116,7 +116,7 @@ public class ServiceController {
 		ServiceVO g = this.serviceSv.getCs_Cont(cs_no);
 		String g_cont=g.getCs_cont().replace("\n","<br/>");
 
-		ModelAndView gm=new ModelAndView("service/service_ncont");
+		ModelAndView gm = new ModelAndView("service/service_ncont");
 		gm.addObject("g",g);
 		gm.addObject("g_cont",g_cont);
 		return gm;
@@ -364,6 +364,48 @@ public class ServiceController {
 	}
 	
 	
+	// 1대1문의 확인(비밀번호 확인)
+   @RequestMapping("/service_qpwdCheck")
+   public ModelAndView service_qpwdCheck(
+		   int cq_no, int page, String state, QnaVO q){
+	   
+		q = this.serviceSv.qpwdCheck(cq_no);
+		
+		ModelAndView pc = new ModelAndView();
+		pc.addObject("q", q);
+		pc.addObject("page", page);
+		pc.addObject("cq_no", cq_no);
+		pc.addObject("state", state);
+		pc.setViewName("/service/service_qpwdCheck");
+		
+		return pc;
+   }
+	
+   
+   @RequestMapping("/qpwdCheck_ok")
+   public String qpwdCheck_ok(
+		   int cq_no, int page, String state, HttpServletRequest request,
+		   HttpServletResponse response, QnaVO q) throws IOException {
+	   
+	   response.setContentType("text/html; charset=UTF-8");
+	   PrintWriter out = response.getWriter();
+	   
+	   String cq_pwd = request.getParameter("cq_pwd");
+	   
+	   if(!q.getCq_pwd().equals(cq_pwd)) {
+		   out.println("<script>");
+		   out.println("alert('비번이 다릅니다!');");
+		   out.println("location='service_qpwdCheck';");
+		   out.println("</script>"); 
+	   } else {
+		   ModelAndView pc = new ModelAndView();
+		   pc.addObject("q", q);
+		   return "redirect:/service/service_qcont?cq_no="+cq_no+"&state="+state+"&page="+page;
+		   }
+	   return null;
+   }
+	
+	
 	//1대1문의 내용보기+답변폼+수정폼+삭제폼
 	@RequestMapping("/service_qcont")
 	public ModelAndView service_qcont(
@@ -371,8 +413,8 @@ public class ServiceController {
 		
 		String cq_id=(String)session.getAttribute("id");
 		
-		if(state.equals("cont")) {//내용보기일때만 조회수 증가 시킨다.
-			q=this.serviceSv.getQnaCont2(cq_no);
+		if(state.equals("cont")) {
+			q = this.serviceSv.getQnaCont2(cq_no);
 		}
 		
 		ModelAndView cm = new ModelAndView();
@@ -382,8 +424,6 @@ public class ServiceController {
 		
 		if(state.equals("cont")) {//내용보기 일때 실행할 뷰페이지 경로
 			cm.setViewName("./service/service_qcont");	
-		}else if(state.equals("reply")) {//답변 폼일때
-			cm.setViewName("./service/service_qreply");
 		}else if(state.equals("edit")) {//자료실 수정폼일때
 			cm.setViewName("./service/service_qedit");
 		}else if(state.equals("del")) {//삭제폼일 때
@@ -394,18 +434,7 @@ public class ServiceController {
 	
 	
 	
-	
-	//답변저장
-	@PostMapping("/qna_reply_ok")
-	public String bbs_reply_ok(QnaVO q,int page) {
-		this.serviceSv.replyqna(q);
-		return "redirect:/service_qboard?page="+page; // 목록 보기로 이동
-	}
-	
-	
-	
-	
-	//답변 수정
+	// 1대1문의 수정
 		@RequestMapping(value="/qna_edit_ok",method=RequestMethod.POST)
 		public ModelAndView qna_edit_ok(HttpServletRequest request,
 				HttpServletResponse response,QnaVO q, HttpSession session) throws Exception{
@@ -486,7 +515,7 @@ public class ServiceController {
 				
 				this.serviceSv.editQna(q);//자료실 수정
 				
-				ModelAndView em=new ModelAndView("redirect:/service_qcont");
+				ModelAndView em=new ModelAndView("redirect:/service/service_qcont");
 				em.addObject("cq_no",cq_no);
 				em.addObject("page",page);
 				em.addObject("state","cont");
@@ -497,18 +526,24 @@ public class ServiceController {
 		
 		
 		
-		//자료실 삭제
+		//1대1문의 삭제
 		@RequestMapping("/qna_del_ok") 
-		public ModelAndView qna_del_ok(int cq_no,int page,@RequestParam("cq_pwd")
-		String cq_pwd, HttpServletResponse response,HttpServletRequest request)
+		public ModelAndView qna_del_ok(
+				@RequestParam("cq_no") int cq_no, int page, @RequestParam("del_pwd")
+		String del_pwd, HttpServletResponse response,HttpServletRequest request)
 		throws Exception{
 	 
 			response.setContentType("text/html;charset=UTF-8");
 			PrintWriter out=response.getWriter();
 			String delFolder=request.getRealPath("upload");
 			
-			QnaVO db_pwd=this.serviceSv.getQnaCont2(cq_no);
-			if(!db_pwd.getCq_pwd().equals(cq_pwd)) {
+			QnaVO db_pwd = this.serviceSv.getQnaCont2(cq_no);
+			
+			System.out.println(cq_no);
+			System.out.println(del_pwd);
+			
+			
+			if(!db_pwd.getCq_pwd().equals(del_pwd)) {
 				out.println("<script>");
 				out.println("alert('비번이 다릅니다!');");
 				out.println("history.go(-1);");
@@ -523,7 +558,7 @@ public class ServiceController {
 				}
 				
 				ModelAndView dm=new ModelAndView();
-				dm.setViewName("redirect:/service_qboard?page="+page);
+				dm.setViewName("redirect:/service/service_qboard?page="+page);
 				return dm;
 			}
 			return null;

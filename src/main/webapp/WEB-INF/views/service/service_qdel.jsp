@@ -44,10 +44,8 @@
 
 <main>
 <div id="bsDel_wrap">
-<form method="post" 
-action="qna_del_ok?cq_no=${q.cq_no}" onsubmit="return del_check();">
-      <%-- cq_no는 get방식으로, page와 del_pwd는 post방식으로 전달 --%>
-          <input type="hidden" name="page" value="${page}" />
+<form method="post" action="qna_del_ok?cq_no=${q.cq_no}" onsubmit="return del_check();">
+	<input type="hidden" name="page" value="${page}" />
 	<table class="qpwdCheck-table">
 	<caption class="main_title">비밀번호 재확인</caption>
             <tr>

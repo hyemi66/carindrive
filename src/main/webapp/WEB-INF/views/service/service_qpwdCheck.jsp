@@ -37,10 +37,14 @@
 <main>
 <div class="qpwdCheck">
 <form method="post" action="qpwdCheck_ok">
+
+	<input type="hidden" name="cq_no" value="${cq_no}" >
+	<input type="hidden" name="page" value="${page}" >
+	<input type="hidden" name="state" value="${state}" >
+	
 	<table class="qpwdCheck-table">
 	<caption class="main_title">비밀번호 재확인</caption>
 	<caption class="ex">회원님의 정보를 안전하게 보호하기 위해 비밀번호를 다시 한번 확인해주세요.</caption>
-		<c:forEach var="qna" items="${qnalist}">
 		<tr>
 			<th>회원 아이디</th>
 			<td>${q.cq_id}</td>
@@ -52,9 +56,8 @@
 			<th>게시물 비밀번호&nbsp;<font style="color:red;">*</font></th>
 			<td><input type="password" size="14" id="cq_pwd" name="cq_pwd"></td>
 		</tr>
-		</c:forEach>
 	</table>
-	<input id="qpwdCheck" type="submit" value="확인" />
+	<input id="qpwdCheck" type="submit" value="확인"/>
 </form>
 <div class="clear"></div>
 </div>

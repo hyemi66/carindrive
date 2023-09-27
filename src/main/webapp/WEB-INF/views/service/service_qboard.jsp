@@ -62,7 +62,7 @@
                   		</c:forEach>
                 		  <img src="./images/AnswerLine.gif" > <%--답변글 이미지 출력 --%>
              			</c:if>							      
-				<a href="service_qcont?cq_no=${q.cq_no}&state=cont&page=${page}">${q.cq_title}</a>
+				<a href="service_qpwdCheck?cq_no=${q.cq_no}&state=cont&page=${page}">${q.cq_title}</a>
 				</td>
 				<td align="center">${q.cq_id}</td>
 				<td align="center">${fn:substring(q.cq_date,0,10)}</td>
@@ -78,7 +78,6 @@
 			</c:if>
 			</table>
 			<div id="write-button">
-			<input type="button" value="글쓰기" onclick="location='service_qwrite';" />
 			</div>
 
 		<%--페이징(쪽나누기)--%>
@@ -145,6 +144,7 @@
 		
 		<input type="search" name="find_name" id="find_name"size="16" value="${find_name}" >
 		<input type="submit" value="검색" >
+		<input type="button" value="글쓰기" onclick="location='service_qwrite';" />
 		</div>
 	</div>
 </form>

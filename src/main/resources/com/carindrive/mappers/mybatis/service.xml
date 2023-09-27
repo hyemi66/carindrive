@@ -121,11 +121,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    <select id="qpwdCheck_b" resultType="qna">
 		select * from c_qna where cq_no=#{cq_no}
 	</select>
+   -->
    
-  	내용보기
+  	<!-- 1대1문의 확인용 비밀번호 확인 페이지  -->
    <select id="qpwdCheck" resultType="com.carindrive.vo.QnaVO">
      select * from c_qna where cq_no=#{cq_no}
-   </select> -->
+   </select>
    
       <!-- 1대1문의 내용보기 -->
    <select id="qna_cont" resultType="com.carindrive.vo.QnaVO">
