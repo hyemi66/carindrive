@@ -94,21 +94,14 @@ public class RentCheckController {
 			// 데이터베이스에 OrderVO 결제정보 저장
 			this.orderService.saveOrder(orderInfo);
 			//결제 완료시 렌탈테이블의 wait를 clear로 변경 (주문번호 기준)
-			rentService.rentalStatus(orderInfo.getMerchantId());
-
-//			List<RentalVO> allRentals = this.rentService.getRentList(memberInfo.getM_id());
-//			for (RentalVO r : allRentals) {
-//				if(r.getCr_order() == null) { //결제가 진행되었는데도 주문번호가 비어있다면 결제를 취소한것이므로 해당 컬럼 삭제
-//					System.out.println(r);
-//					this.rentService.delOrder(r.getCr_num());
-//				}
-//			}
-//
-//			System.out.println("null값 삭제 이후 코드동작");
+			this.rentService.rentalStatus(orderInfo.getMerchantId());
+			//렌탈 테이블의 차량정비시간을 설정
+			this.rentService.waitTime(orderInfo.getMerchantId());
+		
 			System.out.println("현재 렌트하는 차량이름: "+rental.getCr_cname());
 			// 예약된 차 c_ok == 0으로 변경
-	        String c_name = rental.getCr_cname(); // 렌탈된 차 이름 가져오기
-	        this.rentService.updateCok(c_name); // primarykey 차 이름으로 c_car테이블 c_ok 컬럼 업데이트
+			String c_name = rental.getCr_cname(); // 렌탈된 차 이름 가져오기
+			this.rentService.updateCok(c_name); // primarykey 차 이름으로 c_car테이블 c_ok 컬럼 업데이트
 
 			map.put("orderInfo", orderInfo);
 			map.put("rental", rental);
@@ -246,7 +239,9 @@ public class RentCheckController {
 	//시간 연장 코드
 	@RequestMapping(value="/timeUp")
 	public ModelAndView timeUp(@RequestParam int c_num,
-			@RequestParam String order_number, HttpServletResponse response) throws Exception {
+							   @RequestParam String order_number, 
+							   HttpServletResponse response, HttpSession session, RedirectAttributes rttr) 
+							   throws Exception {
 		System.out.println("timeUp메서드 동작");
 		System.out.println("차량 코드번호: "+c_num);//차량코드번호
 		System.out.println("결제 주문번호: "+order_number);//차량코드번호
@@ -255,18 +250,32 @@ public class RentCheckController {
 		PrintWriter out = response.getWriter();
 		ModelAndView model = new ModelAndView();
 
-		//해당 차량의 정보 가져오기
-		CarVO car = this.rentService.getCarInfo2(c_num);
-		System.out.println("car정보: "+car);
-		//렌트 정보 가져오기
-		RentalVO rental = this.rentService.getRentCar(order_number);
-		System.out.println("rental정보: "+rental);
+		// 로그인 정보 가져오기
+		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+		if(memberInfo != null) {
 
-		model.addObject("rental",rental);
-		model.addObject("car",car);
+			//해당 아이디의 결제 중단 내역들을 전부 제거	
+			this.rentService.rentalDel2(memberInfo.getM_id());
+			System.out.println("결제중단 내역들 삭제후 차량 출력");
 
-		return model;
+			//해당 차량의 정보 가져오기
+			CarVO car = this.rentService.getCarInfo2(c_num);
+			System.out.println("car정보: "+car);
+			//렌트 정보 가져오기
+			RentalVO rental = this.rentService.getRentCar(order_number);
+			System.out.println("rental정보: "+rental);
+
+			model.addObject("rental",rental);
+			model.addObject("car",car);
+
+			return model;
+		}else {
+			rttr.addFlashAttribute("LoginNull", "alert('로그인 이후 이용 가능합니다!');");
+			model.setViewName("redirect:/member/m_login");
+			return model;
+		}
 	}
+
 
 	//시간 정보를 계산하는 메서드
 	@RequestMapping(value="/calculatePrice")
@@ -335,6 +344,9 @@ public class RentCheckController {
 		System.out.println("calculatedPrice: " + calculatedPrice);
 
 		this.rentService.insertRental(rental);
+		
+		//5분안에 결제를 진행안하고 취소를 하면 해당 렌트내역은 5분뒤에 사라지고, 5분동안 해당차량 렌트 불가
+		this.rentService.rentalDel();
 
 		System.out.println("rental정보: "+rental);
 
@@ -389,7 +401,7 @@ public class RentCheckController {
 			this.orderService.addTime(orderInfo.getMerchantId());
 			//결제 완료시 렌탈테이블의 wait를 clear로 변경 (주문번호 기준)
 			rentService.rentalStatus(orderInfo.getMerchantId());
-			
+
 			System.out.println("시간추가 완료");
 			//주문번호 기준
 			String oldOrder = orderInfo.getParent_merchant_id();
@@ -664,7 +676,7 @@ public class RentCheckController {
 				alertMessage(out, "환불 처리 되었으나, 환불 금액은 50%입니다.");
 				this.orderService.refundOK(order_number); //환불완료로 업데이트
 				this.rentService.reValueDate(order_number); //주문번호를 기준으로 해당 렌탈내역의 날짜를 초기화
-				
+
 				//order_number를 기준으로 parent_merchant_id 값이 주문번호와 동일한 레코드를 찾음
 				OrderVO order = this.orderService.getPayInfo2(order_number); //부모의 주문번호를 이용해서 그의 자식을 찾음
 				//찾은 레코드의 새로 갱신된 주문번호를 가져옴
@@ -685,7 +697,7 @@ public class RentCheckController {
 					out.println("opener.location.reload();"); //부모창을 새로고침
 					out.println("</script>");
 				}
-			
+
 			}
 			// 그 외 환불 금액 100% 가능
 			else {
@@ -698,14 +710,14 @@ public class RentCheckController {
 				out.println("window.close()");	//현재창을 닫고
 				out.println("opener.location.reload();"); //부모창을 새로고침
 				out.println("</script>");
-				
+
 				// order_number를 기준으로 parent_merchant_id 값이 주문번호와 동일한 모든 레코드를 찾음
 				List<OrderVO> childOrders = this.orderService.getAllChildOrders(order_number);
-				
-				for(OrderVO childOrder : childOrders) {
-				    RentalVO rental = this.rentService.getRentCar(childOrder.getMerchantId());
 
-				    //환불처리
+				for(OrderVO childOrder : childOrders) {
+					RentalVO rental = this.rentService.getRentCar(childOrder.getMerchantId());
+
+					//환불처리
 					double price = rental.getCr_price(); 	//환불 금액
 					String token2 = getImportToken(); 		//토큰 생성
 					String orderNum = rental.getCr_order(); //자식의 주문번호
@@ -722,77 +734,77 @@ public class RentCheckController {
 				out.close();
 			}
 
-			}catch (Exception e) {
-				e.printStackTrace();
-				out.println("<script>");
-				out.println("alert('세션이 만료되었습니다 다시 로그인해주세요!');");
-				out.println("window.open('/member/m_login', '_blank');");//로그인창으로 이동
-				out.println("</script>");
-			} finally {
-				out.close();
-			}
-		}
-
-		//반복되는 자바스크립트 코드 메서드화
-		private void alertMessage(PrintWriter out, String message) {
+		}catch (Exception e) {
+			e.printStackTrace();
 			out.println("<script>");
-			out.println("alert('" + message + "');");
+			out.println("alert('세션이 만료되었습니다 다시 로그인해주세요!');");
+			out.println("window.open('/member/m_login', '_blank');");//로그인창으로 이동
 			out.println("</script>");
-		}
-
-
-		//환불 API 구현
-		public static final String IMPORT_CANCEL_URL = "https://api.iamport.kr/payments/cancel"; 
-
-		public int cancelPay(String token, String order_number, double refundAmount) { 
-			CloseableHttpClient client = HttpClientBuilder.create().build();
-			HttpPost post = new HttpPost(IMPORT_CANCEL_URL); 
-			Map<String, String> map = new HashMap<String, String>(); 
-			post.setHeader("Authorization", token); 
-			map.put("merchant_uid", order_number);						//주문번호와
-			map.put("amount", String.valueOf(refundAmount));	//환불금액 정보 추가
-
-			try { 
-				post.setEntity(new UrlEncodedFormEntity(convertParameter(map), "UTF-8")); 
-				CloseableHttpResponse res = client.execute(post); 
-
-				if (res.getStatusLine().getStatusCode() != 200) {
-					System.err.println("환불 요청 실패: " + res.getStatusLine().getReasonPhrase());
-					return -1;
-				}
-
-				String responseBody = EntityUtils.toString(res.getEntity());
-				ObjectMapper mapper = new ObjectMapper(); 
-				JsonNode rootNode = mapper.readTree(responseBody);
-
-				if (rootNode.has("response") && !rootNode.get("response").isNull()) {
-					System.out.println("환불성공");
-					return 1;
-				} else {
-					System.err.println("환불실패");
-					System.out.println("IAMPORT Response: " + responseBody);
-
-					return -1;
-				}
-
-			} catch (Exception e) {
-				e.printStackTrace(); 
-				System.err.println("환불 요청 중 오류 발생");
-				return -1;
-			} finally {
-				try {
-					client.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-
-		private List<NameValuePair> convertParameter(Map<String, String> params) {
-			List<NameValuePair> paramList = new ArrayList<>();
-			for (Map.Entry<String, String> entry : params.entrySet()) {
-				paramList.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
-			}
-			return paramList;
+		} finally {
+			out.close();
 		}
 	}
+
+	//반복되는 자바스크립트 코드 메서드화
+	private void alertMessage(PrintWriter out, String message) {
+		out.println("<script>");
+		out.println("alert('" + message + "');");
+		out.println("</script>");
+	}
+
+
+	//환불 API 구현
+	public static final String IMPORT_CANCEL_URL = "https://api.iamport.kr/payments/cancel"; 
+
+	public int cancelPay(String token, String order_number, double refundAmount) { 
+		CloseableHttpClient client = HttpClientBuilder.create().build();
+		HttpPost post = new HttpPost(IMPORT_CANCEL_URL); 
+		Map<String, String> map = new HashMap<String, String>(); 
+		post.setHeader("Authorization", token); 
+		map.put("merchant_uid", order_number);						//주문번호와
+		map.put("amount", String.valueOf(refundAmount));	//환불금액 정보 추가
+
+		try { 
+			post.setEntity(new UrlEncodedFormEntity(convertParameter(map), "UTF-8")); 
+			CloseableHttpResponse res = client.execute(post); 
+
+			if (res.getStatusLine().getStatusCode() != 200) {
+				System.err.println("환불 요청 실패: " + res.getStatusLine().getReasonPhrase());
+				return -1;
+			}
+
+			String responseBody = EntityUtils.toString(res.getEntity());
+			ObjectMapper mapper = new ObjectMapper(); 
+			JsonNode rootNode = mapper.readTree(responseBody);
+
+			if (rootNode.has("response") && !rootNode.get("response").isNull()) {
+				System.out.println("환불성공");
+				return 1;
+			} else {
+				System.err.println("환불실패");
+				System.out.println("IAMPORT Response: " + responseBody);
+
+				return -1;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace(); 
+			System.err.println("환불 요청 중 오류 발생");
+			return -1;
+		} finally {
+			try {
+				client.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private List<NameValuePair> convertParameter(Map<String, String> params) {
+		List<NameValuePair> paramList = new ArrayList<>();
+		for (Map.Entry<String, String> entry : params.entrySet()) {
+			paramList.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
+		}
+		return paramList;
+	}
+}

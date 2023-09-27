@@ -67,4 +67,7 @@ public interface RentService {
 	//해당 아이디의 결제 중단 내역들을 전부 제거
 	void rentalDel2(String m_id);
 
+	//렌탈 테이블의 차량정비시간을 설정
+	void waitTime(String merchantId);
+
 }

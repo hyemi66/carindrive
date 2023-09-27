@@ -83,7 +83,11 @@ public class RentController {
 		for(CarVO car : allCars) {
 
 			// 해당 차량이 선택된 날짜에 이미 예약되었는지 확인
+			System.out.println("차량이름 : "+car.getC_name());
 			List<RentalVO> allRentalDate = this.rentService.getDateCar(car.getC_name());
+			System.out.println("예약날짜 확인");
+			System.out.println(allRentalDate);
+			
 			if(allRentalDate == null) {
 				continue; // 해당 차량에 대한 예약 내역이 없다면 다음 차량의 예약 내역 검사
 			}
@@ -99,7 +103,7 @@ public class RentController {
 
 				//예약이 되어있는 날짜
 				LocalDateTime usedSdate = LocalDateTime.parse(rentalDate.getCr_sdate(), formatter);
-				LocalDateTime usedEdate = LocalDateTime.parse(rentalDate.getCr_edate(), formatter);
+				LocalDateTime usedEdate = LocalDateTime.parse(rentalDate.getCr_waittime(), formatter);
 				//사용자가 선택한 날짜
 				LocalDateTime selectSdate = LocalDateTime.parse(cr_sdate, formatter);
 				LocalDateTime selectEdate = LocalDateTime.parse(cr_edate, formatter);
@@ -109,7 +113,8 @@ public class RentController {
 						(selectSdate.isAfter(usedSdate) && selectSdate.isBefore(usedEdate)) ||  // 사용자가 선택한 시작 날짜가 예약된 기간 내에 있는 경우. 
 						(selectEdate.isAfter(usedSdate) && selectEdate.isBefore(usedEdate)) ||  // 사용자가 선택한 종료 날짜가 예약된 기간 내에 있는 경우.
 						(selectSdate.isBefore(usedSdate) && selectEdate.isAfter(usedEdate))  	// 사용자가 선택한 기간이 예약된 기간을 포함하는 경우.
-						) {
+						) 
+				{
 					rentOk = false; //반복문을 사용중이기 때문에 조건에 만족하는것들은 아래 코드로 이동
 					break;
 				}
@@ -237,7 +242,7 @@ public class RentController {
 			LocalDateTime stard_date = LocalDateTime.parse(rental.getCr_sdate(), formatter);
 			LocalDateTime end_date = LocalDateTime.parse(rental.getCr_edate(), formatter);
 
-			/*Duration.between(rentalDateTime, returnDateTime)를 통해 렌트 기간의 시간 간격을 계산*/
+			//Duration.between(rentalDateTime, returnDateTime)를 통해 렌트 기간의 시간 간격을 계산
 			Duration duration = Duration.between(stard_date, end_date);
 			long minutes = duration.toMinutes();	//몇분동안 렌트했는지 파악
 

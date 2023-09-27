@@ -6,15 +6,24 @@
 <head>
     <meta charset="UTF-8">
     <title>시간 연장</title>
+    <link href="${path}/css/rent.css" rel="stylesheet"/>
     <script src="${path}/js/jquery.js"></script>
     <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 </head>
 <body>
     
+		<div id="box01">
+			<br><br><br>
+				<img id="imgC" src="../images/car/${car.c_img}">
+					<br><br><br>
+						<hr>
+						<b>${car.c_brand} ${car.c_name}</b><br>
+						${car.c_type} | ${car.c_oil} | ${car.c_year} <br><br>
+					<div id="box02">
+				<input type="button" value="예 약 하 기" onclick="showCar(currentCar${status.index})" />
+			</div>
+		</div>
     
-    
-    현재 렌트중인 차량<br>
-    ${car.c_name}
     <div id="menu01">
         <p>
             기존 반납시간<br>

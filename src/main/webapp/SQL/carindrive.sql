@@ -1,3 +1,5 @@
+--car테이블의 c_ok 삭제 생각해볼것 , 렌트테이블,  결제정보테이블 재 배포
+
 --시퀀스 1로 초기화
 update c_car set c_num = '1';
 update c_rental set cr_num = '1';
@@ -69,6 +71,9 @@ FROM c_rental
 WHERE cr_cname = '레이'
 ORDER BY start_date;
 
+UPDATE c_rental 
+SET cr_waittime = TO_CHAR(TO_TIMESTAMP(cr_edate, 'yyyy-mm-dd hh24:mi') + (3/24), 'yyyy-mm-dd hh24:mi') 
+WHERE cr_order = 'merchant_1695789378075';
 
 --ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 --확인 코드
@@ -97,7 +102,7 @@ CREATE SEQUENCE car_seq START WITH 1 INCREMENT BY 1 NOCACHE; -- 차 정보 테�
 CREATE SEQUENCE cr_seq START WITH 1 INCREMENT BY 1 NOCACHE; -- 예약(렌탈) 테이블 시퀀스
 CREATE SEQUENCE co_seq START WITH 1 INCREMENT BY 1 NOCACHE; -- 결제 정보 테이블 시퀀스
 
-
+//렌탈 테이블의 차량정비시간을 설정
 
 --시퀀스 삭제
 drop SEQUENCE cs_seq;
@@ -197,6 +202,7 @@ CREATE TABLE c_rental (
     cr_order VARCHAR2(100),                       --주문 번호
     cr_status VARCHAR2(30) DEFAULT 'wait' NOT NULL, --결제 상태 확인
     cr_paytime TIMESTAMP,
+    cr_waittime VARCHAR2(200),
     FOREIGN KEY (cr_mid) REFERENCES c_member(m_id),
     FOREIGN KEY (cr_cname) REFERENCES c_car(c_name)
 );

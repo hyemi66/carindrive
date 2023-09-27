@@ -118,5 +118,10 @@ public class RentalDAOImpl implements RentalDAO {
 		this.sqlSession.delete("rentalDel2",m_id);
 	}//해당 아이디의 결제 중단 내역들을 전부 제거
 
+	@Override
+	public void waitTime(String merchantId) {
+		this.sqlSession.update("waitTime",merchantId);
+	}//렌탈 테이블의 차량정비시간을 설정
+
 
 }

@@ -47,5 +47,7 @@ public interface RentalDAO {
 
 	void rentalDel2(String m_id);
 
+	void waitTime(String merchantId);
+
 
 }

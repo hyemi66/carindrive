@@ -120,6 +120,11 @@ public class RentServiceImpl implements RentService {
 	public void rentalDel2(String m_id) {
 		this.rentalDao.rentalDel2(m_id);
 	}//해당 아이디의 결제 중단 내역들을 전부 제거
+
+	@Override
+	public void waitTime(String merchantId) {
+		this.rentalDao.waitTime(merchantId);
+	}//렌탈 테이블의 차량정비시간을 설정
 	
 
 }
