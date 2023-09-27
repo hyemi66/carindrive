@@ -102,7 +102,6 @@ CREATE SEQUENCE car_seq START WITH 1 INCREMENT BY 1 NOCACHE; -- 차 정보 테�
 CREATE SEQUENCE cr_seq START WITH 1 INCREMENT BY 1 NOCACHE; -- 예약(렌탈) 테이블 시퀀스
 CREATE SEQUENCE co_seq START WITH 1 INCREMENT BY 1 NOCACHE; -- 결제 정보 테이블 시퀀스
 
-//렌탈 테이블의 차량정비시간을 설정
 
 --시퀀스 삭제
 drop SEQUENCE cs_seq;

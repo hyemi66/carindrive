@@ -281,30 +281,32 @@ public class RentCheckController {
 	@RequestMapping(value="/calculatePrice")
 	@ResponseBody
 	public double calculatePrice(@RequestParam int c_num, 
-			@RequestParam String order_number, 
-			@RequestParam String cr_edate) throws Exception {
-		System.out.println("calculatePrice메서드 동작");
+	        @RequestParam String order_number, 
+	        @RequestParam String cr_edate) throws Exception {
+	    
+	    // 1. 차량 정보와 대여 정보 가져오기
+	    CarVO car = this.rentService.getCarInfo2(c_num);
+	    RentalVO rental = this.rentService.getRentCar(order_number);
 
-		// 1. 차량 정보와 대여 정보 가져오기
-		CarVO car = this.rentService.getCarInfo2(c_num);
-		RentalVO rental = this.rentService.getRentCar(order_number);
+	    // 2. 기존 반납시간과 새로운 반납시간의 차이 계산
+	    cr_edate = cr_edate.replace("T", " ");
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+	    LocalDateTime originalEndDate = LocalDateTime.parse(rental.getCr_edate(), formatter);
+	    LocalDateTime newEndDate = LocalDateTime.parse(cr_edate, formatter);
 
-		// 2. 기존 반납시간과 새로운 반납시간의 차이 계산
-		cr_edate = cr_edate.replace("T", " ");
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		LocalDateTime originalEndDate = LocalDateTime.parse(rental.getCr_edate(), formatter);
-		LocalDateTime newEndDate = LocalDateTime.parse(cr_edate, formatter);
+	    Duration duration = Duration.between(originalEndDate, newEndDate);
+	    long minutes = duration.toMinutes();
+	    
+	    if (minutes > 120) {
+	        throw new Exception("시간 연장은 최대 2시간까지만 가능합니다.");
+	    }
 
-		Duration duration = Duration.between(originalEndDate, newEndDate);
-		long minutes = duration.toMinutes();
-
-		// 3. 차량의 가격 정보를 이용해 연장시간의 가격 계산
-		double perMinuteRate = car.getC_price();
-		double price = perMinuteRate * minutes;
-		System.out.println("렌탈비용: "+price);
-
-		return price;
+	    // 3. 차량의 가격 정보를 이용해 연장시간의 가격 계산
+	    double perMinuteRate = car.getC_price();
+	    double price = perMinuteRate * minutes;
+	    return price;
 	}
+
 
 	//시간추가 결제창
 	@RequestMapping(value="/timeUpPay", method=RequestMethod.POST)

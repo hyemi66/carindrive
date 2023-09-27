@@ -66,15 +66,21 @@
     endDate.setAttribute("min", startDate.value);
 
     function setMinValue() {
-        // 두 날짜 값을 비교
+        // 기존의 반납시간과 새로운 반납시간 비교
         if (new Date(endDate.value) < new Date(startDate.value)) {
             alert("기존의 반납시간보다 작은 시간은 설정할 수 없습니다.");
             endDate.value = startDate.value;
-        } else {//날짜를 잘 선택하면
-        	// 여기서 hidden input의 value를 업데이트
+        } else {
+            let diffTime = new Date(endDate.value) - new Date(startDate.value);
+            let diffHours = diffTime / (1000 * 60 * 60);
+
+            if (diffHours > 2) {
+                alert("시간 연장은 최대 2시간까지만 가능합니다.");
+                endDate.value = new Date(new Date(startDate.value).getTime() + 2 * 60 * 60 * 1000).toISOString().slice(0, 16);
+            } 
+
             document.getElementById("cr_edate").value = endDate.value;
-            console.log('cr_edate:', endDate.value);
-            fetchPrice();	//fetchPrice()함수 시작
+            fetchPrice();
         }
     }
 
@@ -113,6 +119,7 @@ function fetchPrice() {
         },
         error: function (error) {
             console.error("Error fetching price:", error);
+            alert("오류가 발생했습니다: " + error.responseText);
         }
     });
 }

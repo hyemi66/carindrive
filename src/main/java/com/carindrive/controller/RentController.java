@@ -83,10 +83,7 @@ public class RentController {
 		for(CarVO car : allCars) {
 
 			// 해당 차량이 선택된 날짜에 이미 예약되었는지 확인
-			System.out.println("차량이름 : "+car.getC_name());
 			List<RentalVO> allRentalDate = this.rentService.getDateCar(car.getC_name());
-			System.out.println("예약날짜 확인");
-			System.out.println(allRentalDate);
 			
 			if(allRentalDate == null) {
 				continue; // 해당 차량에 대한 예약 내역이 없다면 다음 차량의 예약 내역 검사
@@ -100,14 +97,20 @@ public class RentController {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
 			for(RentalVO rentalDate : allRentalDate) {
+			    //예약이 되어있는 날짜
+			    LocalDateTime usedSdate = LocalDateTime.parse(rentalDate.getCr_sdate(), formatter);
+			    
+			    // getCr_waittime() 값이 null이나 "(null)"인 경우 "9999-01-01 01:01"로 대체
+			    String waitTime = rentalDate.getCr_waittime();
+			    if (waitTime == null || waitTime.equals("(null)")) {
+			        waitTime = "9999-01-01 01:01";
+			    }
+			    LocalDateTime usedEdate = LocalDateTime.parse(waitTime, formatter);
 
-				//예약이 되어있는 날짜
-				LocalDateTime usedSdate = LocalDateTime.parse(rentalDate.getCr_sdate(), formatter);
-				LocalDateTime usedEdate = LocalDateTime.parse(rentalDate.getCr_waittime(), formatter);
-				//사용자가 선택한 날짜
-				LocalDateTime selectSdate = LocalDateTime.parse(cr_sdate, formatter);
-				LocalDateTime selectEdate = LocalDateTime.parse(cr_edate, formatter);
-
+			    //사용자가 선택한 날짜
+			    LocalDateTime selectSdate = LocalDateTime.parse(cr_sdate, formatter);
+			    LocalDateTime selectEdate = LocalDateTime.parse(cr_edate, formatter);
+			
 				//날짜 충돌 확인
 				if (																			//하나라도 만족하면 false
 						(selectSdate.isAfter(usedSdate) && selectSdate.isBefore(usedEdate)) ||  // 사용자가 선택한 시작 날짜가 예약된 기간 내에 있는 경우. 
