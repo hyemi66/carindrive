@@ -111,8 +111,7 @@ public class ServiceController {
    // 공지사항 내용 보기 
 	@RequestMapping("/service_ncont")
 	public ModelAndView service_ncont(
-			@RequestParam("cs_no") int cs_no)
-	{
+			@RequestParam("cs_no") int cs_no){
 		ServiceVO g = this.serviceSv.getCs_Cont(cs_no);
 		String g_cont=g.getCs_cont().replace("\n","<br/>");
 

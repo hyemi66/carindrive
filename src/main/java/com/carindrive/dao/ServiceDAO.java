@@ -54,6 +54,8 @@ public interface ServiceDAO {
 
 	List<ServiceVO> getList();
 
+	void updateHit(int cs_no);
+
 
 
 

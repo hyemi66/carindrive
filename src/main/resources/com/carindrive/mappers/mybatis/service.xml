@@ -133,6 +133,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
      select * from c_qna where cq_no=#{cq_no}
    </select>
    
+   <!-- 조회수 증가 -->
+   <update id="cs_hit" parameterType="int">
+     update c_service set cs_hit=cs_hit+1 where cs_no=#{cs_no}
+   </update>
+   
    <!-- 1대1문의 답변 레벨 증가 -->
    <update id="levelUp">
      update c_qna set qna_replyindex=qna_replyindex+1 where qna_replygroup=#{qna_replygroup} 

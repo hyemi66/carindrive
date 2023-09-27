@@ -40,10 +40,12 @@
 			<tr>
 				<th>제목</th>
 				<td class="serivce" colspan="2" name="cq_title">${g.cs_title}</td>
+				<th>조회수</th>
+				<td class="serivce" colspan="2" name="cq_title">${g.cs_hit }</td>
 			</tr>
 			<tr>
 				<th>내용</th>
-				<td class="serivce" colspan="2">${g_cont}</td>
+				<td class="serivce" colspan="4">${g_cont}</td>
 			</tr>
 		</table>
 		<div class="write-menu">

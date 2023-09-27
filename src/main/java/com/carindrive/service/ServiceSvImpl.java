@@ -135,6 +135,7 @@ public class ServiceSvImpl implements ServiceSv {
 
 	@Override
 	public ServiceVO getCs_Cont(int cs_no) {
+		this.serviceDAO.updateHit(cs_no);//조회수 증가
 		return this.serviceDAO.getCs_Cont(cs_no);
 	}
 	
