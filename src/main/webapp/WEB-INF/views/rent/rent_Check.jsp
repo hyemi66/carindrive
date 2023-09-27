@@ -36,6 +36,7 @@
 	    <!-- 주문 번호를 함께 전송합니다. 이 값이 환불 로직에서 사용됩니다. -->
 	    <input type="hidden" name="order_index" value="${orderInfo.id}">
 	    <input type="hidden" name="order_number" value="${orderInfo.merchantId}">
+	    <input type="hidden" name="order_name" value="${orderInfo.buyer_name}">
 	    <button type="submit">환불하기</button>
 		</form>
       </div>

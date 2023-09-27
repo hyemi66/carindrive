@@ -57,23 +57,27 @@ create table c_order_info (
 ALTER TABLE c_order_info ADD (parent_merchant_id VARCHAR2(255));
 -- 공지사항 테이블
 CREATE TABLE C_SERVICE (
-    "CS_NO" NUMBER(*,0),
-    "CS_TITLE" VARCHAR2(200 BYTE), 
-    "CS_CONT" VARCHAR2(4000 BYTE), 
-    "CS_DATE" DATE DEFAULT SYSDATE, 
-    "CS_TYPE" VARCHAR2(20 BYTE),
+    cs_no NUMBER(*,0),
+    cs_id varchar2(200 byte),
+    cs_pwd varchar2(200 byte),
+    cs_title VARCHAR2(200 BYTE), 
+    cs_cont VARCHAR2(4000 BYTE), 
+    cs_date DATE DEFAULT SYSDATE, 
+    cs_type VARCHAR2(20 BYTE),
     cs_hit int default 0
 );
 --Q&A 테이블
-create table c_qna(
-    cq_id VARCHAR2(20),
-    cq_pwd VARCHAR2(400),
-    cq_title VARCHAR2(200),
-    cq_cont VARCHAR2(4000),
-    cq_date DATE DEFAULT SYSDATE,
-    cq_ment VARCHAR2(3000),
-    cq_doc varchar2(400),
-    FOREIGN KEY (cq_id) REFERENCES c_member(m_id)
+CREATE TABLE c_qna (
+    cq_no NUMBER(*,0), 
+    cq_id VARCHAR2(20 BYTE), 
+    cq_pwd VARCHAR2(400 BYTE), 
+    cq_title VARCHAR2(200 BYTE), 
+    cq_cont VARCHAR2(4000 BYTE), 
+    cq_date DATE DEFAULT SYSDATE, 
+    cq_file VARCHAR2(400 BYTE), 
+    QNA_REPLYGROUP NUMBER(*,0), 
+    QNA_REPLYTYPE NUMBER(*,0), 
+    QNA_REPLYINDEX NUMBER(*,0)
 );
 
 -- 차량 정보 테이블 시퀀스
@@ -169,9 +173,13 @@ values('admin01','','','','','admin01',9,'',sysdate);
 select * from c_member;
 select * from c_car;
 select * from c_rental;
-delete from c_rental;
-select * from c_service;
 select * from c_order_info;
+select * from c_service;
+select * from c_qna;
 
+delete from c_rental;
+delete from c_order_info;
+
+UPDATE c_car SET c_ok = 1 WHERE c_ok = 0;
 
 commit;

@@ -118,8 +118,9 @@ public class RentCheckController {
 			} catch (Exception e) {//결제시 문제 발생
 				try {
 					// 환불 처리 시작
-					// 환불시 예약완료된 차 c_ok == 1으로 변경
 					String token = getImportToken();
+					
+					// 환불시 예약완료된 차 c_ok == 1으로 변경
 					MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
 					RentalVO rental = this.rentService.getRentOne(memberInfo.getM_id());
 					String c_name = rental.getCr_cname(); // 렌탈된 차 이름 가져오기
@@ -163,8 +164,6 @@ public class RentCheckController {
 		ModelAndView mav = new ModelAndView();
 
 		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
-
-
 
 		try {
 			if (memberInfo != null) {//로그인시
@@ -363,9 +362,6 @@ public class RentCheckController {
 			// 해당 렌탈정보에 예약번호에 맞는 주문번호 추가
 			String merchantId = order.getMerchantId();
 			this.rentService.insertMerchantId(merchantId, rental.getCr_num());
-			// 예약된 차 c_ok == 0으로 변경
-			String c_name = rental.getCr_cname(); // 렌탈된 차 이름 가져오기
-			this.rentService.updateCok(c_name); // primarykey 차 이름으로 c_car테이블 c_ok 컬럼 업데이트
 
 			//결제정보 getPayInfo 메서드에 주문번호를 넣고 OrderVO에 값들을 셋팅
 			OrderVO orderInfo = getPayInfo(merchantId);
@@ -412,11 +408,6 @@ public class RentCheckController {
 			try {
 				// 환불 처리 시작
 				String token = getImportToken();
-				// 환불시 예약완료된 차 c_ok == 1으로 변경
-				MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
-				RentalVO rental = this.rentService.getRentOne(memberInfo.getM_id());
-				String c_name = rental.getCr_cname(); // 렌탈된 차 이름 가져오기
-				this.rentService.delCok(c_name); // primarykey 차 이름으로 c_car테이블 c_ok 컬럼 업데이트
 
 				if (token == null || token.isEmpty()) {
 					log.error("인증 정보에 문제가 발생했습니다. 환불 처리를 위해 다시 시도해주세요.");
@@ -632,12 +623,16 @@ public class RentCheckController {
 					break;										//rentalRefund에 환불할 정보들이 담김
 				}
 			}
-
+			
 			if (rentalRefund == null) {
 				out.print("일치하는 주문번호를 찾을 수 없습니다.");
 				out.close();
 				return;
 			}
+			
+			// 환불시 예약완료된 차 c_ok == 1으로 변경
+			String c_name = rentalRefund.getCr_cname(); // 렌탈된 차 이름 가져오기
+			this.rentService.delCok(c_name); // primarykey 차 이름으로 c_car테이블 c_ok 컬럼 업데이트
 
 			// String 날짜를 LocalDateTime으로 변환
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -767,6 +762,7 @@ public class RentCheckController {
 				String responseBody = EntityUtils.toString(res.getEntity());
 				ObjectMapper mapper = new ObjectMapper(); 
 				JsonNode rootNode = mapper.readTree(responseBody);
+				
 
 				if (rootNode.has("response") && !rootNode.get("response").isNull()) {
 					System.out.println("환불성공");
@@ -790,7 +786,7 @@ public class RentCheckController {
 				}
 			}
 		}
-
+		
 		private List<NameValuePair> convertParameter(Map<String, String> params) {
 			List<NameValuePair> paramList = new ArrayList<>();
 			for (Map.Entry<String, String> entry : params.entrySet()) {

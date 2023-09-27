@@ -35,7 +35,7 @@
 .Admin_menu a:hover {
 	font-weight: bold;
 	border-bottom: 1px solid #1c2b37;
-	width: 110px;
+	width: 120px;
 }
 /* 관리자페이지 (공지사항) */
 #admin_show {

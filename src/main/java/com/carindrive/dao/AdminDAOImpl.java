@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.carindrive.vo.CarVO;
 import com.carindrive.vo.PageVO;
+import com.carindrive.vo.QnaVO;
 import com.carindrive.vo.ServiceVO;
 
 @Repository
@@ -78,5 +79,16 @@ public class AdminDAOImpl implements AdminDAO {
 	public void carDel(int no) {
 		this.sqlSession.delete("car_del", no);
 	}
+	
+	/* 1대1 문의 */
+	@Override
+	public int getQnaCount(PageVO p) {
+		return this.sqlSession.selectOne("qna_count1", p);
+	} // qna 목록 총 개수
+
+	@Override
+	public List<QnaVO> getAdminQnaList(PageVO p) {
+		return this.sqlSession.selectList("qna_list1", p);
+	} // qna 목록 리스트
 
 }

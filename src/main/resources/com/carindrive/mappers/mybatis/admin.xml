@@ -117,4 +117,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		delete from c_car where c_num = #{no}
 	</delete>
 	
+	<!-- 1대1 문의 -->
+	<!-- qna 목록 총 개수 -->
+	<select id="qna_count1" resultType="int">
+		select count(cq_no) from c_qna
+	</select>
+	
+	<!-- qna 리스트 -->
+	<select id="qna_list1" resultType="qna">
+		select * from (
+		select rowNum rNum, cq_no, cq_id, cq_title, cq_cont, cq_date, cq_file from
+		(select * from c_qna order by cq_no desc))
+		where rNum &gt;= #{startrow} and rNum &lt;= #{endrow}
+	</select>
+	
 </mapper>

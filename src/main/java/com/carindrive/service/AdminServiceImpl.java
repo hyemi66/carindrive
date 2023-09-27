@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.carindrive.dao.AdminDAO;
 import com.carindrive.vo.CarVO;
 import com.carindrive.vo.PageVO;
+import com.carindrive.vo.QnaVO;
 import com.carindrive.vo.ServiceVO;
 
 @Service
@@ -74,6 +75,16 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public void carDel(int no) {
 		this.adminDao.carDel(no);
+	}
+
+	@Override
+	public int getQnaCount(PageVO p) {
+		return this.adminDao.getQnaCount(p);
+	}
+
+	@Override
+	public List<QnaVO> getAdminQnaList(PageVO p) {
+		return this.adminDao.getAdminQnaList(p);
 	}
 	
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.carindrive.vo.CarVO;
 import com.carindrive.vo.PageVO;
+import com.carindrive.vo.QnaVO;
 import com.carindrive.vo.ServiceVO;
 
 public interface AdminService {
@@ -33,5 +34,10 @@ public interface AdminService {
 	void updateCar(CarVO c);
 
 	void carDel(int no);
+	
+	/* 1대1 문의 */
+	int getQnaCount(PageVO p);
+
+	List<QnaVO> getAdminQnaList(PageVO p);
 
 }

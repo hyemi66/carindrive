@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.carindrive.service.AdminService;
 import com.carindrive.vo.CarVO;
 import com.carindrive.vo.PageVO;
+import com.carindrive.vo.QnaVO;
 import com.carindrive.vo.ServiceVO;
 import com.oreilly.servlet.MultipartRequest;
 
@@ -323,5 +324,41 @@ public class AdminController {
 		
 		return dm;
 	} // admin_car_del()
+	
+	/* 1대1 문의 */
+	@RequestMapping("/admin_qna")
+	public ModelAndView admin_qna(QnaVO q,HttpServletResponse response,
+			HttpServletRequest request,HttpSession session,PageVO p) throws Exception {
+		int page=1;
+		int limit=7;
+		if(request.getParameter("page") != null) {
+			page=Integer.parseInt(request.getParameter("page"));
+		}
+		
+		int listcount = this.adminService.getQnaCount(p);
+		
+		p.setStartrow((page-1)*7+1);//시작행번호
+		p.setEndrow(p.getStartrow()+limit-1);//끝행번호
+
+		List<QnaVO> qlist = this.adminService.getAdminQnaList(p);
+		
+		// 총페이지수
+		int maxpage=(int)((double)listcount/limit+0.95);
+		int startpage=(((int)((double)page/10+0.9))-1)*10+1;
+		int endpage=maxpage;
+		if(endpage > startpage+10-1) endpage=startpage+10-1;
+
+		ModelAndView listM=new ModelAndView();
+		
+		listM.addObject("qlist",qlist);
+		listM.addObject("page",page);
+		listM.addObject("startpage",startpage);
+		listM.addObject("endpage",endpage);
+		listM.addObject("maxpage",maxpage);
+		listM.addObject("listcount",listcount);
+		
+		listM.setViewName("admin/admin_qna");
+		return listM;
+	} // admin_qna()
 	
 }
