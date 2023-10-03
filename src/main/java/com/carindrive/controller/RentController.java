@@ -182,17 +182,18 @@ public class RentController {
 		cr_sdate = cr_sdate.replace("T", " ");	//중간에 껴있는 T문자를 공백처리함 (전부다 이렇게 되있으므로 비교를위해 똑같이 T 제거)
 		cr_edate = cr_edate.replace("T", " ");
 
+		//문제가 많은 코드들 추후 수정, 삭제해도 되는지 생각
 		//혹시나 동시에 예약을 할 때 발생하는 메서드
-		boolean isDuplicate = rentService.checkDate(r.getCr_cname(), cr_sdate, cr_edate);
-		System.out.println("렌트하는 차량이름: "+r.getCr_cname());
-		System.out.println("isDuplicate value: " + isDuplicate);
-
-		if (isDuplicate) {//날짜를 비교해서 해당차량이 현재 예약과 겹친다면 true를 반환
-			out.println("<script>");
-			out.println("alert('다른 사용자가 결제를 진행중입니다. 다시 예약을 진행해주세요.');");
-			out.println("</script>");
-			return new ModelAndView("redirect:/rent/rent");
-		}
+//		boolean isDuplicate = rentService.checkDate(r.getCr_cname(), cr_sdate, cr_edate);
+//		System.out.println("렌트하는 차량이름: "+r.getCr_cname());
+//		System.out.println("isDuplicate value: " + isDuplicate);
+//
+//		if (isDuplicate) {//날짜를 비교해서 해당차량이 현재 예약과 겹친다면 true를 반환
+//			out.println("<script>");
+//			out.println("alert('다른 사용자가 결제를 진행중입니다. 다시 예약을 진행해주세요.');");
+//			out.println("</script>");
+//			return new ModelAndView("redirect:/rent/rent");
+//		}
 
 		//로그인 정보 가져오기
 		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");

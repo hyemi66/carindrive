@@ -158,8 +158,8 @@ body {
 	background-color: #1c2b37;
 	color: white;
 }
-/* 차 예약 버튼 */
 
+/* 차 예약 버튼 */
 #carRent {
     display: flex;
     align-items: center; /* 버튼을 수직으로 중앙 정렬 */

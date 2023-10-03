@@ -96,7 +96,7 @@
 					 <div class="info-line">
             <label>세부 정보:</label>
             <a href="javascript:void(0);" 
-             onclick="openPopup('/rent/rent_details?merchantId=${orderInfo.merchantId}&carname=${carInfos[status.index].c_name}')">세부 정보 보기</a>
+             onclick="openPopup('/rent/rent_details?merchantId=${orderInfo.merchantId}&carname=${carInfos[status.index].c_name}')">시간연장 / 환불</a>
         </div>
 
 				    </div>

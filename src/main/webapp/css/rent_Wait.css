@@ -1,13 +1,28 @@
 /* 차량 예약 전체 부분의 스타일링 */
-#carpay {
-    background-color: #f8f9fa; 
+#bigbox {
+    width: 770px;
+    padding: 10px;
+    margin-top: 30px; 
+    margin-bottom: 30px;
+    margin-left: auto;  /* 왼쪽 마진을 자동으로 설정하여 가운데 정렬 */
+    margin-right: auto; /* 오른쪽 마진을 자동으로 설정하여 가운데 정렬 */
+    background-color: #f5f5f5;
     border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0px 0px 15px rgba(0,0,0,0.1);
-    max-width: 1500px;
-    height: 750px;
-    margin: auto;
-    
+    box-shadow: 0px 0px 15px #aaa;
+}
+
+.box {
+    display: flex;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    background-color: #ffffff;
+    border-radius: 7px;
+    padding: 10px;
+    transition: background-color 0.3s;
+}
+
+.box:hover {
+    background-color: #f8f8f8;
 }
 
 #bar {
@@ -23,103 +38,84 @@
     margin: 15px 0px 15px 0px;
 }
 
-/* 차량 예약 타이틀 */
-#carpay > div > h3 {
-    text-align: center;
-    color: #333;
-    margin-bottom: 20px;
-    font-weight: bold;
-}
-
-/* 내부 박스 스타일링 */
-#carpay .box {
-    padding: 20px;
-    border-radius: 10px;
-    background-color: #ffffff;
-}
-
-/* 각 항목(예약자, 차량, 렌트 정보)의 스타일링 */
-#carpay .member, #carpay .car, #carpay .rent {
-    padding: 10px;
-    border-bottom: 1px solid #e9ecef;
-}
-
-/*예약자 정보 제목*/
-#carpay .member .title{
-	color: orange;
-}
-/*예약자 정보 소제목*/
-#carpay .member .mtitle{
-	color: pink;
-}
-/*예약자 정보 내용*/
-#carpay .member > span{
-	color : orange;
-}
-
-/*차량 정보 제목*/
-#carpay .car .title{
-	color:red;
-}
-/*차량 정보 소제목*/
-#carpay .car .mtitle{
-	color:black;
-}
-/*차량 정보 내용*/
-#carpay .car{
-	color:green;
-}
-
-/*차량 정보 제목*/
-#carpay .rent .title{
-	color:red;
-}
-/*차량 정보 소제목*/
-#carpay .rent .mtitle{
-	color:black;
-}
-/*차량 정보 내용*/
-#carpay .rent >span{
-	color:green;
-}
-
-
-
-#carpay .rent {
-    border-bottom: none; /* 마지막 항목이므로 테두리 제거 */
-}
-
-/* 각 항목의 타이틀 스타일링 */
-#carpay .member h2, #carpay .car h2, #carpay .rent h2 {
-    color: #495057;
-    margin-bottom: 15px;
-}
-
 /* 결제 버튼 스타일링 */
-#carpay .rent button {
+/*모든 버튼 및 a태그 공통스타일*/
+.box button, .cancle{
+    display: inline-block; /* a 태그의 디스플레이 속성 변경 */
     padding: 10px 20px;
-    margin: 5px 0;
+    margin-right: 10px;
     font-weight: bold;
     border: none;
     cursor: pointer;
     border-radius: 5px;
+    text-decoration: none; /* a 태그의 밑줄 제거 */
+    text-align: center; /* 텍스트 가운데 정렬 */
 }
 
-#carpay .rent button:first-child {
+.box .cardpay {
     background-color: #007bff;
     color: #fff;
 }
 
-#carpay .rent button:last-child {
+.box .kakaopay {
     background-color: #FFEB3B;
     color: #000;
 }
 
-#carpay .rent button:hover {
-    opacity: 0.9;
+.box .cancle {
+    background-color: #d9534f;
+    color: #fff;
 }
 
-#carpay .rent hr {
-    margin-bottom: 30px;  /* 간격 조절을 위한 마진 추가 */
+.rent {
+    width: 100%;
+    height: 100%;
 }
+
+.rent2 {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+  justify-content: flex-end;
+}
+
+.img {/*이미지 파일의 박스 크기*/
+    width: 770px;
+    height: 250px;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin:10px 15px 10px 15px;
+}
+
+.img img {/*이미지 파일의 크기*/
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.infobox{
+	width:750px;
+    padding: 10px; /* 정보 블럭 내부에 간격을 추가 */
+    border: 1px solid #e0e0e0; /* 경계선 추가 */
+    background-color: #f9f9f9; /* 배경색 추가 */
+}
+
+.infobox h2 {
+    color: #007bff;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.infobox span {
+    color: #555;
+    font-weight: bold;
+    text-align: right;
+    
+}
+
+
+
 

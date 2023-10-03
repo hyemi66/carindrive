@@ -72,7 +72,7 @@ VALUES (cr_seq.NEXTVAL, #{cr_mid}, #{cr_cname}, #{cr_rdate}, #{cr_sdate}, #{cr_e
 		update c_car set c_ok = 0 where c_name = #{c_name}
 	</update>
     
-    <!-- 차량 중복 날짜 확인 쿼리문 -->
+    <!-- 차량 중복 날짜 확인 쿼리문 --> <!-- 이 코드는 필요없을수도 있음 -->
     <select id="checkDate" resultType="int" parameterType="map">
 		SELECT COUNT(*) 
 		FROM c_rental 
