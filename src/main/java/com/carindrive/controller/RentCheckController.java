@@ -95,7 +95,7 @@ public class RentCheckController {
 			this.orderService.saveOrder(orderInfo);
 			//결제 완료시 렌탈테이블의 wait를 clear로 변경 (주문번호 기준)
 			this.rentService.rentalStatus(orderInfo.getMerchantId());
-			//렌탈 테이블의 차량정비시간을 설정
+			//렌탈 테이블의 차량정비시간을 설정 (반납시간의 +3시간)
 			this.rentService.waitTime(orderInfo.getMerchantId());
 		
 			System.out.println("현재 렌트하는 차량이름: "+rental.getCr_cname());
@@ -397,7 +397,25 @@ public class RentCheckController {
 			this.orderService.saveOrder(orderInfo);
 			this.orderService.addTime(orderInfo.getMerchantId());
 			//결제 완료시 렌탈테이블의 wait를 clear로 변경 (주문번호 기준)
-			rentService.rentalStatus(orderInfo.getMerchantId());
+			this.rentService.rentalStatus(orderInfo.getMerchantId());
+			
+			//현재 레코드에서 부모키로 부모의 레코드에 접근
+			String key = orderInfo.getParent_merchant_id();
+			//부모의 레코드를 가져옴
+			RentalVO pKey = this.rentService.getRentCar(key);
+			System.out.println("부모의 레코드: "+pKey);
+			//부모키의 waitTime을 저장
+			String waitTime = pKey.getCr_waitTime();
+			
+			//현재 결제한 레코드를 가져옴
+			RentalVO myKey = this.rentService.getRentCar(orderInfo.getMerchantId());
+			//null이었던 waitTime에 값을 주입시킴
+			myKey.setCr_waitTime(waitTime);
+			System.out.println("myKey의 값: "+myKey);
+			//DB에 저장
+			this.rentService.insertTime(myKey);
+			System.out.println("DB저장완료");
+			
 
 			System.out.println("시간추가 완료");
 			//주문번호 기준

@@ -70,4 +70,7 @@ public interface RentService {
 	//렌탈 테이블의 차량정비시간을 설정
 	void waitTime(String merchantId);
 
+	////waitTime을 원래 반납시간과 똑같은 시간으로 지정
+	void insertTime(RentalVO myKey);
+
 }

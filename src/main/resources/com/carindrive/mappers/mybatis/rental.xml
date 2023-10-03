@@ -129,4 +129,9 @@ VALUES (cr_seq.NEXTVAL, #{cr_mid}, #{cr_cname}, #{cr_rdate}, #{cr_sdate}, #{cr_e
 		WHERE cr_order = #{cr_order}
     </update>
     
+    <!-- waitTime을 원래 반납시간과 똑같은 시간으로 지정 -->
+    <update id="insertTime">
+    	UPDATE c_rental SET cr_waittime = #{cr_waitTime} WHERE cr_order = #{cr_order}
+    </update>
+    
 </mapper>

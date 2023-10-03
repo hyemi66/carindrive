@@ -21,6 +21,6 @@ public class RentalVO {
     private String cr_order; // 주문번호
     private String cr_status;// 결제상태
     private LocalDateTime cr_paytime; //결제제한시간
-    private String cr_waittime;	//차량 정비시간
+    private String cr_waitTime;	//차량 정비시간
    
 }

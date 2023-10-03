@@ -73,6 +73,7 @@ public class RentController {
 	public ModelAndView rent(@RequestParam String cr_sdate, 
 			@RequestParam String cr_edate, 
 			HttpSession session, RedirectAttributes rttr, HttpServletRequest request) {
+		
 		System.out.println("rent메서드 POST 동작");
 		ModelAndView model = new ModelAndView("/rent/rent");
 
@@ -81,40 +82,31 @@ public class RentController {
 
 		List<CarVO> clist = new ArrayList<>(); //나중에 출력되는 값이 여러개가 아니므로 리스트 생성
 
+		//모든 차량을 한대씩 검사 
 		for(CarVO car : allCars) {
 
-			// 해당 차량이 선택된 날짜에 이미 예약되었는지 확인
+			//해당차량의 렌탈 대여 일자와 , 차량 정비 완료 시간을 가져오는 쿼리문
 			List<RentalVO> allRentalDate = this.rentService.getDateCar(car.getC_name());
 
+			//해당 차량의 예약 내역을 확인하고 예약된 차량이 아니라면 다음 차량 예약내역 검사 
 			if(allRentalDate == null) {
-				continue; // 해당 차량에 대한 예약 내역이 없다면 다음 차량의 예약 내역 검사
+				continue;
 			}
 
 			boolean rentOk = true;
+			//rentOk가 true라면 해당 차량은 clist에 추가됨
+			//clist는 jsp에서 출력됨 (예약가능한 차량은 출력)
 
 			//String으로 날짜를 비교하기 위해 날짜형식을 전부 다 동일하게 맞춤
 			cr_sdate = cr_sdate.replace("T", " "); // 중간에 껴있는 T문자를 공백처리함
 			cr_edate = cr_edate.replace("T", " ");
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
+			//
 			for(RentalVO rentalDate : allRentalDate) {
 				//예약이 되어있는 날짜
 				LocalDateTime usedSdate = LocalDateTime.parse(rentalDate.getCr_sdate(), formatter);
-
-				// getCr_waittime() 값이 null이나 "(null)"인 경우 "9999-01-01 01:01"로 대체
-				String waitTime = rentalDate.getCr_waittime();
-				if (waitTime == null || waitTime.equals("(null)")) {
-					// cr_edate를 LocalDateTime 객체로 변환
-					LocalDateTime dateTime = LocalDateTime.parse(cr_edate, formatter);
-
-					// 3시간 더하기
-					dateTime = dateTime.plusHours(3);
-
-					// LocalDateTime 객체를 다시 문자열로 변환
-					waitTime = dateTime.format(formatter);
-				}
-
-				LocalDateTime usedEdate = LocalDateTime.parse(waitTime, formatter);
+				LocalDateTime usedEdate = LocalDateTime.parse(rentalDate.getCr_waitTime(), formatter);
 
 				//사용자가 선택한 날짜
 				LocalDateTime selectSdate = LocalDateTime.parse(cr_sdate, formatter);
@@ -127,7 +119,7 @@ public class RentController {
 						(selectSdate.isBefore(usedSdate) && selectEdate.isAfter(usedEdate))  	// 사용자가 선택한 기간이 예약된 기간을 포함하는 경우.
 						) 
 				{
-					rentOk = false; //반복문을 사용중이기 때문에 조건에 만족하는것들은 아래 코드로 이동
+					rentOk = false; //조건에 만족되지 못한 값들은 false로 걸러짐 그리고 다시 반복문 진행
 					break;
 				}
 

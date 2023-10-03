@@ -49,5 +49,7 @@ public interface RentalDAO {
 
 	void waitTime(String merchantId);
 
+	void insertTime(RentalVO myKey);
+
 
 }

@@ -125,6 +125,11 @@ public class RentServiceImpl implements RentService {
 	public void waitTime(String merchantId) {
 		this.rentalDao.waitTime(merchantId);
 	}//렌탈 테이블의 차량정비시간을 설정
+
+	@Override
+	public void insertTime(RentalVO myKey) {
+		this.rentalDao.insertTime(myKey);
+	}//waitTime을 원래 반납시간과 똑같은 시간으로 지정
 	
 
 }
