@@ -47,7 +47,6 @@ function payMent(paymentType, rental_cr_mid, mem_m_phone, mem_m_name, car_c_name
         buyer_name: rsp.buyer_name,
         buyer_phone: rsp.buyer_tel,
         member_email: rsp.buyer_email,
-        buy_addr: rsp.buyer_addr,
         buy_product_name: rsp.name,
         buyer_buyid: rsp.imp_uid,
         amount: rsp.paid_amount,

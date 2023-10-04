@@ -81,18 +81,7 @@ select * from c_member order by m_name asc; -- 사용자 확인
 select * from c_car order by c_num asc; --차량 확인
 select * from c_rental order by cr_num desc; --렌트 확인
 select * from c_order_info order by id desc; --결제 정보 확인
-merchant_1695602468086
-select * from c_order_info where MERCHANT_ID = 'merchant_1695602937057';
 
-select * from c_order_info where MERCHANT_ID = 'merchant_1695602468086';
-
-select * from c_order_info where parent_merchant_id = 'merchant_1695632654275'; --부모의 주문번호를 이용해서 그의 자식을 찾음
-select * from c_rental where cr_order = 'merchant_1695632654275';
-select * from c_rental where cr_order = 'merchant_1695632899760';
-
-UPDATE c_car SET c_ok = 1 WHERE c_ok = 0;
-UPDATE c_car SET c_ok = 1 WHERE c_name = '캐스퍼' AND c_ok = 0;
-UPDATE c_car SET c_ok = 0 WHERE c_name = '캐스퍼';
 
 
 --시퀀스 생성
@@ -228,7 +217,6 @@ create table c_order_info (
     buyer_name varchar2(255),
     buyer_phone varchar2(20),
     member_email varchar2(255),
-    buyer_address varchar2(500),
     buy_date varchar2(20),
     product_name varchar2(255),
     buy_id varchar2(255),

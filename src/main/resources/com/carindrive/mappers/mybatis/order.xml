@@ -11,7 +11,6 @@
             BUYER_NAME,
             BUYER_PHONE,
             MEMBER_EMAIL,
-            BUYER_ADDRESS,
             BUY_DATE,
             PRODUCT_NAME,
             BUY_ID,
@@ -29,7 +28,6 @@
             #{buyer_name, jdbcType=VARCHAR}, 
             #{buyer_phone, jdbcType=VARCHAR}, 
             #{member_email, jdbcType=VARCHAR}, 
-            #{buyer_addr, jdbcType=VARCHAR},
             #{buy_date, jdbcType=VARCHAR}, 
             #{buy_product_name, jdbcType=VARCHAR}, 
             #{buyer_buyid, jdbcType=VARCHAR}, 
@@ -59,7 +57,6 @@
 	    <result column="BUYER_NAME" property="buyer_name"/>
 	    <result column="BUYER_PHONE" property="buyer_phone"/>
 	    <result column="MEMBER_EMAIL" property="member_email"/>
-	    <result column="BUYER_ADDRESS" property="buyer_addr"/>
 	    <result column="BUY_DATE" property="buy_date"/>
 	    <result column="PRODUCT_NAME" property="buy_product_name"/>
 	    <result column="BUY_ID" property="buyer_buyid"/>
