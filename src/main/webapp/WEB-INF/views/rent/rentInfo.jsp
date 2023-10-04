@@ -130,10 +130,13 @@
 				<td>&nbsp;예약 취소일</td> <td>&nbsp;취소 수수료</td>
 			</tr>
 			<tr>
-				<td>&nbsp;인수일기준 2 ~ 3일전</td> <td>&nbsp;총 대여금의 20% 수수료부과</td>
+				<td>&nbsp;인수일 기준  3 일전</td> <td>&nbsp;모든 금액 환불</td>
 			</tr>
 			<tr>
-				<td>&nbsp;인수일기준 1 ~ 당일</td> <td>&nbsp;총 대여금의 24시간 수수료부과</td>
+				<td>&nbsp;인수일 기준  2 일전</td> <td>&nbsp;총 대여금의 50% 수수료부과</td>
+			</tr>
+			<tr>
+				<td>&nbsp;인수일 기준 1 일전 ~ 당일</td> <td>&nbsp;환불 불가</td>
 			</tr>
 		</table>
 	</div>

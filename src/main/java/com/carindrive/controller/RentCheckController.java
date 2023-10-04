@@ -186,7 +186,9 @@ public class RentCheckController {
 					//결제내역에서 예약한 차량의 이름을 ""(공백)으로 구분함
 					String[] parts = order.getBuy_product_name().split(" ");
 					String carName = parts[2];	//0부터 시작하는 인덱스중 2번째 값을 carName에 저장시킴 ex) 2023년식 WHITE '레이' 시간연장
-
+					
+					//쿼리문 Like을 돌리기위해 와일드카드 사용
+					carName = "%"+carName+"%";
 					carInfo = this.rentService.getCarInfo(carName);	//차량정보를 carName을 기준으로 가져옴
 					carInfos.add(carInfo);	//객체에 저장시킴
 				}
