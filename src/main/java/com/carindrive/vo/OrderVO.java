@@ -13,6 +13,8 @@ public class OrderVO {
     private String member_email;    // 구매자이메일
     private String buyer_addr;      // 구매자 주소 (수정예정)
     private String buy_date;        // 결제일자
+    private String product_name;
+    private String merchant_Id;
     private String buy_product_name; // 결제한 물품
     private String buyer_buyid;     // 결제번호
     private String merchantId;      // 주문번호

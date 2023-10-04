@@ -111,8 +111,7 @@ public class ServiceController {
    // 공지사항 내용 보기 
 	@RequestMapping("/service_ncont")
 	public ModelAndView service_ncont(
-			@RequestParam("cs_no") int cs_no)
-	{
+			@RequestParam("cs_no") int cs_no){
 		ServiceVO g = this.serviceSv.getCs_Cont(cs_no);
 		String g_cont=g.getCs_cont().replace("\n","<br/>");
 
@@ -311,7 +310,7 @@ public class ServiceController {
 
 		this.serviceSv.insertQna(q); // 문의 저장
 
-		return "redirect:/service_qboard";// 목록보기 이동
+		return "redirect:/service/service_qboard";// 목록보기 이동
 	} // 게시물 저장
 
    

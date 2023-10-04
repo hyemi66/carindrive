@@ -14,6 +14,7 @@ public interface MemberDAO {
 
 }
 */
+import com.carindrive.vo.SocialVO;
 
 public interface MemberDAO {
 	
@@ -27,9 +28,15 @@ public interface MemberDAO {
 
 	MemberVO loginCheck(String m_id);
 
-
 	MemberVO adminCk(String m_id);
+	
+	void insertKakao(SocialVO kakaoUser);
 
+	SocialVO serchkakao(String userEmail);
+
+	MemberVO serchUserEmail(String m_email);
+
+	int updatePwd(MemberVO m);
 
 	List<MemberVO> myPage(String m_id);
 
@@ -41,5 +48,7 @@ public interface MemberDAO {
 
 
 	void delMember(String m_id);
+
+
 
 }

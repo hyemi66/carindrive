@@ -9,8 +9,9 @@
 %>
 <html>
 <head>
-	<script src="${path}/js/jquery.js"></script>
-    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+<script src="${path}/js/jquery.js"></script>
+<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+<link href="${path}/css/timeUp.css" rel="stylesheet"/>
 <meta charset="UTF-8">
 <title>시간 연장</title>
 </head>
@@ -118,6 +119,13 @@ function payMent(paymentType, rental_cr_mid, car_c_name, car_c_color, car_c_year
 }
 </script>
 <body>
+<div class="plusPay">
+	<h2>추가 금액</h2>
+	<hr>
+	<p>
+		추가 시간 : ${calculatedPrice / car.c_price} 분
+	</p>
+</div>
 
 <br>
 	결제창<br>

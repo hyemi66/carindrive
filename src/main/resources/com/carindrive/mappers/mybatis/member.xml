@@ -21,7 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- yw -->
 	
-	 	<!-- 아이디 중복 검색 -->
+	<!-- 아이디 중복 검색 -->
    	<select id="m_idcheck"  resultType="member">
    		select * from c_member where m_id=#{id}
    	</select>
@@ -30,7 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    	<insert id="C_mem_in">
    		insert into 
    		c_member(m_id,m_pwd,m_birth,m_name,m_email,m_tel,m_phone,
-   		m_state,m_regdate)
+   		m_state,regdate)
    		values(#{m_id},#{m_pwd},#{m_birth},#{m_name},#{m_email},
    		#{m_tel},#{m_phone},1,sysdate)
    	</insert>
@@ -44,8 +44,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    	<select id="admin_ck" resultType="member">
    		select * from c_member where m_id=#{m_id} and m_state=9
    	</select>
-   	
-   	<!-- 마이페이지쪽 마이바티스 -->
+  
+    <!-- 유저 이메일 검색 후 아이디 가져오기 -->
+  	<select id="Serch_email" resultType="member">
+  		select m_id from c_member where m_email =#{m_email}
+  	</select>
+  	
+  	
+    <!-- 유저 이메일 검색  + 아이디 가져오기(join 예시) 
+  	<select id="Serch_email" resultType="member">
+  		select A.m_id AS m_id 
+		from c_member A FULL OUTER join social B 
+		ON A.m_email = B.email
+		where B.email=#{m_email} 
+		or A.m_email =#{m_email}
+  	</select> -->
+  	
+  	
+    <!-- 유저 비밀번호 변경 -->
+	<update id="update_pwd">
+	update c_member set m_pwd=#{m_pwd} where m_id=#{m_id}
+	</update>
+	
+	<!-- 마이페이지쪽 마이바티스 -->
    	<!-- 멤버 리스트 불러오기 -->
    	<select id="mypage" resultType="member">
    		select * from c_member where m_id=#{m_id}
@@ -64,7 +85,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    	
    	<!-- 회원탈퇴(DB에서 삭제) -->
    	<update id="del_mem">
-   		delete from c_member where m_id = #{m_id}
+   		update c_member set m_state = 2 where m_id = #{m_id}
    	</update>
-
+	
+	
+	
+	
 </mapper>

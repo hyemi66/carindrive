@@ -134,4 +134,9 @@ public class ServiceDAOImpl implements ServiceDAO {
 		return this.sqlSession.selectOne("sg_cont",cs_no);
 	}
 
+	@Override
+	public void updateHit(int cs_no) {
+		this.sqlSession.update("cs_hit",cs_no);
+	}
+
 }

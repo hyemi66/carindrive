@@ -4,46 +4,75 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>시간 연장</title>
-    <script src="${path}/js/jquery.js"></script>
-    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+<meta charset="UTF-8">
+<title>시간 연장</title>
+<link href="${path}/css/timeUp.css" rel="stylesheet"/>
+<link href="${path}/css/rent.css" rel="stylesheet"/>
+<script src="${path}/js/jquery.js"></script>
 </head>
 <body>
-    
-    
-    
-    현재 렌트중인 차량<br>
-    ${car.c_name}
-    <div id="menu01">
-        <p>
-            기존 반납시간<br>
-            <input type="datetime-local" name="cr_sdate" id="cr_sdate" value="${rental.cr_edate}" required readonly>
-        </p>
-    </div>
-    <div id="menu02">
-            반 납 하 는 시 간 <br>
-		            <form method="POST" action="/rent/timeUpPay">
+
+<div class="timeBox">
+	<div id="bigBox">
+		<h2>-- 현재 렌트중인 차량 --</h2>
+		<img src="../images/car/${car.c_img}">
+		<table border="1">
+			<tr>
+				<th width="70">브랜드</th>
+				<th width="100">이름</th>
+				<th width="100">차종</th>
+				<th width="100">기름</th>
+				<th width="100">년도</th>
+			</tr>
+			<tr>
+				<td align="center">${car.c_brand}</td>
+				<td align="center">${car.c_name}</td>
+				<td align="center">${car.c_type}</td>
+				<td align="center">${car.c_oil}</td>
+				<td align="center">${car.c_year}</td>
+			</tr>
+		</table>
+	</div>
+	<hr id="t_hr">
+	<div id="plusBox">
+		<form method="POST" action="/rent/timeUpPay">
+			<table border="1">
+				<tr>
+					<th width="200">기존 반납시간</th>
+					<td align="center" width="400">
+						${rental.cr_edate}"
+					</td>
+				</tr>
+				<tr>
+					<th width="200">연장 후 반납시간</th>
+					<td align="center" width="400">
 						<input type="hidden" name="c_num" id="c_num" value="${car.c_num}">
 						<input type="hidden" name="cr_sdate" id="cr_sdate" value="${rental.cr_edate}">
 						<input type="hidden" name="order_number" id="order_number" value="${rental.cr_order}">
-					    <input type="hidden" name="calculatedPrice" id="calculatedPrice">
-					    <input type="datetime-local" name="cr_edate" id="cr_edate" onchange="setMinValue()" required>
-					    <input type="submit" value="결제요청">
-					</form>
-    </div>
-	<input type="hidden" value="선택완료" onclick="fetchPrice()">
+						<input type="hidden" name="calculatedPrice" id="calculatedPrice">
+						<input type="datetime-local" name="cr_edate" id="cr_edate" onchange="setMinValue()" value="${rental.cr_edate}" required>
+					</td>
+				</tr>
+				<tr>
+					<th>추가 가격</th>
+					<td>
+						<span id="priceDisplay">
+							<c:choose>
+								<c:when test="${not empty orderInfo.amount && orderInfo.amount > 0}">
+									<fmt:formatNumber value="${orderInfo.amount}" type="number" pattern="#,###"/>원
+								</c:when>
+								<c:otherwise>0원</c:otherwise>
+							</c:choose>
+						</span>
+					</td>
+				</tr>
+			</table>
+			<input type="submit" value="결제요청">
+		</form>
+		<input type="hidden" value="선택완료" onclick="fetchPrice()">
+	</div>
+</div>
 
-<p>계산된 가격: <span id="priceDisplay">
-    <c:choose>
-        <c:when test="${not empty orderInfo.amount && orderInfo.amount > 0}">
-            <fmt:formatNumber value="${orderInfo.amount}" type="number" pattern="#,###"/>원
-        </c:when>
-        <c:otherwise>
-            0원
-        </c:otherwise>
-    </c:choose>
-</span></p>
 
 
 
@@ -57,15 +86,21 @@
     endDate.setAttribute("min", startDate.value);
 
     function setMinValue() {
-        // 두 날짜 값을 비교
+        // 기존의 반납시간과 새로운 반납시간 비교
         if (new Date(endDate.value) < new Date(startDate.value)) {
             alert("기존의 반납시간보다 작은 시간은 설정할 수 없습니다.");
             endDate.value = startDate.value;
-        } else {//날짜를 잘 선택하면
-        	// 여기서 hidden input의 value를 업데이트
+        } else {
+            let diffTime = new Date(endDate.value) - new Date(startDate.value);
+            let diffHours = diffTime / (1000 * 60 * 60);
+
+            if (diffHours > 2) {
+                alert("시간 연장은 최대 2시간까지만 가능합니다.");
+                endDate.value = new Date(new Date(startDate.value).getTime() + 2 * 60 * 60 * 1000).toISOString().slice(0, 16);
+            } 
+
             document.getElementById("cr_edate").value = endDate.value;
-            console.log('cr_edate:', endDate.value);
-            fetchPrice();	//fetchPrice()함수 시작
+            fetchPrice();
         }
     }
 
@@ -104,6 +139,7 @@ function fetchPrice() {
         },
         error: function (error) {
             console.error("Error fetching price:", error);
+            alert("오류가 발생했습니다: " + error.responseText);
         }
     });
 }

@@ -4,9 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.carindrive.dao.AdminDAO;
 import com.carindrive.vo.CarVO;
+import com.carindrive.vo.MemberVO;
+import com.carindrive.vo.OrderVO;
 import com.carindrive.vo.PageVO;
 import com.carindrive.vo.QnaVO;
 import com.carindrive.vo.ServiceVO;
@@ -87,4 +90,66 @@ public class AdminServiceImpl implements AdminService {
 		return this.adminDao.getAdminQnaList(p);
 	}
 	
+	@Override
+	public int getAdminState(String cq_id) {
+		return this.adminDao.getAdminState(cq_id);
+	}
+
+	@Override
+	public QnaVO getAdminQnaCont(int no) {
+		return this.adminDao.getAdminQnaCont(no);
+	}
+	
+	@Override
+	public List<QnaVO> getAdminQnaReply(int qna_replygroup) {
+		return this.adminDao.getAdminQnaReply(qna_replygroup);
+	}
+	
+	@Transactional
+	@Override
+	public void replyQna(QnaVO q) {
+		this.adminDao.updateQnaIndex(q); // 답변 레벨 증가
+		this.adminDao.replyQna(q); // 답변 저장
+	}
+
+	@Override
+	public void updateReply(QnaVO q) {
+		this.adminDao.updateReply(q);
+	}
+
+	@Override
+	public void delReply(int no) {
+		this.adminDao.delReply(no);
+	}
+
+	@Override
+	public int getMemCount() {
+		return this.adminDao.getMemCount();
+	}
+
+	@Override
+	public List<MemberVO> getAdminMemList(PageVO p) {
+		return this.adminDao.getAdminMemList(p);
+	}
+
+	@Override
+	public void del_mem(String m_id) {
+		this.adminDao.del_mem(m_id);
+	}
+
+	@Override
+	public int getOrderCount() {
+		return this.adminDao.getOrderCount();
+	}
+
+	@Override
+	public List<OrderVO> getAdminOrderList(PageVO p) {
+		return this.adminDao.getAdminOrderList(p);
+	}
+
+	@Override
+	public void updateRefund(String merchantId) {
+		this.adminDao.updateRefund(merchantId);
+	}
+
 }

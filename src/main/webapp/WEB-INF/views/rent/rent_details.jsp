@@ -32,7 +32,7 @@
 	
 	<div class=box>
 		<div class="infobox">
-		<h2>고객정보</h2>
+		<h2 class="member">고객정보</h2>
 			<p>예약자 성함: ${memberInfo.m_name}</p>
 			<p>예약자 연락처: ${formattedPhone}</p>
 			<p>운전자 성함: 추후 수정</p>
@@ -40,7 +40,7 @@
 		</div>
 		
 		<div class="infobox">
-		<h2>차량정보</h2>
+		<h2 class ="car">차량정보</h2>
 			<p>브랜드: ${carInfo.c_brand}</p>
 			차량이름: <span style="color: red;">${carInfo.c_name}</span>
 			<p>연식: ${carInfo.c_year}년식</p>
@@ -51,7 +51,7 @@
 	</div>
 	<div class=box>
 		<div class="infobox">
-		<h2>결제정보</h2>
+		<h2 class="pay">결제정보</h2>
 			<p>주문번호: ${orderInfo.merchantId}</p>
 			<p>결제일자: ${orderInfo.buy_date}</p>
 			<p>렌트비용: <fmt:formatNumber value="${orderInfo.amount}" type="number" pattern="#,###"/>원</p>
@@ -66,8 +66,18 @@
 					결제상태: <span style="color: green;">${orderInfo.refund}</span>
 				</c:when>
 			</c:choose>
-			<p>대여일자: ${rentalInfo.cr_sdate}</p>
-			<p>반납일자: ${rentalInfo.cr_edate}</p>
+			<p>대여일자: 
+			    <c:choose>
+			        <c:when test="${rentalInfo.cr_sdate eq '0001-01-01 01:01'}">-</c:when>
+			        <c:otherwise>${rentalInfo.cr_sdate}</c:otherwise>
+			    </c:choose>
+			</p>
+			<p>반납일자: 
+			    <c:choose>
+			        <c:when test="${rentalInfo.cr_edate eq '9999-01-01 01:01'}">-</c:when>
+			        <c:otherwise>${rentalInfo.cr_edate}</c:otherwise>
+			    </c:choose>
+			</p>
 		</div>
 	</div>	
 	
@@ -80,11 +90,11 @@
 		                <input type="hidden" name="c_num" value="${carInfo.c_num}">
 		                <input type="hidden" name="cr_edate" value="${rentalInfo.cr_edate}">
 		                <input type="hidden" name="order_number" value="${orderInfo.merchantId}">
-		                <button type="submit">시간연장</button>
+		                <button class="timeup" type="submit">시간연장</button>
 		            </form>		
 		        </c:when>
 		        <c:otherwise>
-		            <h2>시간연장불가</h2>
+		            <h2 class="text">시간 연장 불가</h2>
 		        </c:otherwise>
 		    </c:choose>
 		</div>
@@ -93,12 +103,12 @@
 		<div class="infobox">
 			<c:choose>							<%--환불완료 상태이거나, 현재시간이 렌탈대여시간을 지났으면 --%>
 				<c:when test="${orderInfo.refund == '환불완료' || currentDateTime > rentalInfo.cr_sdate}">
-					<h2>환불불가</h2>
+					<h2 class="text">환불 불가</h2>
 				</c:when>
 				<c:otherwise>
 					<form action="/rent/refund" method="post" id="refundForm">
 			            <input type="hidden" name="order_number" value="${orderInfo.merchantId}">
-			            <button type="submit">환불하기</button>
+			            <button class="cancle" type="submit" onclick="return confirmRefund()">환불하기</button>
 			        </form>
 				</c:otherwise>
 			</c:choose>
@@ -106,7 +116,12 @@
 	</div>
 </div><%--bigbox --%>
 
+<!-- 환불시 인증 팝업  -->
 <script>
+function confirmRefund() {
+    return confirm("정말 환불하시겠습니까?");
+}
+
 function openPopup(url) {
     var width = 1200; // 팝업 창 가로 크기
     var height = 1000; // 팝업 창 세로 크기

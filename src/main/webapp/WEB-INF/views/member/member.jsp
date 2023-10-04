@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <title></title>
 <script src="../js/jquery.js"></script>
-<link href="${path}/resources/css/main.css" rel="stylesheet"/>
+<link href="${path}/css/main.css" rel="stylesheet"/>
 </head>
 <body>
 <jsp:include page="../include/header.jsp"/>

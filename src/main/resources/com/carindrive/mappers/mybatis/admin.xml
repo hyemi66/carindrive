@@ -119,16 +119,91 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 1대1 문의 -->
 	<!-- qna 목록 총 개수 -->
-	<select id="qna_count1" resultType="int">
+	<select id="admin_qna_count" resultType="int">
 		select count(cq_no) from c_qna
 	</select>
 	
 	<!-- qna 리스트 -->
-	<select id="qna_list1" resultType="qna">
+	<select id="admin_qna_list" resultType="qna">
 		select * from (
-		select rowNum rNum, cq_no, cq_id, cq_title, cq_cont, cq_date, cq_file from
-		(select * from c_qna order by cq_no desc))
+		select rowNum rNum, cq_no, cq_id, cq_title, cq_cont, cq_date, cq_file, qna_replytype from
+		(select * from c_qna order by qna_replygroup desc, qna_replyindex asc))
 		where rNum &gt;= #{startrow} and rNum &lt;= #{endrow}
 	</select>
+	
+	<!-- admin state -->
+	<select id="admin_state" resultType="int">
+		select m_state from c_member where m_name = #{cq_id}
+	</select>
+	
+	<!-- qna 내용보기 -->
+	<select id="admin_qna_cont" resultType="qna">
+		select * from c_qna where cq_no = #{no}
+	</select>
+	
+	<!-- 해당하는 번호의 답변불러오기 -->
+	<select id="replyList" resultType="qna">
+		select * from c_qna where qna_replygroup = #{qna_replygroup} and qna_replytype != 0
+	</select>
+	
+	<!-- qnaindex 증가 -->
+	<update id="update_index">
+		update c_qna set qna_replyindex = qna_replyindex + 1 where qna_replygroup = #{qna_replygroup}
+		and qna_replyindex > #{qna_replyindex}
+	</update>
+	
+	<!-- qna 답변저장 -->
+	<insert id="reply_insert">
+		insert into c_qna (cq_no, cq_id, cq_title, cq_cont, qna_replygroup, qna_replytype, qna_replyindex)
+		values (cq_seq.nextval, #{cq_id}, #{cq_title}, #{cq_cont}, 
+		#{qna_replygroup}, #{qna_replytype} + 1, #{qna_replyindex} + 1)
+	</insert>
+	
+	<!-- qna 답변수정 -->
+	<update id="reply_update">
+		update c_qna set cq_cont = #{cq_cont} where cq_no = #{cq_no}
+	</update>
+	
+	<!-- qna 답변삭제 -->
+	<delete id="reply_del">
+		delete from c_qna where cq_no = #{no}
+	</delete>
+	
+	<!-- 탈퇴회원관리 -->
+	<!-- 탈퇴회원 총 수 -->
+	<select id="count_mem" resultType="int">
+		select count(m_id) from c_member where m_state = 2
+	</select>
+	
+	<!-- 탈퇴회원 멤버 리스트 -->
+	<select id="admin_mem_list" resultType="member">
+		select * from (
+		select rowNum rNum, m_id, m_name, m_regdate from
+		(select * from c_member where m_state = 2))
+		where rNum &gt;= #{startrow} and rNum &lt;= #{endrow}
+	</select>
+	
+	<!-- 탈퇴회원 완전히 삭제하기 -->
+	<delete id="admin_del_mem">
+		delete from c_member where m_id = #{m_id}
+	</delete>
+	
+	<!-- 차량예약환불관리 -->
+	<select id="count_order" resultType="int">
+		select count(id) from c_order_info
+	</select>
+	
+	<!-- 차량예약리스트 -->
+	<select id="admin_order_list" resultType="order">
+		select * from (
+		select rowNum rNum, buyer_name, product_name, buy_date, refund, merchant_Id from
+		(select * from c_order_info))
+		where rNum &gt;= #{startrow} and rNum &lt;= #{endrow}
+	</select>
+	
+	<!-- 차량환불시 refund 업데이트 -->
+	<update id="admin_updateRefund">
+		update c_order_info set refund = '환불완료' where merchant_Id = #{merchant_Id}
+	</update>
 	
 </mapper>

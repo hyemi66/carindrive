@@ -16,6 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.carindrive.service.AdminService;
 import com.carindrive.vo.CarVO;
+import com.carindrive.vo.MemberVO;
+import com.carindrive.vo.OrderVO;
 import com.carindrive.vo.PageVO;
 import com.carindrive.vo.QnaVO;
 import com.carindrive.vo.ServiceVO;
@@ -144,6 +146,9 @@ public class AdminController {
 		dm.addObject("page",page);
 		return dm;
 	}//admin_gongji_del()
+	
+	
+	
 	
 	/* 차량관리 */
 	@RequestMapping("/admin_car_list")
@@ -329,6 +334,8 @@ public class AdminController {
 	@RequestMapping("/admin_qna")
 	public ModelAndView admin_qna(QnaVO q,HttpServletResponse response,
 			HttpServletRequest request,HttpSession session,PageVO p) throws Exception {
+		String cq_id = (String)session.getAttribute("id");
+		int state = this.adminService.getAdminState(cq_id);
 		int page=1;
 		int limit=7;
 		if(request.getParameter("page") != null) {
@@ -350,6 +357,7 @@ public class AdminController {
 
 		ModelAndView listM=new ModelAndView();
 		
+		listM.addObject("state", state);
 		listM.addObject("qlist",qlist);
 		listM.addObject("page",page);
 		listM.addObject("startpage",startpage);
@@ -360,5 +368,171 @@ public class AdminController {
 		listM.setViewName("admin/admin_qna");
 		return listM;
 	} // admin_qna()
+	
+	@RequestMapping("/admin_qna_cont")
+	public ModelAndView admin_qna_cont(int no,int page) {
+		QnaVO q = this.adminService.getAdminQnaCont(no);
+		String cq_cont = q.getCq_cont().replace("\n","<br>");
+		
+		List<QnaVO> qlist = this.adminService.getAdminQnaReply(q.getQna_replygroup());
+		
+	    ModelAndView cm=new ModelAndView();
+	    cm.addObject("q",q);
+	    cm.addObject("page",page);
+	    cm.addObject("cq_cont", cq_cont);
+	    cm.addObject("qlist", qlist);
+	    
+	    return cm;
+	} // admin_qna_cont()
+	
+	@RequestMapping("/admin_qna_reply")
+	public ModelAndView admin_qna_reply(int no, int page) {
+		QnaVO q = this.adminService.getAdminQnaCont(no);
+		
+		ModelAndView qm = new ModelAndView();
+		
+		qm.addObject("q", q);
+		qm.addObject("page",page);
+		
+		return qm;
+	} // admin_qna_reply()
+	
+	@PostMapping("/admin_qna_reply_ok")
+	public String admin_qna_reply_ok(int page, QnaVO q, HttpSession session) {
+		String cq_id = (String)session.getAttribute("id");
+		q.setCq_id(cq_id);
+		
+		this.adminService.replyQna(q);
+		
+		return "redirect:/admin/admin_qna?page=" + page; // 목록 보기로 이동
+	} // admin_qna_reply_ok()
+	
+	@RequestMapping("/admin_qna_reply_edit")
+	public ModelAndView admin_qna_reply_edit(int no, int page) {
+		QnaVO q = this.adminService.getAdminQnaCont(no);
+		
+		ModelAndView qm = new ModelAndView();
+		
+		qm.addObject("q", q);
+		qm.addObject("page",page);
+		
+		return qm;
+	} // admin_qna_reply_edit()
+	
+	@PostMapping("/admin_qna_reply_edit_ok")
+	public String admin_qna_reply_edit_ok(int page, QnaVO q) {
+		this.adminService.updateReply(q);
+		
+		return "redirect:/admin/admin_qna?page=" + page;
+	} // admin_qna_reply_edit_ok()
+	
+	@GetMapping("/admin_qna_reply_del")
+	public ModelAndView admin_qna_reply_del(int no,int page) {
+		
+		this.adminService.delReply(no);
+		
+		ModelAndView dm=new ModelAndView();
+		
+		dm.setViewName("redirect:/admin/admin_qna");
+		dm.addObject("page",page);
+		
+		return dm;
+	}//admin_gongji_del()
+	
+	/* 회원관리 */
+	@RequestMapping("/admin_member")
+	public ModelAndView admin_member(MemberVO m,HttpServletResponse response,
+			HttpServletRequest request,HttpSession session,PageVO p) throws Exception {
+		int page=1;
+		int limit=7;
+		if(request.getParameter("page") != null) {
+			page=Integer.parseInt(request.getParameter("page"));
+		}
+		
+		int listcount = this.adminService.getMemCount(); // 탈퇴회원 총 수
+		
+		p.setStartrow((page-1)*7+1);//시작행번호
+		p.setEndrow(p.getStartrow()+limit-1);//끝행번호
+		
+		List<MemberVO> mlist = this.adminService.getAdminMemList(p); // 탈퇴회원 멤버 리스트
+		
+		// 총페이지수
+		int maxpage=(int)((double)listcount/limit+0.95);
+		int startpage=(((int)((double)page/10+0.9))-1)*10+1;
+		int endpage=maxpage;
+		if(endpage > startpage+10-1) endpage=startpage+10-1;
+
+		ModelAndView listM=new ModelAndView();
+		
+		listM.addObject("mlist",mlist);
+		listM.addObject("page",page);
+		listM.addObject("startpage",startpage);
+		listM.addObject("endpage",endpage);
+		listM.addObject("maxpage",maxpage);
+		listM.addObject("listcount",listcount);
+		
+		listM.setViewName("admin/admin_member");
+		return listM;
+	} // admin_member()
+	
+	@GetMapping("/admin_member_del")
+	public ModelAndView admin_member_del(String m_id, int page) {
+		this.adminService.del_mem(m_id);
+		
+		ModelAndView mm = new ModelAndView();
+		mm.addObject("page", page);
+		mm.setViewName("redirect:/admin/admin_member");
+		
+		return mm;
+	} // admin_member_del()
+	
+	/* 차량환불관리 */
+	@RequestMapping("/admin_pay")
+	public ModelAndView admin_pay(OrderVO o,HttpServletResponse response,
+			HttpServletRequest request,HttpSession session,PageVO p) throws Exception {
+		int page=1;
+		int limit=7;
+		if(request.getParameter("page") != null) {
+			page=Integer.parseInt(request.getParameter("page"));
+		}
+		
+		int listcount = this.adminService.getOrderCount(); // 차량예약총수
+		
+		p.setStartrow((page-1)*7+1);//시작행번호
+		p.setEndrow(p.getStartrow()+limit-1);//끝행번호
+		
+		List<OrderVO> mlist = this.adminService.getAdminOrderList(p); // 차량예약리스트
+		
+		// 총페이지수
+		int maxpage=(int)((double)listcount/limit+0.95);
+		int startpage=(((int)((double)page/10+0.9))-1)*10+1;
+		int endpage=maxpage;
+		if(endpage > startpage+10-1) endpage=startpage+10-1;
+
+		ModelAndView listM = new ModelAndView();
+		
+		listM.addObject("mlist",mlist);
+		listM.addObject("page",page);
+		listM.addObject("startpage",startpage);
+		listM.addObject("endpage",endpage);
+		listM.addObject("maxpage",maxpage);
+		listM.addObject("listcount",listcount);
+		
+		listM.setViewName("admin/admin_pay");
+		
+		return listM;
+	} // admin_pay()
+	
+	@GetMapping("/admin_pay_del")
+	public ModelAndView admin_pay_del(String merchant_Id, int page) {
+		this.adminService.updateRefund(merchant_Id);
+		
+		ModelAndView om = new ModelAndView();
+		
+		om.addObject("page", page);
+		om.setViewName("redirect:/admin/admin_pay");
+		
+		return om;
+	}
 	
 }

@@ -158,15 +158,37 @@ body {
 	background-color: #1c2b37;
 	color: white;
 }
+
 /* 차 예약 버튼 */
-#carRent input {
-	border: 1px solid #1c2b37;
-	background-color: #1c2b37;
-	padding: 15px 540px;
-	font-weight: bold;
-	font-size: 20px;
-	color: white;
+#carRent {
+    display: flex;
+    align-items: center; /* 버튼을 수직으로 중앙 정렬 */
 }
+#carRent input[type="submit"] {
+    border: 1px solid #1c2b37;
+    background-color: #1c2b37;
+    padding: 15px 230px;
+    margin-left: 10px;
+    font-weight: bold;
+    font-size: 20px;
+    color: white;
+    box-sizing: border-box;
+    display: inline-block;
+}
+#carRent input[type="button"] {
+	border: 1px solid #1c2b37;
+    background-color: #1c2b37;
+    padding: 15px 190px;
+    font-weight: bold;
+    font-size: 20px;
+    color: white;
+    box-sizing: border-box;
+    display: inline-block;
+}
+#carRent input:hover {
+    background-color: #294052; 
+}
+
 /* 예약자 확인 및 예약일자 + 가격 */
 #cp_intro h3 {
 	color: #1c2b37;

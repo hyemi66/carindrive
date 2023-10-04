@@ -3,6 +3,8 @@ package com.carindrive.service;
 import java.util.List;
 
 import com.carindrive.vo.CarVO;
+import com.carindrive.vo.MemberVO;
+import com.carindrive.vo.OrderVO;
 import com.carindrive.vo.PageVO;
 import com.carindrive.vo.QnaVO;
 import com.carindrive.vo.ServiceVO;
@@ -39,5 +41,31 @@ public interface AdminService {
 	int getQnaCount(PageVO p);
 
 	List<QnaVO> getAdminQnaList(PageVO p);
+
+	int getAdminState(String cq_id);
+
+	QnaVO getAdminQnaCont(int no);
+
+	List<QnaVO> getAdminQnaReply(int qna_replygroup);
+	
+	void replyQna(QnaVO q);
+
+	void updateReply(QnaVO q);
+
+	void delReply(int no);
+	
+	/* 탈퇴회원관리 */
+	int getMemCount();
+
+	List<MemberVO> getAdminMemList(PageVO p);
+
+	void del_mem(String m_id);
+	
+	/* 차량환불관리 */
+	int getOrderCount();
+
+	List<OrderVO> getAdminOrderList(PageVO p);
+
+	void updateRefund(String merchantId);
 
 }

@@ -52,6 +52,7 @@
     max-height: 100%;
 }
 
+/*정보들*/
 .infobox{
 	width:750px;
     margin-bottom: 10px 0px 10px 0px; /* 각 정보 블럭의 아래쪽에 간격을 추가 */
@@ -60,7 +61,17 @@
     background-color: #f9f9f9; /* 배경색 추가 */
 }
 
-.infobox h2 {
+.infobox .member {
+    color: #007bff;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.infobox .car {
+    color: #007bff;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.infobox .pay {
     color: #007bff;
     font-weight: bold;
     margin-bottom: 10px;
@@ -104,9 +115,6 @@ h2 {
     margin-top: 0; /* h2 태그 상단 간격 제거 */
 }
 
-button {
-    margin-right: 10px; /* 버튼 간의 간격 추가 */
-}
 
 /*예약내역이 존재하지 않을 때*/
 .noRental {
@@ -152,21 +160,41 @@ button {
     }
     
 /*환불 버튼 꾸미기*/
-.button button {
-    border: 1px solid black;
-    padding: 8px 8px;
-    margin-right: 20px;
-    background-color: #2b1d5a;
-    color: white;
-    font-size: 15px;
+.box button{
+    padding: 10px 20px;
+    margin-right: 10px;
     font-weight: bold;
-    display: inline-block; /* 인라인 블록 요소로 설정 */
-    float: right; /* 오른쪽으로 이동 */
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
 }
 
-.button button:hover {
-    background-color: #a22d1a; /* 마우스 오버시 배경색상 변경 */
+.box .timeup {
+   background-color: #007bff;
+    color: #fff;
+    width: 320px;
+    font-size: 20px;
+    display: block;        /* 블록 요소로 만들어 전체 폭을 사용하게 함 */
+    margin-left: auto;     /* 왼쪽 마진을 자동으로 설정 */
+    margin-right: auto; 
 }
+
+.box .cancle {
+    background-color: #d9534f;
+    color: #fff;
+    width: 320px;
+    font-size: 20px;
+    display: block;        /* 블록 요소로 만들어 전체 폭을 사용하게 함 */
+    margin-left: auto;     /* 왼쪽 마진을 자동으로 설정 */
+    margin-right: auto; 
+}
+
+.box .text{
+	text-align: center;
+	color: gray;
+}
+
+
 
 
 

@@ -35,11 +35,21 @@ public interface RentalDAO {
 
 	void updateCok(String c_name);
 	
-	void delCok(String c_name);
-	
 	int checkDate(Map<String, Object> params);
 
-	List<String> getDateCar(String c_name);
+	List<RentalVO> getDateCar(String c_name);
+
+	void reValueDate(String order_number);
+
+	void rentalStatus(String merchantId);
+
+	void rentalDel();
+
+	void rentalDel2(String m_id);
+
+	void waitTime(String merchantId);
+
+	void insertTime(RentalVO myKey);
 
 
 }

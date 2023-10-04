@@ -1,0 +1,55 @@
+.timeBox{
+	border: 1px solid #1c2b37;
+	margin: 0px 230px;
+}
+#bigBox, #plusBox {
+	text-align: center;
+}
+#bigBox h2 {
+	color: #1c2b37;
+	font-size: 40px;
+}
+#bigBox img {
+	width: 400px;
+	margin-bottom: 20px;
+}
+#bigBox table {
+	margin: 0 auto;
+	color: #1c2b37;
+}
+#bigBox table tr {
+	height: 30px;
+}
+#t_hr {
+	width: 650px;
+	margin: 20px 40px;
+}
+#plusBox table {
+	margin: 0 auto;
+	color: #1c2b37;
+}
+#plusBox table tr {
+	height: 30px;
+}
+#plusBox input[type="submit"] {
+	margin: 20px 0px;
+	width: 650px; height: 50px;
+	background-color: #1c2b37;
+	font-size: 18px;
+	font-weight: bold;
+	color: white;
+}
+#plusBox input[type="submit"]:hover {
+	background-color: #294052;
+}
+/* 결제창 */
+.plusPay {
+	border: 1px solid #1c2b37;
+	margin: 0px 300px;
+	padding: 0px 20px;
+}
+.plusPay h2 {
+	text-align: center;
+	font-size: 37px;
+	color: #1c2b37;
+}

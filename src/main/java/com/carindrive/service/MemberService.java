@@ -16,9 +16,11 @@ public interface MemberService {
 
 }*/
 
+import javax.transaction.Transactional;
 
 
 import com.carindrive.vo.MemberVO;
+import com.carindrive.vo.SocialVO;
 
 
 public interface MemberService {
@@ -37,6 +39,14 @@ public interface MemberService {
 	MemberVO loginCheck(String m_id);
 
 	MemberVO adminCk(String m_id);
+
+	void insertKakao(SocialVO kakaoUser);
+
+	SocialVO serchkakao(String userEmail);
+	
+	MemberVO serchUserEmail(String m_email);
+
+	int updatePwd(MemberVO m);
 
 	List<MemberVO> myPage(String m_id);
 

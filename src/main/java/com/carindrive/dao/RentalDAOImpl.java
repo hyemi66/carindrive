@@ -68,7 +68,6 @@ public class RentalDAOImpl implements RentalDAO {
 		return this.sqlSession.selectList("findAllCar");
 	}//모든 차량 불러오기
 	
-	
 	@Override
 	public List<CarVO> getCarList(CarVO cv) {
 		return this.sqlSession.selectList("carList", cv);
@@ -88,11 +87,6 @@ public class RentalDAOImpl implements RentalDAO {
 	public void updateCok(String c_name) {
 		this.sqlSession.update("update_cok", c_name);
 	} // 예약된 차 이름으로 c_car테이블 c_ok 0으로 변경
-	
-	@Override
-	public void delCok(String c_name) {
-		this.sqlSession.update("del_cok", c_name);
-	} // 결제오류시 예약완료된 차 c_ok == 1으로 변경
 
 	@Override
 	public int checkDate(Map<String, Object> params) {
@@ -100,9 +94,39 @@ public class RentalDAOImpl implements RentalDAO {
 	}
 
 	@Override
-	public List<String> getDateCar(String c_name) {
+	public List<RentalVO> getDateCar(String c_name) {
 		return this.sqlSession.selectList("getDateCar",c_name);
 	}// 선택된 차량에 대한 예약된 날짜 목록을 가져옴
+
+	@Override
+	public void reValueDate(String order_number) {
+		this.sqlSession.update("reValueDate",order_number);
+	}//환불시 렌탈날짜 초기화
+
+	@Override
+	public void rentalStatus(String merchantId) {
+		this.sqlSession.update("rentalStatus",merchantId);
+	}//주문번호를 기준으로 렌탈완료시 c_rental 테이블 status를 wait -> clear로 설정
+
+	@Override
+	public void rentalDel() {
+		this.sqlSession.delete("rentalDel");
+	}//5분안에 결제를 진행안하고 취소를 하면 5분동안 해당차량 렌트 불가
+
+	@Override
+	public void rentalDel2(String m_id) {
+		this.sqlSession.delete("rentalDel2",m_id);
+	}//해당 아이디의 결제 중단 내역들을 전부 제거
+
+	@Override
+	public void waitTime(String merchantId) {
+		this.sqlSession.update("waitTime",merchantId);
+	}//렌탈 테이블의 차량정비시간을 설정
+
+	@Override
+	public void insertTime(RentalVO myKey) {
+		this.sqlSession.update("insertTime",myKey);
+	}//waitTime을 원래 반납시간과 똑같은 시간으로 지정
 
 
 }

@@ -35,6 +35,7 @@ import org.springframework.stereotype.Service;
 
 import com.carindrive.dao.MemberDAO;
 import com.carindrive.vo.MemberVO;
+import com.carindrive.vo.SocialVO;
 
 
 @Service
@@ -73,6 +74,31 @@ public class MemberServiceImpl implements MemberService {
 		return this.memberDao.adminCk(m_id);
 	}
 
+	
+	@Override
+	public void insertKakao(SocialVO kakaoUser) {
+		this.memberDao.insertKakao(kakaoUser);
+		
+	}
+
+	@Override
+	public SocialVO serchkakao(String userEmail) {
+		
+		return this.memberDao.serchkakao(userEmail);
+	}
+
+	@Override
+	public MemberVO serchUserEmail(String m_email) {
+		
+		return this.memberDao.serchUserEmail(m_email);
+	}
+
+	@Override
+	public int updatePwd(MemberVO m) {
+		
+		return this.memberDao.updatePwd(m);
+	}
+	
 	@Override
 	public List<MemberVO> myPage(String m_id) {
 		return this.memberDao.myPage(m_id);
@@ -92,6 +118,8 @@ public class MemberServiceImpl implements MemberService {
 	public void delMember(String m_id) {
 		this.memberDao.delMember(m_id);
 	}
-	
 
+
+
+	
 }

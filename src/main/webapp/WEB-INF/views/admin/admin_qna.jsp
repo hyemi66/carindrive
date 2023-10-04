@@ -18,9 +18,11 @@
 			<h2>관리자페이지</h2>
 			<img id="admin_img" alt="관리자" src="${path}/images/admin.jpg">
 			<ul>
-				<li><a href="${path}/admin/admin_main">공 지 사 항</a></li>
-				<li><a href="${path}/admin/admin_car_list">차 량 관 리</a></li>
-				<li><a href="${path}/admin/admin_gna">1 대 1 문 의</a></li>
+				<li><a href="${path}/admin/admin_main">공지사항</a></li>
+				<li><a href="${path}/admin/admin_qna">1 대 1 문 의</a></li>
+				<li><a href="${path}/admin/admin_member">회원관리</a></li>
+				<li><a href="${path}/admin/admin_car_list">차량관리</a></li>
+				<li><a href="${path}/admin/admin_pay">차량환불</a></li>
 			</ul>
 		</div>
 		<article id="admin_show">
@@ -28,6 +30,7 @@
 			<div class="clear"></div>
 				<form method="get" action="admin_qna">
 					<div id="Bag">
+						
 						<h2>
 							1대1 문의 목록 ( 총 개수 : 
 							<c:if test="${listcount == null}">
@@ -36,7 +39,14 @@
 							<c:if test="${listcount != null}">
 								${listcount}개
 							</c:if>
-							)
+							,
+							<c:set var="count" value="0" />
+							<c:forEach var="i" items="${qlist}" varStatus="status">
+								<c:if test="${i.qna_replytype != 0}">
+									<c:set var="count" value="${count + 1}" />
+								</c:if>
+							</c:forEach>
+							답변 : ${count}개 )
 						</h2>
 						
 						<table id="ag_t" border="1">
@@ -47,12 +57,13 @@
 								<th>작성일</th>
 							</tr>
 							<c:if test="${!empty qlist}">
-								<c:forEach var="q" items="${qlist}"  varStatus="status">
-									<tr>
+								<c:forEach var="q" items="${qlist}" varStatus="status">
+									<c:if test="${q.qna_replytype == 0}">
+										<tr>
 										<td align="center">${status.count}</td>
 										<td align="center">${q.cq_id}</td>
 										<td align="center">
-											<a href="admin_qna_cont?no=${q.cq_no}&page=${page}&state=cont">
+											<a href="admin_qna_cont?no=${q.cq_no}&page=${page}">
 												<c:if test="${fn:length(q.cq_title)>16}">
 													${fn:substring(q.cq_title,0,16)}...
 												</c:if>
@@ -63,6 +74,8 @@
 										</td>
 										<td align="center">${fn:substring(q.cq_date,0,10)}</td>
 									</tr>
+									</c:if>
+									
 								</c:forEach>
 							</c:if>
 							<c:if test="${empty qlist}">
