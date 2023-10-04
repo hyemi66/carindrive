@@ -122,23 +122,14 @@ function payMent(paymentType, rental_cr_mid, car_c_name, car_c_color, car_c_year
 <div class="plusPay">
 	<h2>추가 금액</h2>
 	<hr>
-	<p>
-		추가 시간 : ${calculatedPrice / car.c_price} 분
-	</p>
+	<p>추가시간 : ${calculatedPrice / car.c_price}분</p>
+	<p>1분 금액 : ${car.c_price}원</p>
+	<hr>
+	<p>총 추가 금액(1분 금액 x 추가시간) : ${calculatedPrice}원</p>
+	<div id="plusMent">
+		<button onclick="payMent('card', '${rental.cr_mid}', '${car.c_name}', '${car.c_color}', '${car.c_year}', ${calculatedPrice}, '${rental.cr_order}')">카드 결제</button>
+		<button onclick="payMent('kakao', '${rental.cr_mid}', '${car.c_name}', '${car.c_color}', '${car.c_year}', ${calculatedPrice}, '${rental.cr_order}')">카카오페이 결제</button>
+	</div>
 </div>
-
-<br>
-	결제창<br>
-	결제인:${memberInfo.m_name}<br>
-	차량 : ${car.c_name}<br>
-	주문번호:${rental.cr_order}<br>
-	결제가격:${calculatedPrice}<br>
-	
-
-<button onclick="payMent('card', '${rental.cr_mid}', '${car.c_name}', '${car.c_color}', '${car.c_year}', ${calculatedPrice}, '${rental.cr_order}')">카드 결제</button>
-<button onclick="payMent('kakao', '${rental.cr_mid}', '${car.c_name}', '${car.c_color}', '${car.c_year}', ${calculatedPrice}, '${rental.cr_order}')">카카오페이 결제</button>
-
-
-	
 </body>
 </html>

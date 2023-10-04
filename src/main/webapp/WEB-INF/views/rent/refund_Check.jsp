@@ -12,15 +12,6 @@
     
 </head>
 
-    	<%--이 창을 띄울때 세션이 만료되면 새로운 창을 띄우고 로그인유도 --%>
-<%-- 세션이 만료되면 새 창을 열어 로그인 페이지로 이동 // 부모 창을 로그인 페이지로 이동 --%>
-<c:if test="${sessionScope.noSession == true}"> <%--이 기능이 동작을 안함 --%>
-    <script>
-        alert('세션이 만료되었습니다 다시 로그인해주세요!');
-        window.opener.location.href = '/member/m_login'; 
-        window.close(); // 현재 팝업 창 닫기
-    </script>
-</c:if>
 <body>
 
     
@@ -33,6 +24,42 @@
     </div>
     <button id="submit">환불하기</button>
     </form>
+ 
+<script>
+    $(document).ready(function() {
+        $("#submit").click(function(e) {
+            e.preventDefault(); // 폼의 기본 제출을 방지
+
+            $.ajax({
+                type: "POST",
+                url: "/rent/refund_Check",
+                data: { mPwd: $("#mPwd").val() },
+                success: function(map) {
+                    console.log(map);  // 전체 응답 확인
+
+                    if (map.authSuccess) {
+                        console.log("인증 완료");
+                        submitMainForm();
+                    } else {
+                        alert("비밀번호 인증에 실패했습니다.");
+                    }
+                },
+                error: function() {
+                    alert("세션이 만료되었습니다. 다시 로그인 해주세요");
+                    window.close(); // 팝업 창 닫기
+                    window.opener.close();
+                }
+            });
+        });
+    });
+
+    function submitMainForm() {
+        window.opener.document.getElementById('refundForm').submit();
+        window.close();
+    }
+</script>
+ 
+
     
 
 

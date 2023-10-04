@@ -45,11 +45,35 @@
 /* 결제창 */
 .plusPay {
 	border: 1px solid #1c2b37;
-	margin: 0px 300px;
+	margin: 0px 350px;
 	padding: 0px 20px;
 }
 .plusPay h2 {
 	text-align: center;
 	font-size: 37px;
 	color: #1c2b37;
+}
+.plusPay p {
+	margin-left: 20px;
+	margin-top: 30px;
+	font-size: 20px;
+	font-weight: bold;
+	color: #1c2b37;
+}
+#plusMent {
+	text-align: center;
+	margin-top: 45px;
+	margin-bottom: 20px;
+}
+#plusMent button {
+	margin: 5px 0px;
+	text-align: center;
+	background-color: #1c2b37;
+	color: white;
+	font-size: 14px;
+	font-weight: bold;
+	width: 450px; height: 30px;
+}
+#plusMent button:hover {
+	background-color: #294052;
 }

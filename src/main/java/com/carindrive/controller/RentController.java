@@ -122,15 +122,12 @@ public class RentController {
 					rentOk = false; //조건에 만족되지 못한 값들은 false로 걸러짐 그리고 다시 반복문 진행
 					break;
 				}
-
 			}
-
 			//예약가능한 날짜의 차량들은 리스트에 추가 후 jsp에 출력
 			if(rentOk) {
 				clist.add(car);
 			}
 		}
-
 		model.addObject("cr_sdate", cr_sdate);
 		model.addObject("cr_edate", cr_edate);
 		model.addObject("clist", clist);
@@ -181,7 +178,6 @@ public class RentController {
 
 		cr_sdate = cr_sdate.replace("T", " ");	//중간에 껴있는 T문자를 공백처리함 (전부다 이렇게 되있으므로 비교를위해 똑같이 T 제거)
 		cr_edate = cr_edate.replace("T", " ");
-
 
 
 		//로그인 정보 가져오기

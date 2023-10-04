@@ -97,7 +97,7 @@ public class RentCheckController {
 			this.rentService.rentalStatus(orderInfo.getMerchantId());
 			//렌탈 테이블의 차량정비시간을 설정 (반납시간의 +3시간)
 			this.rentService.waitTime(orderInfo.getMerchantId());
-		
+
 			System.out.println("현재 렌트하는 차량이름: "+rental.getCr_cname());
 
 			map.put("orderInfo", orderInfo);
@@ -210,35 +210,48 @@ public class RentCheckController {
 	}
 
 	//예약내역 상세보기
-	@RequestMapping(value="/rent_details")
-	public ModelAndView rent_details(@RequestParam("merchantId") String merchantId,
-			@RequestParam("carname") String carName, HttpSession session) {
-		System.out.println("rent_details메서드 동작");
-		ModelAndView model = new ModelAndView();
-		//로그인정보
-		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
-		//차량 정보 가져오기
-		CarVO carInfo = this.rentService.getCarInfo(carName);
-		//렌탈 정보 가져오기
-		RentalVO rentalInfo = this.rentService.getRentCar(merchantId);
-		//결제내역
-		OrderVO orderInfo = this.orderService.getOrder2(merchantId);
-		System.out.println("주문번호: "+merchantId);
+		@RequestMapping(value="/rent_details")
+		public ModelAndView rent_details(@RequestParam("merchantId") String merchantId,
+				@RequestParam("carname") String carName, HttpSession session, HttpServletResponse response) 
+						throws IOException {
+			System.out.println("rent_details메서드 동작");
+			response.setContentType("text/html;charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			
+			ModelAndView model = new ModelAndView();
+			//로그인정보
+			MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+			
+		    if (memberInfo == null) {
+		    	out.println("<script>");
+				out.println("window.close()");				//현재창을 닫고
+				out.println("opener.location.reload();"); 	//부모창을 새로고침
+				out.println("</script>");
+				return null;
+		    }
+		    
+			//차량 정보 가져오기
+			CarVO carInfo = this.rentService.getCarInfo(carName);
+			//렌탈 정보 가져오기
+			RentalVO rentalInfo = this.rentService.getRentCar(merchantId);
+			//결제내역
+			OrderVO orderInfo = this.orderService.getOrder2(merchantId);
+			System.out.println("주문번호: "+merchantId);
 
-		model.addObject("memberInfo", memberInfo);
-		model.addObject("carInfo",carInfo);
-		model.addObject("rentalInfo",rentalInfo);
-		model.addObject("orderInfo",orderInfo);
+			model.addObject("memberInfo", memberInfo);
+			model.addObject("carInfo",carInfo);
+			model.addObject("rentalInfo",rentalInfo);
+			model.addObject("orderInfo",orderInfo);
 
-		return model;
-	}
+			return model;
+		}
 
 	//시간 연장 코드
 	@RequestMapping(value="/timeUp")
 	public ModelAndView timeUp(@RequestParam int c_num,
-							   @RequestParam String order_number, 
-							   HttpSession session, RedirectAttributes rttr) 
-							   throws Exception {
+			@RequestParam String order_number, 
+			HttpSession session, RedirectAttributes rttr) 
+					throws Exception {
 		System.out.println("timeUp메서드 동작");
 		System.out.println("차량 코드번호: "+c_num);//차량코드번호
 		System.out.println("결제 주문번호: "+order_number);//차량코드번호
@@ -276,30 +289,30 @@ public class RentCheckController {
 	@RequestMapping(value="/calculatePrice")
 	@ResponseBody
 	public double calculatePrice(@RequestParam int c_num, 
-	        @RequestParam String order_number, 
-	        @RequestParam String cr_edate) throws Exception {
-	    
-	    // 1. 차량 정보와 대여 정보 가져오기
-	    CarVO car = this.rentService.getCarInfo2(c_num);
-	    RentalVO rental = this.rentService.getRentCar(order_number);
+			@RequestParam String order_number, 
+			@RequestParam String cr_edate) throws Exception {
 
-	    // 2. 기존 반납시간과 새로운 반납시간의 차이 계산
-	    cr_edate = cr_edate.replace("T", " ");
-	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-	    LocalDateTime originalEndDate = LocalDateTime.parse(rental.getCr_edate(), formatter);
-	    LocalDateTime newEndDate = LocalDateTime.parse(cr_edate, formatter);
+		// 1. 차량 정보와 대여 정보 가져오기
+		CarVO car = this.rentService.getCarInfo2(c_num);
+		RentalVO rental = this.rentService.getRentCar(order_number);
 
-	    Duration duration = Duration.between(originalEndDate, newEndDate);
-	    long minutes = duration.toMinutes();
-	    
-	    if (minutes > 120) {
-	        throw new Exception("시간 연장은 최대 2시간까지만 가능합니다.");
-	    }
+		// 2. 기존 반납시간과 새로운 반납시간의 차이 계산
+		cr_edate = cr_edate.replace("T", " ");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		LocalDateTime originalEndDate = LocalDateTime.parse(rental.getCr_edate(), formatter);
+		LocalDateTime newEndDate = LocalDateTime.parse(cr_edate, formatter);
 
-	    // 3. 차량의 가격 정보를 이용해 연장시간의 가격 계산
-	    double perMinuteRate = car.getC_price();
-	    double price = perMinuteRate * minutes;
-	    return price;
+		Duration duration = Duration.between(originalEndDate, newEndDate);
+		long minutes = duration.toMinutes();
+
+		if (minutes > 120) {
+			throw new Exception("시간 연장은 최대 2시간까지만 가능합니다.");
+		}
+
+		// 3. 차량의 가격 정보를 이용해 연장시간의 가격 계산
+		double perMinuteRate = car.getC_price();
+		double price = perMinuteRate * minutes;
+		return price;
 	}
 
 
@@ -341,7 +354,7 @@ public class RentCheckController {
 		System.out.println("calculatedPrice: " + calculatedPrice);
 
 		this.rentService.insertRental(rental);
-		
+
 		//5분안에 결제를 진행안하고 취소를 하면 해당 렌트내역은 5분뒤에 사라지고, 5분동안 해당차량 렌트 불가
 		this.rentService.rentalDel();
 
@@ -352,6 +365,45 @@ public class RentCheckController {
 		model.addObject("rental", rental);
 
 		return model;
+	}
+	
+	//본인 인증 메서드 
+	@RequestMapping(value="refund_Check")
+	public ModelAndView refund_Check(HttpSession session, HttpServletRequest request) throws Exception {
+		System.out.println("refund_Check (GET)메서드 동작");
+		
+		ModelAndView model = new ModelAndView();//
+		
+		return model;//
+	}
+
+	@RequestMapping(value="refund_Check", method = RequestMethod.POST)
+	@ResponseBody  // JSON 형태로 응답하기 위한 어노테이션 추가
+	public Map<String, Object> refund_Check(HttpSession session, HttpServletRequest request, RedirectAttributes rttr) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		System.out.println("refund_Check (POST) 메서드 동작");
+			MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo"); //로그인정보
+			
+			if(memberInfo == null) {
+		        map.put("status", "error");
+		        map.put("message", "로그인 이후 이용 가능합니다!");
+		        return map;
+		    }
+
+			String mPwd = request.getParameter("mPwd");
+			System.out.println("암호화 전: "+mPwd);
+
+			if(mPwd != null) {//사용자에게 값을 입력 받은 뒤
+				mPwd = CarPwdCh.getPassWordToXEMD5String(mPwd);
+				System.out.println("암호화 후: "+mPwd);
+				if (memberInfo.getM_pwd().equals(mPwd)) {
+					System.out.println("map인증완료");
+					map.put("authSuccess", true);
+				} else {
+					map.put("authSuccess", false);
+				}
+			}
+		return map;
 	}
 
 
@@ -398,7 +450,7 @@ public class RentCheckController {
 			this.orderService.addTime(orderInfo.getMerchantId());
 			//결제 완료시 렌탈테이블의 wait를 clear로 변경 (주문번호 기준)
 			this.rentService.rentalStatus(orderInfo.getMerchantId());
-			
+
 			//현재 레코드에서 부모키로 부모의 레코드에 접근
 			String key = orderInfo.getParent_merchant_id();
 			//부모의 레코드를 가져옴
@@ -406,7 +458,7 @@ public class RentCheckController {
 			System.out.println("부모의 레코드: "+pKey);
 			//부모키의 waitTime을 저장
 			String waitTime = pKey.getCr_waitTime();
-			
+
 			//현재 결제한 레코드를 가져옴
 			RentalVO myKey = this.rentService.getRentCar(orderInfo.getMerchantId());
 			//null이었던 waitTime에 값을 주입시킴
@@ -415,7 +467,7 @@ public class RentCheckController {
 			//DB에 저장
 			this.rentService.insertTime(myKey);
 			System.out.println("DB저장완료");
-			
+
 
 			System.out.println("시간추가 완료");
 			//주문번호 기준
@@ -472,41 +524,6 @@ public class RentCheckController {
 	//환불 관련 메서드
 
 
-	//본인 인증 메서드 //사용안함
-	@RequestMapping(value="refund_Check")
-	public ModelAndView refund_Check(HttpSession session, HttpServletRequest request) throws Exception {
-
-		System.out.println("refund_Check 메서드 동작");
-		ModelAndView model = new ModelAndView();
-		try {
-			MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo"); //로그인정보
-
-			String mPwd = request.getParameter("mPwd");
-			System.out.println("암호화 전: "+mPwd);
-
-			if(mPwd != null) {//사용자에게 값을 입력 받은 뒤
-				mPwd = CarPwdCh.getPassWordToXEMD5String(mPwd);
-				System.out.println("암호화 후: "+mPwd);
-				if(memberInfo.getM_pwd().equals(mPwd)) {//인증이 되면
-					System.out.println("인증완료");
-				}else {
-					System.out.println("인증실패");
-				}
-			}//
-			return model;
-		}catch(Exception e) {
-			e.printStackTrace();
-			model.addObject("noSession", true);//세션이 없음을 jsp에 전달 //이 기능이 동작을 안함
-			return model;
-		}
-	};
-
-
-
-
-
-
-
 	//토큰을 받아오는 코드
 	// IAMPORT의 API 키와 시크릿
 	private static final String API_KEY = "6723566850304883";
@@ -548,9 +565,6 @@ public class RentCheckController {
 		String buyer_name = "";
 		String buyer_phone = "";
 		String member_email = "";
-		String buyer_addrStr = "";
-		String buyer_postcode = "";
-		String buyer_addr = "";
 		String paid_at = "";
 		String buy_product_name = "";
 		String buyer_buyid = "";
@@ -583,10 +597,6 @@ public class RentCheckController {
 			buyer_name = resNode.get("buyer_name").asText(); 
 			buyer_phone = resNode.get("buyer_tel").asText(); 
 			member_email = resNode.get("buyer_email").asText(); 
-
-			buyer_addrStr = resNode.get("buyer_addr").asText(); 
-			buyer_postcode = resNode.get("buyer_postcode").asText(); 
-			buyer_addr = buyer_addrStr+" "+buyer_postcode; //주소에 우편번호 합치기
 
 			paid_at = resNode.get("paid_at").asText(); //결제시간
 			buy_product_name = resNode.get("name").asText(); 
@@ -622,7 +632,7 @@ public class RentCheckController {
 
 
 		OrderVO order_info = new OrderVO(-1L, buyer_name, buyer_phone, member_email, 
-				buyer_addr, buy_date, buy_product_name, buyer_buyid, buyer_merid, 
+				buy_date, buy_product_name, buyer_buyid, buyer_merid, 
 				buyer_pay_price, buyer_card_num, buyer_pay_ok, -1, parent_merchant_id);
 
 		return order_info;
@@ -681,7 +691,7 @@ public class RentCheckController {
 			if (now.isAfter(oneDayBeforeRental)) {
 				out.println("<script>");
 				out.println("alert('대여시간 24시간 이내는 환불이 불가능합니다.');");
-				out.println("window.close()");	//현재창을 닫고
+				out.println("window.close()");	//현재창을 닫음
 				out.println("</script>");
 			}
 			// 이틀 전 환불
@@ -705,7 +715,7 @@ public class RentCheckController {
 					//환불처리 메서드 (토큰, 주문번호, 가격)
 					cancelPay(token2,orderNum,price);
 					this.orderService.refundOK(orderNum);
-					this.rentService.reValueDate(orderNum); //주문번호를 기준으로 해당 렌탈내역의 날짜를 초기화
+					this.rentService.reValueDate(orderNum); //주문번호를 기준으로 해당 렌탈내역의 날짜들을 초기화
 					alertMessage(out, "시간추가된 결제도 환불되었습니다!");
 					out.println("<script>");
 					out.println("window.close()");	//현재창을 닫고
@@ -714,7 +724,7 @@ public class RentCheckController {
 				}
 
 			}
-			// 그 외 환불 금액 100% 가능
+			// 그 외 환불 금액 100% 가능, 시간연장은 100퍼센트 환불
 			else {
 				refundAmount = rentalRefund.getCr_price(); //환불처리후 새로고침
 				cancelPay(token, order_number, refundAmount);
@@ -739,7 +749,7 @@ public class RentCheckController {
 					//환불처리 메서드 (토큰, 주문번호, 가격)
 					cancelPay(token2,orderNum,price);
 					this.orderService.refundOK(orderNum);
-					this.rentService.reValueDate(orderNum); //주문번호를 기준으로 해당 렌탈내역의 날짜를 초기화
+					this.rentService.reValueDate(orderNum);  //주문번호를 기준으로 해당 렌탈내역의 날짜들을 초기화
 					alertMessage(out, "관련된 모든 예약이 취소 되었습니다 !");
 					out.println("<script>");
 					out.println("window.close()");	//현재창을 닫고

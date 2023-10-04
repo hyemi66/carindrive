@@ -40,13 +40,11 @@ CREATE TABLE c_rental (
     FOREIGN KEY (cr_mid) REFERENCES c_member(m_id),
     FOREIGN KEY (cr_cname) REFERENCES c_car(c_name)
 );
---결제 정보 저장 테이블
 create table c_order_info (
     id number primary key,
     buyer_name varchar2(255),
     buyer_phone varchar2(20),
     member_email varchar2(255),
-    buyer_address varchar2(500),
     buy_date varchar2(20),
     product_name varchar2(255),
     buy_id varchar2(255),
@@ -55,9 +53,9 @@ create table c_order_info (
     card_num varchar2(255),
     pay_status varchar2(50),
     post_code number,
-    refund varchar2(20)
+    refund varchar2(20),
+    parent_merchant_id varchar2(255)
 );
-ALTER TABLE c_order_info ADD (parent_merchant_id VARCHAR2(255));
 -- 공지사항 테이블
 CREATE TABLE C_SERVICE (
     cs_no NUMBER(*,0),
@@ -196,10 +194,5 @@ select * from c_rental;
 select * from c_order_info;
 select * from c_service;
 select * from c_qna;
-
-delete from c_qna;
-delete from c_rental;
-delete from c_order_info;
-
 
 commit;

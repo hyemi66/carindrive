@@ -152,4 +152,14 @@ public class AdminServiceImpl implements AdminService {
 		this.adminDao.updateRefund(merchantId);
 	}
 
+	@Override
+	public void updatePlusRefund(String merchant_Id) {
+		this.adminDao.updatePlusRefund(merchant_Id);
+	}
+
+	@Override
+	public void deleteRental(String merchant_Id) {
+		this.adminDao.deleteRental(merchant_Id);
+	}
+
 }

@@ -65,4 +65,8 @@ public interface AdminDAO {
 
 	void updateRefund(String merchantId);
 
+	void updatePlusRefund(String merchant_Id);
+
+	void deleteRental(String merchant_Id);
+
 }

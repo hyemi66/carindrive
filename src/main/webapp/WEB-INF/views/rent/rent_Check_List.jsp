@@ -54,7 +54,7 @@
 				    <label>렌탈 대여/반납 일시 :</label>
 					    <span>
 					        <c:choose>
-					            <c:when test="${rentalMap[orderInfo.merchantId].cr_sdate == '0001-01-01 01:01' && rentalMap[orderInfo.merchantId].cr_edate == '9999-01-01 01:01'}">
+					            <c:when test="${rentalMap[orderInfo.merchantId].cr_sdate == '0001-01-01 01:01' && rentalMap[orderInfo.merchantId].cr_edate == '0001-01-01 01:01'}">
 					                -
 					            </c:when>
 					            <c:otherwise>
@@ -96,7 +96,7 @@
 					 <div class="info-line">
             <label>세부 정보:</label>
             <a href="javascript:void(0);" 
-             onclick="openPopup('/rent/rent_details?merchantId=${orderInfo.merchantId}&carname=${carInfos[status.index].c_name}')">세부 정보 보기</a>
+             onclick="openPopup('/rent/rent_details?merchantId=${orderInfo.merchantId}&carname=${carInfos[status.index].c_name}')">시간연장 / 환불</a>
         </div>
 
 				    </div>

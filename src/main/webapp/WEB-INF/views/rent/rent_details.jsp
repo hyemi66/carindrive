@@ -74,7 +74,7 @@
 			</p>
 			<p>반납일자: 
 			    <c:choose>
-			        <c:when test="${rentalInfo.cr_edate eq '9999-01-01 01:01'}">-</c:when>
+			        <c:when test="${rentalInfo.cr_edate eq '0001-01-01 01:01'}">-</c:when>
 			        <c:otherwise>${rentalInfo.cr_edate}</c:otherwise>
 			    </c:choose>
 			</p>
@@ -108,7 +108,7 @@
 				<c:otherwise>
 					<form action="/rent/refund" method="post" id="refundForm">
 			            <input type="hidden" name="order_number" value="${orderInfo.merchantId}">
-			            <button class="cancle" type="submit" onclick="return confirmRefund()">환불하기</button>
+			            <button class="cancle" type="button" onclick="openPopup('/rent/refund_Check')">환불하기</button>
 			        </form>
 				</c:otherwise>
 			</c:choose>
@@ -123,13 +123,13 @@ function confirmRefund() {
 }
 
 function openPopup(url) {
-    var width = 1200; // 팝업 창 가로 크기
-    var height = 1000; // 팝업 창 세로 크기
+    var width = 600; // 팝업 창 가로 크기
+    var height = 400; // 팝업 창 세로 크기
     var left = (screen.width - width) / 2; // 화면 가운데 정렬을 위한 좌표
     var top = (screen.height - height) / 2; // 화면 가운데 정렬을 위한 좌표
 
  // 팝업 창 열기 resizable=no'는 창의 크기 고정
-    window.open(url, 'popup', 'width=' + width + ', height=' + height + ', left=' + left + ', top=' + top + ', resizable=no');
+    window.open(url, '_blank', 'width=' + width + ', height=' + height + ', left=' + left + ', top=' + top + ', resizable=no');
 }
 </script>
         

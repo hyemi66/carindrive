@@ -11,7 +11,6 @@ public class OrderVO {
     private String buyer_name;      // 구매자아이디
     private String buyer_phone;     // 구매자폰번호
     private String member_email;    // 구매자이메일
-    private String buyer_addr;      // 구매자 주소 (수정예정)
     private String buy_date;        // 결제일자
     private String product_name;
     private String merchant_Id;
@@ -31,7 +30,6 @@ public class OrderVO {
                       String buyer_name, 
                       String buyer_phone, 
                       String member_email, 
-                      String buyer_addr, 
                       String buy_date, 
                       String buy_product_name, 
                       String buyer_buyid, 
@@ -46,7 +44,6 @@ public class OrderVO {
         this.buyer_name = buyer_name;
         this.buyer_phone = buyer_phone;
         this.member_email = member_email;
-        this.buyer_addr = buyer_addr;
         this.buy_date = buy_date;
         this.buy_product_name = buy_product_name;
         this.buyer_buyid = buyer_buyid;
@@ -67,7 +64,6 @@ public class OrderVO {
                 ", buyerName='" + buyer_name + '\'' +
                 ", buyerPhone='" + buyer_phone + '\'' +
                 ", memberEmail='" + member_email + '\'' +
-                ", buyerAddress='" + buyer_addr + '\'' +
                 ", buyDate='" + buy_date + '\'' +
                 ", productName='" + buy_product_name + '\'' +
                 ", buyId='" + buyer_buyid + '\'' +

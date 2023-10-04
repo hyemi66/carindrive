@@ -206,4 +206,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update c_order_info set refund = '환불완료' where merchant_Id = #{merchant_Id}
 	</update>
 	
+	<!-- 차량환불시 시간연장된 것도 업데이트 -->
+	<update id="admin_updateplusRefund">
+		update c_order_info set refund = '환불완료' where parent_merchant_id = #{merchant_Id}
+	</update>
+	
+	<!-- 차량환불시 rental 테이블 데이터 삭제 -->
+	<delete id="admin_deleteRental">
+		delete from c_rental where cr_order = #{merchant_Id}
+	</delete>
+	
 </mapper>
