@@ -26,32 +26,39 @@
     </form>
  
 <script>
-    $(document).ready(function() {
-        $("#submit").click(function(e) {
-            e.preventDefault(); // 폼의 기본 제출을 방지
+$(document).ready(function() {
+    $("#submit").click(function(e) {
+        e.preventDefault(); // 폼의 기본 제출을 방지
 
-            $.ajax({
-                type: "POST",
-                url: "/rent/refund_Check",
-                data: { mPwd: $("#mPwd").val() },
-                success: function(map) {
-                    console.log(map);  // 전체 응답 확인
+        $.ajax({
+            type: "POST",
+            url: "/rent/refund_Check",
+            data: { mPwd: $("#mPwd").val() },
+            success: function(map) {
+                console.log(map);  // 전체 응답 확인
 
-                    if (map.authSuccess) {
-                        console.log("인증 완료");
-                        submitMainForm();
-                    } else {
-                        alert("비밀번호 인증에 실패했습니다.");
-                    }
-                },
-                error: function() {
-                    alert("세션이 만료되었습니다. 다시 로그인 해주세요");
-                    window.close(); // 팝업 창 닫기
-                    window.opener.close();
+                if (map.authSuccess) {
+                    console.log("인증 완료");
+                    submitMainForm();
+                } else if (map.status === "error") {
+                    alert(map.message); // 서버에서 보낸 에러 메시지를 사용
+
+                    // 리디렉션 URL이 있는 경우 페이지를 해당 URL로 리디렉션
+                    	window.close();
+                    	window.opener.close();
+                } else {
+                    alert("비밀번호 인증에 실패했습니다.");
                 }
-            });
+            },
+            error: function() {
+                alert("세션이 만료되었습니다. 다시 로그인 해주세요");
+                window.close(); // 팝업 창 닫기
+                window.opener.close();
+            }
         });
     });
+});
+
 
     function submitMainForm() {
         window.opener.document.getElementById('refundForm').submit();

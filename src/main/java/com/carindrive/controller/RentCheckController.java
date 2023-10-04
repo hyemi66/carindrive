@@ -210,41 +210,41 @@ public class RentCheckController {
 	}
 
 	//예약내역 상세보기
-	@RequestMapping(value="/rent_details")
-	public ModelAndView rent_details(@RequestParam("merchantId") String merchantId,
-			@RequestParam("carname") String carName, HttpSession session, HttpServletResponse response) 
-					throws IOException {
-		System.out.println("rent_details메서드 동작");
-		response.setContentType("text/html;charset=UTF-8");
-		PrintWriter out = response.getWriter();
-		
-		ModelAndView model = new ModelAndView();
-		//로그인정보
-		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
-		
-	    if (memberInfo == null) {
-	    	out.println("<script>");
-			out.println("window.close()");				//현재창을 닫고
-			out.println("opener.location.reload();"); 	//부모창을 새로고침
-			out.println("</script>");
-			return null;
-	    }
-	    
-		//차량 정보 가져오기
-		CarVO carInfo = this.rentService.getCarInfo(carName);
-		//렌탈 정보 가져오기
-		RentalVO rentalInfo = this.rentService.getRentCar(merchantId);
-		//결제내역
-		OrderVO orderInfo = this.orderService.getOrder2(merchantId);
-		System.out.println("주문번호: "+merchantId);
+		@RequestMapping(value="/rent_details")
+		public ModelAndView rent_details(@RequestParam("merchantId") String merchantId,
+				@RequestParam("carname") String carName, HttpSession session, HttpServletResponse response) 
+						throws IOException {
+			System.out.println("rent_details메서드 동작");
+			response.setContentType("text/html;charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			
+			ModelAndView model = new ModelAndView();
+			//로그인정보
+			MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+			
+		    if (memberInfo == null) {
+		    	out.println("<script>");
+				out.println("window.close()");				//현재창을 닫고
+				out.println("opener.location.reload();"); 	//부모창을 새로고침
+				out.println("</script>");
+				return null;
+		    }
+		    
+			//차량 정보 가져오기
+			CarVO carInfo = this.rentService.getCarInfo(carName);
+			//렌탈 정보 가져오기
+			RentalVO rentalInfo = this.rentService.getRentCar(merchantId);
+			//결제내역
+			OrderVO orderInfo = this.orderService.getOrder2(merchantId);
+			System.out.println("주문번호: "+merchantId);
 
-		model.addObject("memberInfo", memberInfo);
-		model.addObject("carInfo",carInfo);
-		model.addObject("rentalInfo",rentalInfo);
-		model.addObject("orderInfo",orderInfo);
+			model.addObject("memberInfo", memberInfo);
+			model.addObject("carInfo",carInfo);
+			model.addObject("rentalInfo",rentalInfo);
+			model.addObject("orderInfo",orderInfo);
 
-		return model;
-	}
+			return model;
+		}
 
 	//시간 연장 코드
 	@RequestMapping(value="/timeUp")
@@ -379,12 +379,16 @@ public class RentCheckController {
 
 	@RequestMapping(value="refund_Check", method = RequestMethod.POST)
 	@ResponseBody  // JSON 형태로 응답하기 위한 어노테이션 추가
-	public Map<String, Object> refund_Check(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public Map<String, Object> refund_Check(HttpSession session, HttpServletRequest request, RedirectAttributes rttr) throws Exception {
 		Map<String, Object> map = new HashMap<>();
 		System.out.println("refund_Check (POST) 메서드 동작");
-		response.setContentType("text/html;charset=UTF-8");
-		PrintWriter out = response.getWriter();
 			MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo"); //로그인정보
+			
+			if(memberInfo == null) {
+		        map.put("status", "error");
+		        map.put("message", "로그인 이후 이용 가능합니다!");
+		        return map;
+		    }
 
 			String mPwd = request.getParameter("mPwd");
 			System.out.println("암호화 전: "+mPwd);
@@ -398,7 +402,7 @@ public class RentCheckController {
 				} else {
 					map.put("authSuccess", false);
 				}
-			}//
+			}
 		return map;
 	}
 
