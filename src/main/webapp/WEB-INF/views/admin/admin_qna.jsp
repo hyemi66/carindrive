@@ -91,7 +91,7 @@
 								◁&nbsp;
 							</c:if>
 							<c:if test="${page>1}">
-								<a href="admin_main?page=${page-1}">◀</a>&nbsp;
+								<a href="admin_qna?page=${page-1}">◀</a>&nbsp;
 							</c:if>
 						
 							<%--현재 쪽번호 출력--%>
@@ -102,7 +102,7 @@
 								</c:if>
 								<c:if test="${a != page}">
 									<%--현재 페이지가 선택되지 않았다면 --%>
-									<a href="admin_main?page=${a}">[${a}]</a>&nbsp;
+									<a href="admin__qna?page=${a}">[${a}]</a>&nbsp;
 								</c:if>
 							</c:forEach>
 						
@@ -110,7 +110,7 @@
 								▷
 							</c:if>
 							<c:if test="${page<maxpage}">
-								<a href="admin_main?page=${page+1}">▶</a>
+								<a href="admin__qna?page=${page+1}">▶</a>
 							</c:if>
 						</div>
 						
