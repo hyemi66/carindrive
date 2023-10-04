@@ -30,7 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    	<insert id="C_mem_in">
    		insert into 
    		c_member(m_id,m_pwd,m_birth,m_name,m_email,m_tel,m_phone,
-   		m_state,regdate)
+   		m_state,m_regdate)
    		values(#{m_id},#{m_pwd},#{m_birth},#{m_name},#{m_email},
    		#{m_tel},#{m_phone},1,sysdate)
    	</insert>
@@ -83,7 +83,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    		where m_id = #{m_id}
    	</update>
    	
-   	<!-- 회원탈퇴(DB에서 삭제) -->
+   	<!-- 회원탈퇴(state = 2변경) -->
    	<update id="del_mem">
    		update c_member set m_state = 2 where m_id = #{m_id}
    	</update>

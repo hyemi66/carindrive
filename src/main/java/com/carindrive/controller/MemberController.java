@@ -638,7 +638,7 @@ public class MemberController {
 				ModelAndView fm = new ModelAndView();
 				this.memberService.delMember(m_id);
 				out.println("<script>");
-				out.println("alert('회원탈퇴되셨습니다.');");
+				out.println("alert('회원탈퇴요청되셨습니다.');");
 				out.println("location='/';");
 				out.println("</script>");
 				
@@ -647,9 +647,6 @@ public class MemberController {
 			}
 			return null;
 		}
-	    
-	   
-	    
 	    
 }
 	    
