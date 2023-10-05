@@ -51,7 +51,7 @@ body {
 	font-weight: bold;
 }
 .conbox {
-	margin-left: 163px;
+	margin: 0 auto;
 	width: 1190px; background: white;
 	border-bottom: 2px solid black;
 	border-left: 2px solid black;

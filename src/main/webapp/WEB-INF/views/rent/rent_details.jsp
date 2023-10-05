@@ -35,8 +35,6 @@
 		<h2 class="member">고객정보</h2>
 			<p>예약자 성함: ${memberInfo.m_name}</p>
 			<p>예약자 연락처: ${formattedPhone}</p>
-			<p>운전자 성함: 추후 수정</p>
-			<p>운전자 연락처: 추후 수정</p>
 		</div>
 		
 		<div class="infobox">
@@ -118,9 +116,6 @@
 
 <!-- 환불시 인증 팝업  -->
 <script>
-function confirmRefund() {
-    return confirm("정말 환불하시겠습니까?");
-}
 
 function openPopup(url) {
     var width = 600; // 팝업 창 가로 크기

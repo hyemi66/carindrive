@@ -186,7 +186,11 @@ public class RentCheckController {
 					//결제내역에서 예약한 차량의 이름을 ""(공백)으로 구분함
 					String[] parts = order.getBuy_product_name().split(" ");
 					String carName = parts[2];	//0부터 시작하는 인덱스중 2번째 값을 carName에 저장시킴 ex) 2023년식 WHITE '레이' 시간연장
-
+					
+					//쿼리문 Like을 돌리기위해 와일드카드 사용 //차량명이 겹치지 않아서 like문을 사용
+					//다음에 프로젝트를 다시 진행한다면 carname이 아닌 carnumber를 기준으로 할것
+					//carName = "%"+carName+"%";
+					carName = "%"+carName;
 					carInfo = this.rentService.getCarInfo(carName);	//차량정보를 carName을 기준으로 가져옴
 					carInfos.add(carInfo);	//객체에 저장시킴
 				}
@@ -698,31 +702,36 @@ public class RentCheckController {
 			else if (now.isAfter(twoDaysBeforeRental) && now.isBefore(oneDayBeforeRental)) {	
 				refundAmount = rentalRefund.getCr_price() * 0.5; //환불처리후 새로고침
 				cancelPay(token, order_number, refundAmount);
-				alertMessage(out, "환불 처리 되었으나, 환불 금액은 50%입니다.");
 				this.orderService.refundOK(order_number); //환불완료로 업데이트
 				this.rentService.reValueDate(order_number); //주문번호를 기준으로 해당 렌탈내역의 날짜를 초기화
+				alertMessage(out, "환불 처리 되었으나, 환불 금액은 50%입니다.");
+				out.println("<script>");
+				out.println("window.close()");	//현재창을 닫고
+				out.println("opener.location.reload();"); //부모창을 새로고침
+				out.println("</script>");
 
-				//order_number를 기준으로 parent_merchant_id 값이 주문번호와 동일한 레코드를 찾음
-				OrderVO order = this.orderService.getPayInfo2(order_number); //부모의 주문번호를 이용해서 그의 자식을 찾음
-				//찾은 레코드의 새로 갱신된 주문번호를 가져옴
-				RentalVO rental = this.rentService.getRentCar(order.getMerchantId());
 
-				//부모와 자식의 주문번호가 같으면 환불메서드를 한번 더 진행
-				if(order_number.equals(order.getParent_merchant_id())){
+				// order_number를 기준으로 parent_merchant_id 값이 주문번호와 동일한 모든 레코드를 찾음
+				List<OrderVO> childOrders = this.orderService.getAllChildOrders(order_number);
+
+				for(OrderVO childOrder : childOrders) {
+					RentalVO rental = this.rentService.getRentCar(childOrder.getMerchantId());
+
+					//환불처리
 					double price = rental.getCr_price(); 	//환불 금액
 					String token2 = getImportToken(); 		//토큰 생성
 					String orderNum = rental.getCr_order(); //자식의 주문번호
 					//환불처리 메서드 (토큰, 주문번호, 가격)
 					cancelPay(token2,orderNum,price);
 					this.orderService.refundOK(orderNum);
-					this.rentService.reValueDate(orderNum); //주문번호를 기준으로 해당 렌탈내역의 날짜들을 초기화
-					alertMessage(out, "시간추가된 결제도 환불되었습니다!");
+					this.rentService.reValueDate(orderNum);  //주문번호를 기준으로 해당 렌탈내역의 날짜들을 초기화
+					alertMessage(out, "관련된 모든 예약이 취소 되었습니다 !");
 					out.println("<script>");
 					out.println("window.close()");	//현재창을 닫고
 					out.println("opener.location.reload();"); //부모창을 새로고침
 					out.println("</script>");
 				}
-
+				out.close();
 			}
 			// 그 외 환불 금액 100% 가능, 시간연장은 100퍼센트 환불
 			else {
