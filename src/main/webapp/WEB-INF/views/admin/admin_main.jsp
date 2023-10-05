@@ -61,14 +61,13 @@
 							<input type="button" id="plus" value="공지추가" onclick="location='admin_gongji_write?page=${page}';" />
 						</div>
 						
-						<table id="ag_t" border="1">
+						<table id="ag_t2" border="1">
 							<tr>
-								<th>번호</th>
-								<th>타입</th>
-								<th>제목</th>
-								<th>작성일</th>
-								<th>조회수</th>
-								<th>수정/삭제</th>
+								<th width="45">번호</th>
+								<th width="65">타입</th>
+								<th width="400">제목</th>
+								<th width="100">작성일</th>
+								<th width="120">수정/삭제</th>
 							</tr>
 							<c:if test="${!empty glist}">
 								<c:forEach var="g" items="${glist}"  varStatus="status">
@@ -80,14 +79,13 @@
 												<c:if test="${fn:length(g.cs_title)>16}">
 													${fn:substring(g.cs_title,0,16)}...
 												</c:if>
-												<c:if test="${fn:length(g.cs_title)<16}">
+												<c:if test="${fn:length(g.cs_title)<=16}">
 													${g.cs_title}
 												</c:if>
 											</a>
 										</td>
 										<td align="center">${fn:substring(g.cs_date,0,10)}</td>
 										<%-- 0이상 10미만 사이의 년월일 만 반환 --%>
-										<td align="center">${g.cs_hit}</td>
 										<td align="center">
 											<input type="button" value="수정" onclick="location='admin_gongji_cont?no=${g.cs_no}&page=${page}&state=edit';" />
 											/

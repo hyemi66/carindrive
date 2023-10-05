@@ -21,7 +21,6 @@ create table c_car(
     c_type2 varchar2(200) not null, -- 차량 차종
     c_oil varchar2(200) not null, -- 차량 기름
     c_price number not null, -- 차량 가격
-    c_ok int default 1, -- 차량 가능 여부
     c_img varchar2(200) not null -- 차량 이미지
 );
 -- 예약 테이블

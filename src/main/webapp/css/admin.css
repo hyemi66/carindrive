@@ -39,7 +39,7 @@
 }
 /* 관리자페이지 (공지사항) */
 #admin_show {
-	width: 850px; height: 800px;
+	width: 850px; height: 1000px;
 	float: right;
 	padding-left: 70px;
 	margin-right: 100px;
@@ -80,7 +80,7 @@
 }
 #plus {
 	float:right;
-	margin-right: 92px;
+	margin-right: 77px;
 }
 /* 관리자페이지(공지사항 글쓰기) */
 #ag_button2 {
@@ -99,7 +99,7 @@
 	padding-left: 10px;
 }
 #ag_cont p {
-	height: 250px;
+	height: 500px;
 }
 #ag_button3 {
 	margin-top: 20px;
