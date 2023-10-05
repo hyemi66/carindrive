@@ -162,6 +162,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
      delete from c_qna where cq_no=#{cq_no}
    </delete>
    
+	<!--  -->
+	<select id="qna_reply" resultType="qna">
+		select * from c_qna where qna_replygroup = #{qna_replygroup} and qna_replytype != 0
+	</select>
+   
    
  </mapper>
    

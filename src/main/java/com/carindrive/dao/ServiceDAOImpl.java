@@ -139,4 +139,9 @@ public class ServiceDAOImpl implements ServiceDAO {
 		this.sqlSession.update("cs_hit",cs_no);
 	}
 
+	@Override
+	public List<QnaVO> getQnaReply(int qna_replygroup) {
+		return this.sqlSession.selectList("qna_reply", qna_replygroup);
+	}
+
 }

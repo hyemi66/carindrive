@@ -55,6 +55,8 @@ public interface ServiceSv {
 
 	List<ServiceVO> getList();
 
+	List<QnaVO> getQnaReply(int qna_replygroup);
+
 
 
 

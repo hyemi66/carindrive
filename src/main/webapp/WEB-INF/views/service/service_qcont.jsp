@@ -52,6 +52,12 @@
 				<td class="serivce" colspan="3" name="cq_file" id="cq_file"><img src="./upload${q.cq_file}"/></td>
 			</tr>
 		</c:if>
+		<c:forEach var="i" items="${qlist}">
+			<tr>
+				<th>답변글</th>
+				<td class="serivce" colspan="3" name="cq_reply" id="cq_reply">${i.cq_cont}</td>
+			</tr>
+		</c:forEach>
 	</table>
 	<div  class="write-menu">
 		<input type="button" value="수정"

@@ -138,5 +138,10 @@ public class ServiceSvImpl implements ServiceSv {
 		this.serviceDAO.updateHit(cs_no);//조회수 증가
 		return this.serviceDAO.getCs_Cont(cs_no);
 	}
+
+	@Override
+	public List<QnaVO> getQnaReply(int qna_replygroup) {
+		return this.serviceDAO.getQnaReply(qna_replygroup);
+	}
 	
 }

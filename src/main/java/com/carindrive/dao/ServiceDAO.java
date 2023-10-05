@@ -56,6 +56,8 @@ public interface ServiceDAO {
 
 	void updateHit(int cs_no);
 
+	List<QnaVO> getQnaReply(int qna_replygroup);
+
 
 
 

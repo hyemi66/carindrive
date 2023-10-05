@@ -37,20 +37,23 @@ public class ServiceController {
 	
 	// service 메인 공지사항 5개 보기 
    @RequestMapping(value="/service_center")
-   public ModelAndView service_center(HttpServletRequest request, PageVO p) {
+   public ModelAndView service_center(HttpSession session,
+		   HttpServletResponse response,HttpServletRequest request, 
+		   PageVO p) throws IOException {
+	   
+	   ModelAndView listS = new ModelAndView();
+	   
 	   /* 검색 관련 부분 */
 		String find_name=request.getParameter("find_name");//검색어
 		p.setFind_name("%"+find_name+"%");
-		
-		List<ServiceVO> glist = this.serviceSv.getList();
 		   
-		ModelAndView listS = new ModelAndView();
+		List<ServiceVO> glist = this.serviceSv.getList();
 				
 		listS.addObject("glist",glist);// 목록을 저장
 		listS.addObject("find_name", find_name);//
 		listS.setViewName("service/service_center");
 
-		return listS;
+	   return listS;
 	}
    
    
@@ -240,19 +243,31 @@ public class ServiceController {
   
    
    
-   // 1대1문의 작성
+// 1대1문의 작성
    @GetMapping("/service_qwrite")
-   public ModelAndView service_qwrite(HttpServletRequest request) {
-		int page=1;
-		if(request.getParameter("page") != null) {
-			page=Integer.parseInt(request.getParameter("page"));			
-		}
-		
-		ModelAndView wm = new ModelAndView();
-		wm.addObject("page",page);
-		wm.setViewName("service/service_qwrite");
-		
-      return wm;
+   public ModelAndView service_qwrite(HttpServletRequest request,
+		   HttpServletResponse response, HttpSession session) 
+				   throws IOException {
+	   
+	   response.setContentType("text/html; charset=UTF-8");
+	   PrintWriter out = response.getWriter();
+
+	   if((String)session.getAttribute("id") == null) {
+		   out.println("<script>");
+		   out.println("alert('로그인해주세요!');");
+		   out.println("location='service_center';");
+		   out.println("</script>"); 
+	   } else {
+		   int page=1;
+			if(request.getParameter("page") != null) {
+				page=Integer.parseInt(request.getParameter("page"));			
+			}
+			ModelAndView wm = new ModelAndView();
+			wm.addObject("page",page);
+			wm.setViewName("service/service_qwrite");
+			return wm;
+	   }
+	return null;
    }
    
    // 1대1문의 저장
@@ -269,7 +284,7 @@ public class ServiceController {
 		String cq_title=multi.getParameter("cq_title");
 		String cq_pwd=multi.getParameter("cq_pwd");
 		String cq_cont=multi.getParameter("cq_cont");
-
+		
 		File upFile = multi.getFile("cq_file");//첨부한 이진파일을 가져온다.
 
 		if(upFile != null) { //첨부한 이진파일이 있는 경우 실행
@@ -416,10 +431,13 @@ public class ServiceController {
 			q = this.serviceSv.getQnaCont2(cq_no);
 		}
 		
+		List<QnaVO> qlist = this.serviceSv.getQnaReply(q.getQna_replygroup());
+		
 		ModelAndView cm = new ModelAndView();
 		cm.addObject("page",page);//페이징에서 책갈피 기능 때문에 쪽번호 저장
 		cm.addObject("q",q);
 		cm.addObject("cq_id",cq_id);
+		cm.addObject("qlist", qlist);
 		
 		if(state.equals("cont")) {//내용보기 일때 실행할 뷰페이지 경로
 			cm.setViewName("./service/service_qcont");	
