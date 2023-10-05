@@ -53,7 +53,7 @@
 	        </tbody>
         </table>
         <div class="write-menu">
-			<input type="submit" value="저장" onclick="location='service_qboard?page=${page}';"/> 
+			<input type="submit" value="저장"/> 
 			<input type="button" value="취소" onclick="location='service_center';"/>
 		</div>
     </form>

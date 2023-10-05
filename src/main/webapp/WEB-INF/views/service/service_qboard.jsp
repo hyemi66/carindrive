@@ -73,7 +73,7 @@
 
 			<c:if test="${empty qnalist}">
 			<tr>
-				<th colspan="4">자료실 목록이 없습니다.</th>
+				<th colspan="4">목록이 없습니다.</th>
 			</tr>
 			</c:if>
 			</table>

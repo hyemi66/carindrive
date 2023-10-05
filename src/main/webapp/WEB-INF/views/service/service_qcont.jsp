@@ -52,6 +52,15 @@
 				<td class="serivce" colspan="3" name="cq_file" id="cq_file"><img src="./upload${q.cq_file}"/></td>
 			</tr>
 		</c:if>
+		<c:if test="${q.qna_replytype != 0}">
+			<c:if test="${q.qna_replygroup == q.cq_no }">
+			<%--답변글이 있는경우--%>
+			<tr>
+				<th>답변글</th>
+				<td class="serivce" colspan="3" name="cq_reply" id="cq_reply"></td>
+			</tr>
+			</c:if>
+		</c:if>
 	</table>
 	<div  class="write-menu">
 		<input type="button" value="수정"
