@@ -251,13 +251,12 @@ public class ServiceController {
 	   
 	   response.setContentType("text/html; charset=UTF-8");
 	   PrintWriter out = response.getWriter();
-	   
+
 	   if((String)session.getAttribute("id") == null) {
 		   out.println("<script>");
 		   out.println("alert('로그인해주세요!');");
+		   out.println("location='service_center';");
 		   out.println("</script>"); 
-		   return new ModelAndView("redirect:/member/m_login"); 
-		   // wm.setViewName("member/m_login");
 	   } else {
 		   int page=1;
 			if(request.getParameter("page") != null) {
@@ -268,6 +267,7 @@ public class ServiceController {
 			wm.setViewName("service/service_qwrite");
 			return wm;
 	   }
+	return null;
    }
    
    // 1대1문의 저장
