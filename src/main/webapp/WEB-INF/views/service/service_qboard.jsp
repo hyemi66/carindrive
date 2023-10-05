@@ -45,29 +45,21 @@
 
 			<c:if test="${!empty qnalist}">
 			<c:forEach var="q" items="${qnalist}">
+				<c:if test="${q.qna_replytype == 0}">
 			<tr class="qnalist">
 				<td>
-				<c:if test="${q.qna_replytype == 0}">
 				<%--원본글일때만 글그룹 번호가 출력되고,답변글일때는 그룹번호가 출력 안됨.--%>
 					&lt;${q.qna_replygroup}&gt;
-				</c:if>
+				
 				</td>
-
-				<td>
-				<c:if test="${q.qna_replytype != 0}"> 
-				<%-- 답변글일때만 실행, 계단형 게시판  --%>
-                  		<c:forEach begin="1" end="${q.qna_replytype}" step="1">
-                 		  &nbsp;
-				<%--빈공백 처리함으로써 2번째 답변글이면 2칸의 빈공백을 띄움 --%>
-                  		</c:forEach>
-                		  <img src="./images/AnswerLine.gif" > <%--답변글 이미지 출력 --%>
-             			</c:if>							      
+				<td>					      
 				<a href="service_qpwdCheck?cq_no=${q.cq_no}&state=cont&page=${page}">${q.cq_title}</a>
 				</td>
 				<td align="center">${q.cq_id}</td>
 				<td align="center">${fn:substring(q.cq_date,0,10)}</td>
 				<%-- 0이상 10미만 사이의 년월일만 반환 --%>
 			</tr>
+			</c:if>
 			</c:forEach>
 			</c:if>
 

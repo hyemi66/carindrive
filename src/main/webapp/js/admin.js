@@ -68,5 +68,15 @@ function car_write_check(){
 		  $("#c_price").val("").focus();
 		  return false;
 	  }
+}
+
+/* qna답변체크 */
+function qna_reply_check() {
+	
+	if($("#cq_cont").val() == "") {
+		alert("답변 내용을 입력해주세요!");
+		$("#cq_cont").focus();
+		return false;
+	}
 	
 }

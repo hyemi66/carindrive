@@ -4,54 +4,74 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>시간 연장</title>
-    <link href="${path}/css/timeUp.css" rel="stylesheet"/>
-    <link href="${path}/css/rent.css" rel="stylesheet"/>
-    <script src="${path}/js/jquery.js"></script>
+<meta charset="UTF-8">
+<title>시간 연장</title>
+<link href="${path}/css/timeUp.css" rel="stylesheet"/>
+<link href="${path}/css/rent.css" rel="stylesheet"/>
+<script src="${path}/js/jquery.js"></script>
 </head>
 <body>
-	<div id="bigbox"> <%--10.04/01:45 css수정중 timeUp 시간연장페이지 수정중 --%>
-		<div class="cimg">
-			<img id="imgC" src="../images/car/${car.c_img}">
-		</div>
-		<h2>현재 렌트중인 차량</h2>
-						<b>${car.c_brand} ${car.c_name}</b><br>
-						${car.c_type} | ${car.c_oil} | ${car.c_year} <br><br>
-					<div id="box02">
-			</div>
-		</div>
-		<hr>
-    
-    <div id="menu01">
-        <p>
-            기존 반납시간<br>
-            <input type="datetime-local" name="cr_sdate" id="cr_sdate" value="${rental.cr_edate}" required readonly>
-        </p>
-    </div>
-    <div id="menu02">
-            반 납 하 는 시 간 <br>
-		            <form method="POST" action="/rent/timeUpPay">
+
+<div class="timeBox">
+	<div id="bigBox">
+		<h2>-- 현재 렌트중인 차량 --</h2>
+		<img src="../images/car/${car.c_img}">
+		<table border="1">
+			<tr>
+				<th width="70">브랜드</th>
+				<th width="100">이름</th>
+				<th width="100">차종</th>
+				<th width="100">기름</th>
+				<th width="100">년도</th>
+			</tr>
+			<tr>
+				<td align="center">${car.c_brand}</td>
+				<td align="center">${car.c_name}</td>
+				<td align="center">${car.c_type}</td>
+				<td align="center">${car.c_oil}</td>
+				<td align="center">${car.c_year}</td>
+			</tr>
+		</table>
+	</div>
+	<hr id="t_hr">
+	<div id="plusBox">
+		<form method="POST" action="/rent/timeUpPay">
+			<table border="1">
+				<tr>
+					<th width="200">기존 반납시간</th>
+					<td align="center" width="400">
+						${rental.cr_edate}
+					</td>
+				</tr>
+				<tr>
+					<th width="200">연장 후 반납시간</th>
+					<td align="center" width="400">
 						<input type="hidden" name="c_num" id="c_num" value="${car.c_num}">
 						<input type="hidden" name="cr_sdate" id="cr_sdate" value="${rental.cr_edate}">
 						<input type="hidden" name="order_number" id="order_number" value="${rental.cr_order}">
-					    <input type="hidden" name="calculatedPrice" id="calculatedPrice">
-					    <input type="datetime-local" name="cr_edate" id="cr_edate" onchange="setMinValue()" required>
-					    <input type="submit" value="결제요청">
-					</form>
-    </div>
-	<input type="hidden" value="선택완료" onclick="fetchPrice()">
-
-<p>계산된 가격: <span id="priceDisplay">
-    <c:choose>
-        <c:when test="${not empty orderInfo.amount && orderInfo.amount > 0}">
-            <fmt:formatNumber value="${orderInfo.amount}" type="number" pattern="#,###"/>원
-        </c:when>
-        <c:otherwise>
-            0원
-        </c:otherwise>
-    </c:choose>
-</span></p>
+						<input type="hidden" name="calculatedPrice" id="calculatedPrice">
+						<input type="datetime-local" name="cr_edate" id="cr_edate" onchange="setMinValue()" value="${rental.cr_edate}" required>
+					</td>
+				</tr>
+				<tr>
+					<th>추가 가격</th>
+					<td>
+						<span id="priceDisplay">
+							<c:choose>
+								<c:when test="${not empty orderInfo.amount && orderInfo.amount > 0}">
+									<fmt:formatNumber value="${orderInfo.amount}" type="number" pattern="#,###"/>원
+								</c:when>
+								<c:otherwise>0원</c:otherwise>
+							</c:choose>
+						</span>
+					</td>
+				</tr>
+			</table>
+			<input type="submit" value="결제요청">
+		</form>
+		<input type="hidden" value="선택완료" onclick="fetchPrice()">
+	</div>
+</div>
 
 
 

@@ -1,6 +1,8 @@
 package com.carindrive.dao;
 
 
+import java.util.List;
+
 import com.carindrive.vo.MemberVO;
 /*
 public interface MemberDAO {
@@ -12,6 +14,7 @@ public interface MemberDAO {
 
 }
 */
+import com.carindrive.vo.SocialVO;
 
 public interface MemberDAO {
 	
@@ -25,9 +28,26 @@ public interface MemberDAO {
 
 	MemberVO loginCheck(String m_id);
 
-
 	MemberVO adminCk(String m_id);
+	
+	void insertKakao(SocialVO kakaoUser);
 
+	SocialVO serchkakao(String userEmail);
+
+	MemberVO serchUserEmail(String m_email);
+
+	int updatePwd(MemberVO m);
+
+	List<MemberVO> myPage(String m_id);
+
+
+	MemberVO findPwd(String m_id);
+
+
+	void updateMember(MemberVO m);
+
+
+	void delMember(String m_id);
 
 
 

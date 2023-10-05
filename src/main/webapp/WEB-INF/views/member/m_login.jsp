@@ -5,13 +5,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>carindrive : 로그인페이지</title>
+<title></title>
 
 <link rel="stylesheet" type="text/css" href="${path}/css/member/m_log.css">
 <script type="text/javascript" src="${path}/js/member/m_login.js"></script>
 
 <script src="${path}/js/jquery.js"></script>
-<!-- 네이버 인증 로그인 -->
+<script type="text/javascript" src="${path}/js/m_login.js"></script>
 
 </head>
 <body>
@@ -29,7 +29,7 @@
 			<div id="log_form">
 				<div id="id_form">
 					<input id="m_id" name="m_id" placeholder="아이디" 
-					onfocus="this.placeholder=''" onblur="this.placeholder='아이디'">
+					onfocus="this.placeholder=''" onblur="this.placeholder='아이디'" autocomplete="off">
 					<span class="idck"></span>
 				</div><%--id_form --%>
 				<div id="pwd_form">
@@ -39,7 +39,7 @@
 				</div><%--pwd_form --%>
 				 
 				<div id="maintain">
-					<input type="checkbox" id="checkbox" name="checkbox"checked="checked"><label for="checkbox"><span>로그인 상태 유지</span></label>
+					<input type="checkbox" id="checkbox" name="checkbox" checked><label for="checkbox" ><span>로그인 상태 유지</span></label>
 				</div><%--maitain_form --%>
 				<div id="button_form">
 					<input type="submit" value="로그인" id="btn1" onclick="return logCk()">
@@ -53,17 +53,8 @@
 			</div>
 			<%-- SNS 로그인 --%>
 			<div id="social">
-				<a href="#"><img src="${path}/images/member/naver_icon.png"  id="naver"></a>
-				<a href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=4094fcc6d950836e2f6c9f216ab46fef&redirect_uri=http://localhost:7990/member/kakaotest">
-				<img src="${path}/images/member/kakao_icon.png"id="kakao"></a>
-				<a href="#"><img src="${path}/images/member/google_icon.png"  id="google">
-				</a>
-			</div>
-			<%-- 기타--%>
-			<div id="ano">
-				<span>CARINDRIVE&nbsp;&nbsp;&#124;</span>
-				<span> Copyright&nbsp;</span>
-				<span>All Rights Reserved.</span>
+				<a href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=4094fcc6d950836e2f6c9f216ab46fef&redirect_uri=http://localhost:7991/member/kakaotest">
+				<img id='kakao' ></a>
 			</div>
 		</div><%--allform end --%>
 	</div><%-- wrap end --%>

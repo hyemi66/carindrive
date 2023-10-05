@@ -21,7 +21,10 @@
 			<img id="admin_img" alt="관리자" src="${path}/images/admin.jpg">
 			<ul>
 				<li><a href="${path}/admin/admin_main">공지사항</a></li>
+				<li><a href="${path}/admin/admin_qna">1 대 1 문 의</a></li>
+				<li><a href="${path}/admin/admin_member">회원관리</a></li>
 				<li><a href="${path}/admin/admin_car_list">차량관리</a></li>
+				<li><a href="${path}/admin/admin_pay">차량환불</a></li>
 			</ul>
 		</div>
 		<article id="admin_show">
@@ -54,7 +57,8 @@
 							</tr>
 							<tr>
 								<th>내&nbsp;&nbsp;용</th>
-								<td><textarea name="cs_cont" id="cs_cont" rows="25" cols="92"></textarea>
+								<td>
+									<textarea name="cs_cont" id="cs_cont" rows="25" cols="92"></textarea>
 								</td>
 							</tr>
 						</table>

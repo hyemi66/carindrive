@@ -186,9 +186,11 @@ public class RentCheckController {
 					//결제내역에서 예약한 차량의 이름을 ""(공백)으로 구분함
 					String[] parts = order.getBuy_product_name().split(" ");
 					String carName = parts[2];	//0부터 시작하는 인덱스중 2번째 값을 carName에 저장시킴 ex) 2023년식 WHITE '레이' 시간연장
-					
-					//쿼리문 Like을 돌리기위해 와일드카드 사용
-					carName = "%"+carName+"%";
+
+					//쿼리문 Like을 돌리기위해 와일드카드 사용 //차량명이 겹치지 않아서 like문을 사용
+					//다음에 프로젝트를 다시 진행한다면 carname이 아닌 carnumber를 기준으로 할것
+					//carName = "%"+carName+"%";
+					carName = "%"+carName;
 					carInfo = this.rentService.getCarInfo(carName);	//차량정보를 carName을 기준으로 가져옴
 					carInfos.add(carInfo);	//객체에 저장시킴
 				}
@@ -212,41 +214,41 @@ public class RentCheckController {
 	}
 
 	//예약내역 상세보기
-		@RequestMapping(value="/rent_details")
-		public ModelAndView rent_details(@RequestParam("merchantId") String merchantId,
-				@RequestParam("carname") String carName, HttpSession session, HttpServletResponse response) 
-						throws IOException {
-			System.out.println("rent_details메서드 동작");
-			response.setContentType("text/html;charset=UTF-8");
-			PrintWriter out = response.getWriter();
-			
-			ModelAndView model = new ModelAndView();
-			//로그인정보
-			MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
-			
-		    if (memberInfo == null) {
-		    	out.println("<script>");
-				out.println("window.close()");				//현재창을 닫고
-				out.println("opener.location.reload();"); 	//부모창을 새로고침
-				out.println("</script>");
-				return null;
-		    }
-		    
-			//차량 정보 가져오기
-			CarVO carInfo = this.rentService.getCarInfo(carName);
-			//렌탈 정보 가져오기
-			RentalVO rentalInfo = this.rentService.getRentCar(merchantId);
-			//결제내역
-			OrderVO orderInfo = this.orderService.getOrder2(merchantId);
-			System.out.println("주문번호: "+merchantId);
+	@RequestMapping(value="/rent_details")
+	public ModelAndView rent_details(@RequestParam("merchantId") String merchantId,
+			@RequestParam("carname") String carName, HttpSession session, HttpServletResponse response) 
+					throws IOException {
+		System.out.println("rent_details메서드 동작");
+		response.setContentType("text/html;charset=UTF-8");
+		PrintWriter out = response.getWriter();
 
-			model.addObject("memberInfo", memberInfo);
-			model.addObject("carInfo",carInfo);
-			model.addObject("rentalInfo",rentalInfo);
-			model.addObject("orderInfo",orderInfo);
+		ModelAndView model = new ModelAndView();
+		//로그인정보
+		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
 
-			return model;
+		if (memberInfo == null) {
+			out.println("<script>");
+			out.println("window.close()");				//현재창을 닫고
+			out.println("opener.location.reload();"); 	//부모창을 새로고침
+			out.println("</script>");
+			return null;
 		}
+
+		//차량 정보 가져오기
+		CarVO carInfo = this.rentService.getCarInfo(carName);
+		//렌탈 정보 가져오기
+		RentalVO rentalInfo = this.rentService.getRentCar(merchantId);
+		//결제내역
+		OrderVO orderInfo = this.orderService.getOrder2(merchantId);
+		System.out.println("주문번호: "+merchantId);
+
+		model.addObject("memberInfo", memberInfo);
+		model.addObject("carInfo",carInfo);
+		model.addObject("rentalInfo",rentalInfo);
+		model.addObject("orderInfo",orderInfo);
+
+		return model;
+	}
 
 	//시간 연장 코드
 	@RequestMapping(value="/timeUp")
@@ -368,14 +370,14 @@ public class RentCheckController {
 
 		return model;
 	}
-	
+
 	//본인 인증 메서드 
 	@RequestMapping(value="refund_Check")
 	public ModelAndView refund_Check(HttpSession session, HttpServletRequest request) throws Exception {
 		System.out.println("refund_Check (GET)메서드 동작");
-		
+
 		ModelAndView model = new ModelAndView();//
-		
+
 		return model;//
 	}
 
@@ -384,27 +386,27 @@ public class RentCheckController {
 	public Map<String, Object> refund_Check(HttpSession session, HttpServletRequest request, RedirectAttributes rttr) throws Exception {
 		Map<String, Object> map = new HashMap<>();
 		System.out.println("refund_Check (POST) 메서드 동작");
-			MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo"); //로그인정보
-			
-			if(memberInfo == null) {
-		        map.put("status", "error");
-		        map.put("message", "로그인 이후 이용 가능합니다!");
-		        return map;
-		    }
+		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo"); //로그인정보
 
-			String mPwd = request.getParameter("mPwd");
-			System.out.println("암호화 전: "+mPwd);
+		if(memberInfo == null) {
+			map.put("status", "error");
+			map.put("message", "로그인 이후 이용 가능합니다!");
+			return map;
+		}
 
-			if(mPwd != null) {//사용자에게 값을 입력 받은 뒤
-				mPwd = CarPwdCh.getPassWordToXEMD5String(mPwd);
-				System.out.println("암호화 후: "+mPwd);
-				if (memberInfo.getM_pwd().equals(mPwd)) {
-					System.out.println("map인증완료");
-					map.put("authSuccess", true);
-				} else {
-					map.put("authSuccess", false);
-				}
+		String mPwd = request.getParameter("mPwd");
+		System.out.println("암호화 전: "+mPwd);
+
+		if(mPwd != null) {//사용자에게 값을 입력 받은 뒤
+			mPwd = CarPwdCh.getPassWordToXEMD5String(mPwd);
+			System.out.println("암호화 후: "+mPwd);
+			if (memberInfo.getM_pwd().equals(mPwd)) {
+				System.out.println("map인증완료");
+				map.put("authSuccess", true);
+			} else {
+				map.put("authSuccess", false);
 			}
+		}
 		return map;
 	}
 
@@ -700,31 +702,36 @@ public class RentCheckController {
 			else if (now.isAfter(twoDaysBeforeRental) && now.isBefore(oneDayBeforeRental)) {	
 				refundAmount = rentalRefund.getCr_price() * 0.5; //환불처리후 새로고침
 				cancelPay(token, order_number, refundAmount);
-				alertMessage(out, "환불 처리 되었으나, 환불 금액은 50%입니다.");
 				this.orderService.refundOK(order_number); //환불완료로 업데이트
 				this.rentService.reValueDate(order_number); //주문번호를 기준으로 해당 렌탈내역의 날짜를 초기화
+				alertMessage(out, "환불 처리 되었으나, 환불 금액은 50%입니다.");
+				out.println("<script>");
+				out.println("window.close()");	//현재창을 닫고
+				out.println("opener.location.reload();"); //부모창을 새로고침
+				out.println("</script>");
 
-				//order_number를 기준으로 parent_merchant_id 값이 주문번호와 동일한 레코드를 찾음
-				OrderVO order = this.orderService.getPayInfo2(order_number); //부모의 주문번호를 이용해서 그의 자식을 찾음
-				//찾은 레코드의 새로 갱신된 주문번호를 가져옴
-				RentalVO rental = this.rentService.getRentCar(order.getMerchantId());
 
-				//부모와 자식의 주문번호가 같으면 환불메서드를 한번 더 진행
-				if(order_number.equals(order.getParent_merchant_id())){
+				// order_number를 기준으로 parent_merchant_id 값이 주문번호와 동일한 모든 레코드를 찾음
+				List<OrderVO> childOrders = this.orderService.getAllChildOrders(order_number);
+
+				for(OrderVO childOrder : childOrders) {
+					RentalVO rental = this.rentService.getRentCar(childOrder.getMerchantId());
+
+					//환불처리
 					double price = rental.getCr_price(); 	//환불 금액
 					String token2 = getImportToken(); 		//토큰 생성
 					String orderNum = rental.getCr_order(); //자식의 주문번호
 					//환불처리 메서드 (토큰, 주문번호, 가격)
 					cancelPay(token2,orderNum,price);
 					this.orderService.refundOK(orderNum);
-					this.rentService.reValueDate(orderNum); //주문번호를 기준으로 해당 렌탈내역의 날짜들을 초기화
-					alertMessage(out, "시간추가된 결제도 환불되었습니다!");
+					this.rentService.reValueDate(orderNum);  //주문번호를 기준으로 해당 렌탈내역의 날짜들을 초기화
+					alertMessage(out, "관련된 모든 예약이 취소 되었습니다 !");
 					out.println("<script>");
 					out.println("window.close()");	//현재창을 닫고
 					out.println("opener.location.reload();"); //부모창을 새로고침
 					out.println("</script>");
 				}
-
+				out.close();
 			}
 			// 그 외 환불 금액 100% 가능, 시간연장은 100퍼센트 환불
 			else {
@@ -768,6 +775,77 @@ public class RentCheckController {
 			out.println("window.open('/member/m_login', '_blank');");//로그인창으로 이동
 			out.println("</script>");
 		} finally {
+			out.close();
+		}
+	}
+
+	//관리자 전용 환불하기 기능 금액 100% 환불
+	@PostMapping("/adminRefund")
+	public void adminRefund(@RequestParam String order_number, HttpServletResponse response, HttpSession session) throws Exception {
+		System.out.println("adminRefund메서드 동작");
+		response.setContentType("text/html;charset=UTF-8");
+		PrintWriter out = response.getWriter();
+
+		// 로그인 고객정보 가져오기
+		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+		try {
+			if(memberInfo.getM_id().equals("zzzz")) { //아이디가 zzzz인 경우만 차량환불에 접근가능
+														//admin01이 로그인이 안되는것에 의문을 제기해야함
+				//주문번호를 기준으로 해당 결제 내역을 가져옴
+				OrderVO orderInfo = this.orderService.getOrder2(order_number);
+				double refundAmount = orderInfo.getAmount();
+
+
+				//토큰 생성
+				String token = getImportToken();
+				System.out.println("환불토큰생성 : "+token);
+
+				if (token == null || token.isEmpty()) {
+					alertMessage(out, "인증 정보에 문제가 발생했습니다 다시 시도해주세요!");
+					return;
+				}
+
+				//관리자 권한으로 100퍼센트 환불
+				cancelPay(token, order_number, refundAmount);
+				this.orderService.refundOK(order_number); //환불완료로 업데이트
+				this.rentService.reValueDate(order_number); //주문번호를 기준으로 해당 렌탈내역의 날짜를 초기화
+				alertMessage(out, "환불이 완료 되었습니다!");
+				out.println("<script>");
+				out.println("location.href = '/admin/admin_pay';");
+				out.println("</script>");
+
+				// order_number를 기준으로 parent_merchant_id 값이 주문번호와 동일한 모든 레코드를 찾음
+				List<OrderVO> childOrders = this.orderService.getAllChildOrders(order_number);
+
+				for(OrderVO childOrder : childOrders) {
+					RentalVO rental = this.rentService.getRentCar(childOrder.getMerchantId());
+
+					//환불처리
+					double price = rental.getCr_price(); 	//환불 금액
+					String token2 = getImportToken(); 		//토큰 생성
+					String orderNum = rental.getCr_order(); //자식의 주문번호
+					//환불처리 메서드 (토큰, 주문번호, 가격)
+					cancelPay(token2,orderNum,price);
+					this.orderService.refundOK(orderNum);
+					this.rentService.reValueDate(orderNum);  //주문번호를 기준으로 해당 렌탈내역의 날짜들을 초기화
+					alertMessage(out, "관련된 모든 예약이 취소 되었습니다 !");
+					out.println("<script>");
+					out.println("location.href = '/admin/admin_pay';");
+					out.println("</script>");
+				}
+			}else {
+				out.println("<script>");
+				out.println("alert('관리자 전용입니다!');");
+				out.println("window.open('/member/m_login', '_blank');");//로그인창으로 이동
+				out.println("</script>");
+			}
+		}catch (Exception e) {
+			System.err.println("로그인이 되어있지 않습니다.");
+			out.println("<script>");
+			out.println("alert('로그인 정보가 필요합니다!');");
+			out.println("window.open('/member/m_login', '_blank');");//로그인창으로 이동
+			out.println("</script>");
+		}finally {
 			out.close();
 		}
 	}

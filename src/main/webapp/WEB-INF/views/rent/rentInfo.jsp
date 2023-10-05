@@ -13,7 +13,6 @@
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 <link href="${path}/css/main.css" rel="stylesheet"/>
 <link href="${path}/css/rent.css" rel="stylesheet"/>
-<link href="${path}/css/rent_Wait.css" rel="stylesheet" />
 
 </head>
 <body>
@@ -26,14 +25,13 @@
 <input type="hidden" name="cr_cname" id="cr_cname" value="${car.c_name}">
 
 <div class="mainmenu">
-
 <div id="menu01">
 	<p>
 		빌 리 는 날 짜&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<input type="datetime-local" name="cr_sdate" id="cr_sdate" value="${cr_sdate}" required readOnly>
-
 	</p>
 </div>
+
 <div id="menu02">
 	<p>
 		반 납 하 는 날 짜&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -43,7 +41,8 @@
 </div>
 
 <div class="clear"></div>
-
+<br><br>
+<div class="mainmenu">
 <div class="carname">
 	<h1>${car.c_brand} ${car.c_name}</h1>
 	<div class="carInfo">
@@ -77,15 +76,9 @@
 	
 	<hr>
 	
-	<div id= "carRent"> <%--09/27 마지막 작업 CSS작업중 차량/날짜 다시선택 버튼 활성화 시켜서 /rent/rent로 이동시키는 기능 추가 --%>
-						<%--그 다음 작업은 예약하기를 누른뒤의 결제창 수정 일단 결제창 이쁘게 해놓고 마지막에 한번 가능하면 팝업창으로 결제창 띄움  --%>
-			<div class = "selectBox">
-			<a href="/rent/rent" class="btn-link"> 차 량 / 날 짜   다  시 선  택 </a>
-			</div>
-			
-			<div class = "selectBox">
-			<input type="submit" value="예 &nbsp;&nbsp;약 &nbsp;&nbsp;하 &nbsp;&nbsp;기">
-			</div>
+	<div id="carRent">
+		<input type="button" value="차 량 / 날 짜   다  시 선  택" onclick="location='${path}/rent/rent';">
+		<input type="submit" value="예 &nbsp;&nbsp;약 &nbsp;&nbsp;하 &nbsp;&nbsp;기">
 	</div>
 	
 	<hr>
@@ -140,6 +133,7 @@
 			</tr>
 		</table>
 	</div>
+</div>
 </div>
 
 </form>

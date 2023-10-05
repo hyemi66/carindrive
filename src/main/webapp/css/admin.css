@@ -179,3 +179,8 @@
 #ag_t img {
 	padding: 10px 20px;
 }
+/* 관리자페이지(차량환불) */
+#ag_paging2 {
+	margin-left: 380px;
+	margin-top: 20px;
+}

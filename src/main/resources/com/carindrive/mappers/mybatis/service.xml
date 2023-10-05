@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Service">
+
+	<!-- service 메인 공지사항 5개 보기 -->
+	<select id="s_list" resultType="service">
+	select * from (
+		select cs_no,cs_title,cs_date
+		from c_service order by cs_no desc)
+		where rowNum &lt; 10 
+	</select>
+
+	<!-- 공지내용보기 -->
+	<select id="sg_cont" resultType="service">
+		select * from c_service where cs_no=#{cs_no}
+	</select>
+	
+    
+    <!-- 자주 묻는 질문 보기 레코드 수 -->
+    <select id="notice_row" parameterType="page" resultType="int">
+     select count(cs_no) from c_service 
+    </select>
+    
+    <!-- 자주 묻는 질문 보기 목록 -->
+  <select id="question_list" resultType="service" parameterType="page">
+     select * from(
+     select rowNum rNum,cs_no,cs_id,cs_title,cs_cont,
+     cs_date from (select * from c_service     
+     <where>
+      <if test="find_field == ''"></if> <!-- 검색을 안한 경우, 총레코드 개수 -->
+      <if test="find_field == 'cs_title'"> <!-- 제목으로 검색한 경우 -->
+        cs_title like #{find_name}
+      </if>
+      <if test="find_field == 'cs_cont'"> <!-- 내용으로 검색한 경우 -->
+        cs_cont like #{find_name}
+      </if>
+	</where>
+	order by cs_no desc)) 
+	where rNum &gt;= #{startrow} and rNum &lt;= #{endrow}
+	</select>
+
+	<!-- 공지내용보기 -->
+	<select id="cs_cont" resultType="service">
+		select * from c_service where cs_no=#{cs_no}
+	</select>
+	
+	<!-- 자주묻는 질문 상세페이지 -->
+	<select id="question_list00" resultType="service">
+		select * from c_service 
+	</select>
+	<select id="question_list01" resultType="service">
+		select * from c_service where cs_type='가입탈퇴'
+	</select>
+	<select id="question_list02" resultType="service">
+		select * from c_service where cs_type='예약취소'
+	</select>
+	<select id="question_list03" resultType="service">
+		select * from c_service where cs_type='요금결제' 
+	</select>
+	<select id="question_list04" resultType="service">
+		select * from c_service where cs_type='사용반납' 
+	</select>
+	<select id="question_list05" resultType="service">
+		select * from c_service where cs_type='보험사고' 
+	</select>
+	<select id="question_list06" resultType="service">
+		select * from c_service where cs_type='전기차' 
+	</select>
+	<select id="question_list07" resultType="service">
+		select * from c_service where cs_type='기타' 
+	</select>
+	
+	<!-- 게시판 저장 -->
+    <insert id="qna_in" parameterType="qna">
+     insert into c_qna 
+     (cq_no,cq_id,cq_pwd,cq_title,cq_cont,cq_file,cq_date,
+     qna_replygroup, qna_replytype, qna_replyindex) 
+     values
+     (cq_seq.nextval,#{cq_id},#{cq_pwd},#{cq_title},#{cq_cont},#{cq_file},sysdate,
+     cq_seq.nextval, 0, 0) 
+    </insert> 
+	
+	<select id="qna_count" resultType="int">
+	select count(cq_no) from c_qna
+     <!-- 검색 조건 -->
+     <where>
+      <if test="find_field == ''"></if> <!-- 검색을 안한 경우, 총레코드 개수 -->
+      <if test="find_field == 'cq_title'"> <!-- 제목으로 검색한 경우 -->
+        cq_title like #{find_name}
+      </if>
+      <if test="find_field == 'cq_cont'"> <!-- 내용으로 검색한 경우 -->
+        cq_cont like #{find_name}
+      </if>
+     </where>
+	</select>
+	
+	<!-- 검색전후 목록 -->
+   <select id="qna_list" resultType="qna">
+     select * from(
+     select rowNum rNum,cq_no,cq_id,cq_title,qna_replygroup,qna_replytype,qna_replyindex,
+     cq_date from (select * from c_qna     
+     <!-- 검색 조건 -->
+     <where>
+      <if test="find_field == ''"></if> <!-- 검색을 안한 경우 -> 총레코드 개수 -->
+      <if test="find_field == 'cq_title'"> <!-- 제목으로 검색한 경우 -->
+        cq_title like #{find_name}
+      </if>
+      <if test="find_field == 'cq_cont'"> <!-- 내용으로 검색한 경우 -->
+        cq_cont like #{find_name}
+      </if>
+     </where>     
+     order by qna_replygroup desc,qna_replyindex asc)) 
+     where rNum &gt;= #{startrow} and rNum &lt;= #{endrow}
+   </select>
+   
+	<!-- 1대1문의 비밀번호 확인페이지 정보  
+   <select id="qpwdCheck_b" resultType="qna">
+		select * from c_qna where cq_no=#{cq_no}
+	</select>
+   -->
+   
+  	<!-- 1대1문의 확인용 비밀번호 확인 페이지  -->
+   <select id="qpwdCheck" resultType="com.carindrive.vo.QnaVO">
+     select * from c_qna where cq_no=#{cq_no}
+   </select>
+   
+      <!-- 1대1문의 내용보기 -->
+   <select id="qna_cont" resultType="com.carindrive.vo.QnaVO">
+     select * from c_qna where cq_no=#{cq_no}
+   </select>
+   
+   <!-- 조회수 증가 -->
+   <update id="cs_hit" parameterType="int">
+     update c_service set cs_hit=cs_hit+1 where cs_no=#{cs_no}
+   </update>
+   
+   <!-- 1대1문의 답변 레벨 증가 -->
+   <update id="levelUp">
+     update c_qna set qna_replyindex=qna_replyindex+1 where qna_replygroup=#{qna_replygroup} 
+     and qna_replyindex > #{qna_replyindex}
+   </update>
+   
+   <!-- 1대1문의 답변 저장 -->
+   <insert id="reply_in">
+    insert into c_qna (cq_no,cq_id,cq_title,cq_pwd,cq_cont,qna_replygroup,
+    qna_replytype,qna_replyindex,cq_date) values(cq_no_seq.nextval,#{cq_id},#{cq_title},
+    #{cq_pwd},#{cq_cont},0,#{qna_replygroup},#{qna_replytype}+1,#{qna_replyindex}+1,sysdate)
+   </insert>
+   
+   <!-- 1대1문의 수정 -->
+   <update id="qna_edit" parameterType="qna">
+     update c_qna set cq_id=#{cq_id}, cq_title=#{cq_title},cq_cont=#{cq_cont},
+     cq_file=#{cq_file} where cq_no=#{cq_no}
+   </update>
+   
+   <!-- 1대1문의 삭제 -->
+   <delete id="del_qna" >
+     delete from c_qna where cq_no=#{cq_no}
+   </delete>
+   
+	<!--  -->
+	<select id="qna_reply" resultType="qna">
+		select * from c_qna where qna_replygroup = #{qna_replygroup} and qna_replytype != 0
+	</select>
+   
+   
+ </mapper>
+   
+   

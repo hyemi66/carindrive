@@ -38,8 +38,6 @@
 		<h2>고객정보</h2>
 			<p>예약자 성함: ${memberInfo.m_name}</p>
 			<p>예약자 연락처: ${formattedPhone}</p>
-			<p>운전자 성함: 추후 수정</p>
-			<p>운전자 연락처: 추후 수정</p>
 		</div>
 		
 		<div class="infobox">

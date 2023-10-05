@@ -10,7 +10,7 @@
 <link href="${path}/css/main.css" rel="stylesheet"/>
 <script>
     alert("세션이 만료되었습니다. 다시 로그인을 해주세요.");
-    location.href = "/member/m_login";
+    location.href = "/member/memberLogin";
 </script>
 </head>
 <body>

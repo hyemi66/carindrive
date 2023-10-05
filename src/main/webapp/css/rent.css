@@ -51,7 +51,7 @@ body {
 	font-weight: bold;
 }
 .conbox {
-	margin-left: 163px;
+	margin: 0 auto;
 	width: 1190px; background: white;
 	border-bottom: 2px solid black;
 	border-left: 2px solid black;
@@ -164,31 +164,29 @@ body {
     display: flex;
     align-items: center; /* 버튼을 수직으로 중앙 정렬 */
 }
-
-.selectBox {
-    padding: 10px;
-    margin: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px; 
-}
-
-.btn-link, #carRent input {
+#carRent input[type="submit"] {
     border: 1px solid #1c2b37;
     background-color: #1c2b37;
-    padding: 15px 325px;
+    padding: 15px 230px;
+    margin-left: 10px;
     font-weight: bold;
     font-size: 20px;
     color: white;
     box-sizing: border-box;
     display: inline-block;
 }
-
-.btn-link {
-    text-decoration: none;
+#carRent input[type="button"] {
+	border: 1px solid #1c2b37;
+    background-color: #1c2b37;
+    padding: 15px 190px;
+    font-weight: bold;
+    font-size: 20px;
+    color: white;
+    box-sizing: border-box;
+    display: inline-block;
 }
-
-.btn-link:hover, #carRent input:hover {
-    background-color: #e0e0e0; 
+#carRent input:hover {
+    background-color: #294052; 
 }
 
 /* 예약자 확인 및 예약일자 + 가격 */
