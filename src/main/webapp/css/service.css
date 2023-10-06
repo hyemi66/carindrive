@@ -4,16 +4,23 @@ body{
 	padding-left: 120px;
 }
 
+
 /* 고객센터 메인 페이지 메뉴  */
 #board_name{
-	margin:70px 20px 0px 50px; 
 	font-family: verdana, Geneva,sans-serif;
 	font-size:50px;
 }
 
-#sub_menu{display:flex; margin:0px 20px 0px 0px;}
+#sub_menu{
+		  width: 600px;
+		  position: absolute; 
+		  left: 50%; 
+		  margin-left: -300px; 
+		  
+		  }
 
 #sub_menu ul{
+	display:flex;
 	list-style:none; 
 	font-family: verdana, Geneva,sans-serif;	
 	font-size:13px; font-Weight:100;			
@@ -21,6 +28,7 @@ body{
 }
 
 #sub_menu ul li{float:left;	margin:0px 5px;}
+
 
 #sub_menu a{
 	display: block; height:20px; padding: 10px;
@@ -39,14 +47,38 @@ body{
 
 
 /* 고객센터 메인페이지 공지사항 목록 보기 (5개)*/
+
+.center_nlist{
+	width :1200px;
+	position: absolute; 
+		  left: 50%;
+		  margin-left: -600px; 
+		   margin-top : 200px;
+}
+.center_nlist1{
+	width :1200px;
+	position: absolute; 
+		  left: 50%;
+		  margin-left: -600px; 
+		  margin-top : 100px;
+}
+#center_nlist2{
+	width :1200px;
+	position: absolute; 
+		  left: 50%;
+		  margin-left: -600px; 
+		  margin-top : 100px;
+}
+
 .center_nlist caption{
 	text-align: left; text-indent: 5px; margin-bottom: 1%;
 	font-weight: bold; font-size: 17px;
+	
 }
 
 .center_nlist-table {
-	display: table;	table-layout: fixed; width:1250px;
-	border-top: 2px solid #49557d; margin-left: 115px;
+	display: table;	table-layout: fixed; width:1200px;
+	border-top: 2px solid #49557d; 
 }
 
 .center_nlist-table th{
@@ -63,7 +95,7 @@ body{
 
 
 /* 고객센터 메인페이지 하단 공지사항 전체 보기 버튼 */
-.notice-all-btn{text-align: center; margin-top:50px;}
+.notice-all-btn{text-align: center; margin-top: 500px;}
 
 .notice-all{
 	width: 50px; padding:20px;
@@ -82,9 +114,15 @@ body{
 
 
 
-
 /* 고객센터 메인페이지 바로가기 버튼  */
-.shortcut{width: 90%; display: flex; padding: 15% auto; margin: 5% auto;}
+.shortcut{
+	width: 1200px; 
+	position: absolute; 
+		  left: 50%; 
+		  margin-left: -600px;
+		  display: flex; 
+		  margin-bottom: 30px;
+	}
 
 .shortcut a{text-decoration: none; color: inherit;}
 
@@ -109,7 +147,7 @@ body{
 
 
 /* 하단 페이지 컨트롤러 */
-#page_control{clear:left; text-align:center; margin: 50px 10px;}
+#page_control{ text-align:center; margin-top: 10px;}
 
 #page_control a{
 	text-decoration:none; padding:2px 5px; margin:0px 5px; color:#1c2b37;
@@ -120,7 +158,9 @@ body{
 }
 
 
-
+#ffff{
+	margin-top: 500px;
+}
 
 
 
@@ -130,7 +170,13 @@ body{
     position: relative; text-align: center;
     width: 1200px; height:100px;
     padding: 20px; 
-    margin-left: 115px; margin-bottom: 50px;
+    margin-top : 150px;
+    margin-bottom: 50px;
+    
+		  left: 50%; 
+		  margin-left: -600px; 
+
+    
 }
 
 .input_box {
@@ -320,13 +366,13 @@ main .write-table td > input{vertical-align:middle;}
 /* 공지 사항 목록 검색 */
 .notice_box{text-align: left;}
 
-#bFind_wrap{text-align:center; margin:20px;}
+#bFind_wrap{text-align:center; margin-top: 450px;}
 
 
 
 /* 1대1문의 목록 페이지 */
 .qna-table{
-	display: table;	table-layout: fixed; width:1250px;
+		table-layout: fixed; width:1200px;
 	border-top: 2px solid #1c2b37; margin-left:115px;
 }
 

@@ -16,7 +16,7 @@
 <jsp:include page="../include/header.jsp"/>
 
 <%--서브 메인 이미지--%>
-<h1 id="board_name">고객센터</h1>
+<h1 id="board_name" align="center">고객센터</h1>
 
 <%-- 고객센터 메뉴 --%>
 <div id="sub_menu">
@@ -33,7 +33,7 @@
 <main>
 
 <form method="get" action="service_qboard">
-		<div id="center_nlist">
+		<div id="center_nlist2">
 			<table class="qna-table">
 			<caption class="main_title">1대1문의 목록</caption>
 			<tr>
@@ -141,6 +141,8 @@
 	</div>
 </form>
 </main>
+<div id="ffff"><br></div>
+<br><br>
 
 <jsp:include page="../include/footer.jsp"/>
 </body>

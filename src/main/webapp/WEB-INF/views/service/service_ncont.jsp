@@ -21,7 +21,7 @@
 <div id="sub_img_member"></div>
 <div class="clear"></div>
 
-<h1 id="board_name">고객센터</h1>
+<h1 id="board_name" align="center">고객센터</h1>
 
 <%-- 고객센터 메뉴 --%>
 <div id="sub_menu">

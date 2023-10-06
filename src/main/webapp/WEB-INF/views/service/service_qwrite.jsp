@@ -13,7 +13,7 @@
 </head>
 <body>
 <jsp:include page="../include/header.jsp"/>
-<h1 id="board_name">고객센터</h1>
+<h1 id="board_name" align="center">고객센터</h1>
 
 <div id="sub_menu">
  <ul>

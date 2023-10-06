@@ -19,9 +19,8 @@
 
 <%--서브 메인 이미지--%>
 <div id="sub_img_member"></div>
-<div class="clear"></div>
 
-<h1 id="board_name">고객센터</h1>
+<h1 id="board_name" align="center">고객센터</h1>
 
 <div id="sub_menu">
  <ul>
@@ -34,8 +33,9 @@
 
 
 <%-- 공지사항 목록 보기 --%>
+<main>
 <form method="get" action="service_notice">
-<div class="center_nlist">
+<div class="center_nlist1">
 	<table class="qna-table">
 	<caption class="main_title">공지 목록</caption>
 		<tbody>
@@ -69,6 +69,7 @@
 		</c:forEach>
 		</tbody>
 	</table>
+	<div id="write-button">
 </div>
 
 
@@ -137,7 +138,11 @@
 <input type="search" name="find_name" id="find_name" size="16" value="${find_name}" >
 <input type="submit" value="검색" >
 </div>
+</div>
 </form>
+</main>
+<div id="ffff"><br></div>
+<br><br>
 <jsp:include page="../include/footer.jsp"/>
 </body>
 </html>
