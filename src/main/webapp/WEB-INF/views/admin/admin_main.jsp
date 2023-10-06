@@ -72,7 +72,7 @@
 							<c:if test="${!empty glist}">
 								<c:forEach var="g" items="${glist}"  varStatus="status">
 									<tr>
-										<td align="center">${status.count}</td>
+										<td align="center">${g.cs_no}</td>
 										<td align="center">${g.cs_type}</td>
 										<td align="center">
 											<a href="admin_gongji_cont?no=${g.cs_no}&page=${page}&state=cont">

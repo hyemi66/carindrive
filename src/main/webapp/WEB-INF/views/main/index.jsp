@@ -39,20 +39,27 @@
 		<input type="radio" name="m_tabmenu" id="tab02">
 		<input type="radio" name="m_tabmenu" id="tab03">
 		
-		<div class="m_conbox con1">이벤트 1</div>
-		<div class="m_conbox con2">이벤트 2</div>
-		<div class="m_conbox con3">이벤트 3</div>
-		
+		<div class="m_conbox con1">
+			<img alt="이벤트1" src="${path}/images/event1.jpg">
 		</div>
+		<div class="m_conbox con2">
+			<img alt="이벤트2" src="${path}/images/event2.jpg">
+		</div>
+		<div class="m_conbox con3">
+			<img alt="이벤트3" src="${path}/images/event3.jpg">
+		</div>
+		
+	
 		<div class="m_btn">
 			<label for="tab01"></label>
 			<label for="tab02"></label>
 			<label for="tab03"></label>
-			<p id="m_fullev">
-				<a href="${path}/event/event">▶이벤트 전체 보기</a>
-			</p>
+			
+		</div>
 	</div>
-	
+	<p id="m_fullev">
+		<a href="${path}/event/event">▶ 이벤트 전체 보기</a>
+	</p>
 </div>
 <div class="m_ser">
 	<input type="button" value="고객센터" onclick="location='${path}/service/service_center'">
