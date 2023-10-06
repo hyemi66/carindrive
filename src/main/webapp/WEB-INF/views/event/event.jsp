@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
+<c:set var="path" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,11 +10,9 @@
 </head>
 <body>
 <jsp:include page="../include/header.jsp"/>
-<h2>이벤트 페이지입니다</h2>
-<br>
-<br>
-<br>
-<br>
+<div id="eventImg" >
+	<img alt="이벤트" src="${path}/images/event.jpg">
+</div>
 <jsp:include page="../include/footer.jsp"/>
 </body>
 </html>

@@ -205,3 +205,10 @@ input[id="tab03"]:checked ~ .m_btn > label[for="tab03"] {
 	background-color: #1c2b37;
 	color: white;
 }
+/* event페이지 */
+#eventImg {
+	display: flex;
+	text-align: center;
+     justify-content: center;
+     align-items: center;
+}
