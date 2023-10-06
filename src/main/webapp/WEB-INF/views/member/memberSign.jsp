@@ -10,7 +10,10 @@
 <link href="${path}/css/main.css" rel="stylesheet"/>
 </head>
 <body>
+<div class="CARBig">
 <jsp:include page="../include/header.jsp"/>
+</div>
+<div class="CARBig">
 <form method="post">
 <h2>회원 가입 페이지 입니다.</h2>
     <label for="m_id">아이디:</label>
@@ -27,6 +30,9 @@
     
     <input type="submit" value="가입하기"> <br>
 </form>
+</div>
+<div class="CARBig">
 <jsp:include page="../include/footer.jsp"/>
+</div>
 </body>
 </html>

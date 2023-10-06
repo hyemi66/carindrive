@@ -10,7 +10,10 @@
 <link href="${path}/css/guide.css" rel="stylesheet"/>
 </head>
 <body>
+<div class="CARBig">
 <jsp:include page="../include/header.jsp"/>
+</div>
+<div class="CARBig">
 <div class="l-ct">
 	<h1 class="guideTitle">1. 대여자격</h1>
 	<table class="guideTable">
@@ -130,6 +133,9 @@
 		</div>
 	</div>
 </div>
+</div>
+<div class="CARBig">
 <jsp:include page="../include/footer.jsp"/>
+</div>
 </body>
 </html>

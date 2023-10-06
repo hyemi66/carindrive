@@ -12,9 +12,11 @@
 <link href="${path}/css/rent.css" rel="stylesheet"/>
 </head>
 <body>
+<div class="CARBig">
 <jsp:include page="../include/header.jsp"/>
+</div>
 <!-- 페이지 내용 -->
-
+<div class="CARBig">
 <div class="mainimg">
 	<img alt="메인사진" src="${path}/images/MAINIMG.jpg">
 </div>
@@ -67,7 +69,9 @@
 	<input type="button" value="보험안내" onclick="location='${path}/insurance/insurance'">
 </div>
 
-
+</div>
+<div class="CARBig">
 <jsp:include page="../include/footer.jsp"/>
+</div>
 </body>
 </html>

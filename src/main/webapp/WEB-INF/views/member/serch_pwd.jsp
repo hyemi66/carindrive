@@ -11,8 +11,11 @@
 <script src="${path}/js/member/s_pwd.js"></script>
 </head>
 <body>
+<div class="CARBig">
 <%-- include : main --%>
 <%@ include file="../include/header.jsp" %>
+</div>
+<div class="CARBig">
 
 <form action="serch_pwd_email_ck" method="post">
 <div id="wrap">
@@ -34,8 +37,11 @@
 	</div>
 </div>
 </form>
+</div>
+<div class="CARBig">
 
 <%-- include : footer --%>
 <%@ include file="../include/footer.jsp" %>
+</div>
 </body>
 </html>

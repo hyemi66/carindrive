@@ -15,8 +15,11 @@
 
 </head>
 <body>
+<div class="CARBig">
 <%-- include : main --%>
 <%@ include file="../include/header.jsp" %>
+</div>
+<div class="CARBig">
 
 <form action="m_login_ok" method="post">
 	<div id="wrap">
@@ -69,9 +72,11 @@
     <%-- 스크립트가 실행되었으므로 alertScript를 삭제 --%>
     <c:remove var="alertScript" scope="page" />
 </c:if>
-
+</div>
+<div class="CARBig">
 <%-- include : footer --%>
 <%@ include file="../include/footer.jsp" %>
+</div>
 
 
 

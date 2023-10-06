@@ -10,7 +10,10 @@
 <link href="${path}/css/main.css" rel="stylesheet"/>
 </head>
 <body>
+<div class="CARBig">
 <jsp:include page="../include/header.jsp"/>
+</div>
+<div class="CARBig">
 <form method="post">
 <h2>로그인 페이지 입니다.</h2>
     <table border="1">
@@ -54,7 +57,9 @@
        alert('잘못 입력 하셨습니다. 다시 로그인 해주세요 !');   
    }
  </script>
-
+</div>
+<div class="CARBig">
 <jsp:include page="../include/footer.jsp"/>
+</div>
 </body>
 </html>

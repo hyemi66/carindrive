@@ -13,7 +13,10 @@
 <link href="${path}/css/service.css" rel="stylesheet"/>
 </head>
 <body>
+<div class="CARBig">
 <jsp:include page="../include/header.jsp"/>
+</div>
+<div class="CARBig">
 <div id="sub_img_center"></div>
 <div class="clear"></div>
 
@@ -78,7 +81,9 @@
       </form>
    </div>
 </main>
-
+</div>
+<div class="CARBig">
 <jsp:include page="../include/footer.jsp"/>
+</div>
 </body>
 </html>

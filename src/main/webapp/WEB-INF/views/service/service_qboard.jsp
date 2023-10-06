@@ -13,8 +13,10 @@
 <link href="${path}/css/service.css" rel="stylesheet"/>
 </head>
 <body>
+<div class="CARBig">
 <jsp:include page="../include/header.jsp"/>
-
+</div>
+<div class="CARBig">
 <%--서브 메인 이미지--%>
 <h1 id="board_name" align="center">고객센터</h1>
 
@@ -143,7 +145,9 @@
 </main>
 <div id="ffff"><br></div>
 <br><br>
-
+</div>
+<div class="CARBig">
 <jsp:include page="../include/footer.jsp"/>
+</div>
 </body>
 </html>

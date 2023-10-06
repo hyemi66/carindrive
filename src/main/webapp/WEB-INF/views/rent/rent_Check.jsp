@@ -12,7 +12,10 @@
 
 </head>
 <body>
+<div class="CARBig">
 <jsp:include page="../include/header.jsp"/>
+</div>
+<div class="CARBig">
 <div class="clear"></div>
 
 <div id="bigbox">
@@ -47,7 +50,9 @@
 <script type="text/javascript"> 
   history.replaceState({}, null, location.pathname); 
 </script> 
- 
+ </div>
+ <div class="CARBig">
 <jsp:include page="../include/footer.jsp"/>
+</div>
 </body>
 </html>

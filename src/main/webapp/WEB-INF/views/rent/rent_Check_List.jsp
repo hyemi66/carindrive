@@ -21,7 +21,10 @@
     <script src="${path}/js/rentList.js"></script>
 </head>
 <body>
+<div class="CARBig">
     <jsp:include page="../include/header.jsp"/>
+    </div>
+    <div class="CARBig">
     <div class="clear"></div>
 
     <div id="bigbox">
@@ -119,6 +122,9 @@ function openPopup(url) {
     window.open(url, 'popup', 'width=' + width + ', height=' + height + ', left=' + left + ', top=' + top + ', resizable=no');
 }
 </script>
+</div>
+<div class="CARBig">
 <jsp:include page="../include/footer.jsp"/>
+</div>
 </body>
 </html>

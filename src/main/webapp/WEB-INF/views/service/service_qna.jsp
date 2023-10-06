@@ -12,7 +12,10 @@
 <link href="${path}/css/service.css" rel="stylesheet"/>
 </head>
 <body>
+<div class="CARBig">
 <jsp:include page="../include/header.jsp"/>
+</div>
+<div class="CARBig">
 <div id="sub_img_center"></div>
 <div class="clear"></div>
 
@@ -251,7 +254,9 @@
    <a href="#">4</a> <a href="#">5</a> <a href="3">6</a> <a href="#">7</a>
    <a href="#">8</a> <a href="#">9</a> <a href="#">10</a> <a href="#">Next</a>
 </div>
-
+</div>
+<div class="CARBig">
 <jsp:include page="../include/footer.jsp"/>
+</div>
 </body>
 </html>

@@ -10,7 +10,10 @@
 <script src="${path}/js/jquery.js"></script>
 </head>
 <body>
+<div class="CARBig">
 	<jsp:include page="../include/header.jsp" />
+	</div>
+	<div class="CARBig">
 	<div class="clear"></div>
 	<div id="bigbox">
 		<p id="bar">예약 내역</p>
@@ -20,7 +23,9 @@
 		</div>
 	</div>
 
-
+</div>
+<div class="CARBig">
 	<jsp:include page="../include/footer.jsp" />
+	</div>
 </body>
 </html>

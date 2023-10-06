@@ -11,8 +11,11 @@
 <script src="${path}/resources/js/member/s_id.js"></script>
 </head>
 <body>
+<div class="CARBig">
 <%-- include : main --%>
 <%@ include file="../include/header.jsp" %>
+</div>
+<div class="CARBig">
 <form action="serch_id_email_ck" method="post">
 <div id="wrap">
 	<div id="serchform"> 
@@ -40,7 +43,10 @@
 			</div>
 	</div>
 </form>
+</div>
+<div class="CARBig">
 <%-- include : footer --%>
 <%@ include file="../include/footer.jsp" %>
+</div>
 </body>
 </html>

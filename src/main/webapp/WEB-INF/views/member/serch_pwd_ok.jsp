@@ -82,7 +82,10 @@
 </head>
 <body>
 <%-- include : main --%>
+<div class="CARBig">
 <%@ include file="../include/header.jsp" %>
+</div>
+<div class="CARBig">
 <form method="post" action="pwd_change_ok" id="p_form">
 <div id="wrap" style="height: 800px;">
 	<div id="serchform" style="height: 800px; margin-top: 20px; margin-bottom: 20px;"> 
@@ -130,7 +133,10 @@
 			</div>
 		</div>
 </form>
+</div>
+<div class="CARBig">
 <%-- include : footer --%>
 <%@ include file="../include/footer.jsp" %>
+</div>
 </body>
 </html>

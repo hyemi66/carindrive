@@ -41,7 +41,10 @@
 </head>
 <body>
 <%-- include : main --%>
+<div class="CARBig">
 <%@ include file="../include/header.jsp" %>
+</div>
+<div class="CARBig">
 <form method="get" >
 <div id="wrap">
 	<div id="serchform" style="height: 600px;"> 
@@ -70,8 +73,10 @@
 		</div>
 </form>
 
-
+</div>
+<div class="CARBig">
 <%-- include : footer --%>
 <%@ include file="../include/footer.jsp" %>
+</div>
 </body>
 </html>
