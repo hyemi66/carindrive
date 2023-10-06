@@ -156,19 +156,4 @@ public class AdminDAOImpl implements AdminDAO {
 		return this.sqlSession.selectList("admin_order_list", p);
 	} // 차량예약리스트
 
-	@Override
-	public void updateRefund(String merchantId) {
-		this.sqlSession.update("admin_updateRefund", merchantId);
-	} // 차량환불시 refund 업데이트
-
-	@Override
-	public void updatePlusRefund(String merchant_Id) {
-		this.sqlSession.update("admin_updateplusRefund", merchant_Id);
-	} // 차량환불시 시간연장된 차도 같이 업데이트
-
-	@Override
-	public void deleteRental(String merchant_Id) {
-		this.sqlSession.delete("admin_deleteRental", merchant_Id);
-	} // 차량환불시 rental 테이블 데이터 삭제
-
 }

@@ -64,8 +64,8 @@
 						<table id="ag_t2" border="1">
 							<tr>
 								<th width="45">번호</th>
-								<th width="65">타입</th>
-								<th width="400">제목</th>
+								<th width="100">타입</th>
+								<th width="370">제목</th>
 								<th width="100">작성일</th>
 								<th width="120">수정/삭제</th>
 							</tr>

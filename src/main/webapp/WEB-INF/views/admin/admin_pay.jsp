@@ -28,7 +28,6 @@
 		<article id="admin_show">
 			<h1>차 량 환 불</h1>
 			<div class="clear"></div>
-				<form method="get" action="admin_member">
 					<div id="Bag">
 						<h2>
 							차량 예약 목록 ( 총 개수 : 
@@ -45,18 +44,21 @@
 							<tr>
 								<th width="45">번호</th>
 								<th width="80">아이디</th>
-								<th width="400">차종</th>
+								<th width="360">차종</th>
 								<th width="100">결제일자</th>
+								<th width="140">주문번호</th>
 								<th width="100">결제상태</th>
 								<th width="80">환불처리</th>
 							</tr>
 							<c:if test="${!empty mlist}">
 								<c:forEach var="m" items="${mlist}" varStatus="status">
 									<tr>
-										<td align="center">${status.count}</td>
+										<td align="center">${m.id}</td>
 										<td align="center">${m.buyer_name}</td>
-										<td align="center">${m.product_name}</td>
+										<td align="center">${m.buy_product_name}</td>
 										<td align="center">${fn:substring(m.buy_date,0,10)}</td>
+										<td align="center">${fn:replace(m.merchantId, "merchant_", "")}</td>
+										<%--merchant_ 문자를 생략하고 숫자만 출력 --%>
 										<td align="center">${m.refund}</td>
 										<%-- 0이상 10미만 사이의 년월일 만 반환 --%>
 										<td align="center">
@@ -64,9 +66,11 @@
 												환불완료
 											</c:if>
 											<c:if test="${!m.refund.equals('환불완료')}">
-												<input type="button" value="환불처리" onclick="if(confirm('${m.buyer_name}의 예약을 환불처리 하겠습니까?') == true){
-												location= 'admin_pay_del?merchant_Id=${m.merchant_Id}&page=${page}';   
-												}else{return;}" />
+												<form action="/rent/adminRefund" method="post" id="refundForm">
+   												<input type="hidden" name="order_number" value="${m.merchantId}">
+    												<button class="cancle" type="submit" style="background-color:#FDFD96;"
+    												onclick="if(!confirm('${m.buyer_name}님의 ${m.buy_product_name}\n차량예약을 환불처리 하시겠습니까?')) return false;">환불하기</button>
+			        							</form>
 											</c:if>
 										</td>
 									</tr>
@@ -109,7 +113,6 @@
 						</div>
 						
 					</div>
-				</form>
 		</article>
 	</div>
 </div>

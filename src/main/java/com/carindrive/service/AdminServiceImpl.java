@@ -147,19 +147,4 @@ public class AdminServiceImpl implements AdminService {
 		return this.adminDao.getAdminOrderList(p);
 	}
 
-	@Override
-	public void updateRefund(String merchantId) {
-		this.adminDao.updateRefund(merchantId);
-	}
-
-	@Override
-	public void updatePlusRefund(String merchant_Id) {
-		this.adminDao.updatePlusRefund(merchant_Id);
-	}
-
-	@Override
-	public void deleteRental(String merchant_Id) {
-		this.adminDao.deleteRental(merchant_Id);
-	}
-
 }

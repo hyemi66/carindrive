@@ -523,18 +523,4 @@ public class AdminController {
 		return listM;
 	} // admin_pay()
 	
-	@GetMapping("/admin_pay_del")
-	public ModelAndView admin_pay_del(String merchant_Id, int page) {
-		this.adminService.updateRefund(merchant_Id);
-		this.adminService.updatePlusRefund(merchant_Id);
-		this.adminService.deleteRental(merchant_Id);
-		
-		ModelAndView om = new ModelAndView();
-		
-		om.addObject("page", page);
-		om.setViewName("redirect:/admin/admin_pay");
-		
-		return om;
-	}
-	
 }

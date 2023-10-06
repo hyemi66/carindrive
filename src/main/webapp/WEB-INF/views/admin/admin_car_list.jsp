@@ -69,13 +69,13 @@
 								<th width="73">년식</th>
 								<th width="73">색상</th>
 								<th width="105">차종</th>
-								<th width="155">기름</th>										
+								<th width="155">연료</th>										
 								<th width="110">수정/삭제</th>
 							</tr>
 							<c:if test="${!empty clist}">
 								<c:forEach var="c" items="${clist}" varStatus="status">
 									<tr>
-										<td align="center">${status.count}</td>
+										<td align="center">${c.c_num}</td>
 										<td align="center">
 											<a href="admin_car_cont?no=${c.c_num}&page=${page}&state=cont">
 												${c.c_name}
