@@ -23,8 +23,8 @@ VALUES (cr_seq.NEXTVAL, #{cr_mid}, #{cr_cname}, #{cr_rdate}, #{cr_sdate}, #{cr_e
 	</resultMap>
 	
 	<!-- 해당 차 정보 가져오기 -->
-	<select id="c_list" resultType="car" parameterType="car">
-	    SELECT * FROM c_car WHERE c_name = #{c_name}
+	<select id="getCarInfo" resultType="car" parameterType="car">
+	    SELECT * FROM c_car where c_name like #{c_name}
 	</select>
 	
     <!-- 해당 고객의 모든차량 렌트 내역 확인 -->

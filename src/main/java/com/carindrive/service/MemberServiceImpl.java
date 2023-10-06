@@ -35,6 +35,8 @@ import org.springframework.stereotype.Service;
 
 import com.carindrive.dao.MemberDAO;
 import com.carindrive.vo.MemberVO;
+import com.carindrive.vo.OrderVO;
+import com.carindrive.vo.RentalVO;
 import com.carindrive.vo.SocialVO;
 
 
@@ -117,6 +119,11 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public void delMember(String m_id) {
 		this.memberDao.delMember(m_id);
+	}
+
+	@Override
+	public List<OrderVO> checkPay(String m_id) {
+		return this.memberDao.checkPay(m_id);
 	}
 
 

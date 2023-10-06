@@ -39,7 +39,7 @@ public class RentalDAOImpl implements RentalDAO {
 
 	@Override
 	public CarVO getCarInfo(String cr_cname) {
-		return this.sqlSession.selectOne("c_list",cr_cname);
+		return this.sqlSession.selectOne("getCarInfo",cr_cname);
 	}//차 정보 가져오기
 	
 	@Override

@@ -47,14 +47,14 @@
 							<td>
 								<div>
 									<select id="m_tel" name="m_tel" class="select">
-									<option value="">통신사 선택</option>
+									<option value="${m.m_tel}">${m.m_tel}</option>
 									<option value="SK">SK</option>
 									<option value="KT">KT</option>
 									<option value="LG">LGU+</option>
 									<option value="알뜰">알뜰폰</option>
 									</select>
 									<input id="m_phone" name="m_phone" placeholder="휴대전화번호"
-									onfocus="this.placeholder=''" onblur="this.placeholder='휴대전화번호'">
+									onfocus="this.placeholder=''" onblur="this.placeholder='휴대전화번호'" value="${m.m_phone}">
 								</div>
 							</td>
 						</tr>
@@ -63,22 +63,16 @@
 							<td>
 								<div>
 									<input id="m_email" name="m_email" placeholder="이메일"
-									onfocus="this.placeholder=''" onblur="this.placeholder='이메일'">
-									<select name="m_email_se" class="select">
-									<option value="">이메일 선택</option>
-									<option value="naver">naver.com</option>
-									<option value="gmail">gmail.com</option>
-									<option value="daum">daum.net</option>
-									</select>
+									onfocus="this.placeholder=''" onblur="this.placeholder='이메일'" value="${m.m_email}">
 								</div>
 							</td>
-							</tr>
-							<tr>
-								<th>면허등록여부</th>
-								<td>
-									<input type="button" value="면허등록" onclick="${path}/">
-								</td>
-							</tr>
+						</tr>
+						<tr>
+							<th>면허등록여부</th>
+							<td>
+								<input type="button" value="면허등록" onclick="${path}/">
+							</td>
+						</tr>
 					</c:forEach>
 				</table>
 				<input id="mypage_bt2" type="submit" value="수정완료" />

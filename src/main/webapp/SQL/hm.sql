@@ -25,20 +25,21 @@ create table c_car(
 );
 -- 예약 테이블
 CREATE TABLE c_rental (
-    cr_num number PRIMARY KEY,                    -- 예약번호
-    cr_mid VARCHAR2(30),                          -- 고객 아이디
-    cr_cname VARCHAR2(200),                     --차 이름            --cr_cid를 cr_cname으로 바꿈
-    cr_rdate VARCHAR2(200),                       --예약 일자
-    cr_sdate VARCHAR2(200),                      --실제 대여일
-    cr_edate VARCHAR2(200),                      --반납 일자
-    cr_price number,                                       --렌트 비용
-    cr_order VARCHAR2(100),                       --주문 번호
+    cr_num number PRIMARY KEY,                              -- 예약번호
+    cr_mid VARCHAR2(30),                                        -- 고객 아이디
+    cr_cname VARCHAR2(200),                                     --차 이름
+    cr_rdate VARCHAR2(200),                                      --예약 일자
+    cr_sdate VARCHAR2(200),                                     --실제 대여일
+    cr_edate VARCHAR2(200),                                     --반납 일자
+    cr_price number,                                              --렌트 비용
+    cr_order VARCHAR2(100),                                   --주문 번호
     cr_status VARCHAR2(30) DEFAULT 'wait' NOT NULL, --결제 상태 확인
     cr_paytime TIMESTAMP,
     cr_waittime VARCHAR2(200),
-    FOREIGN KEY (cr_mid) REFERENCES c_member(m_id),
+    FOREIGN KEY (cr_mid) REFERENCES c_member(m_id) ON DELETE CASCADE,
     FOREIGN KEY (cr_cname) REFERENCES c_car(c_name)
 );
+-- 결제정보창
 create table c_order_info (
     id number primary key,
     buyer_name varchar2(255),
@@ -64,7 +65,8 @@ CREATE TABLE C_SERVICE (
     cs_cont VARCHAR2(4000 BYTE), 
     cs_date DATE DEFAULT SYSDATE, 
     cs_type VARCHAR2(20 BYTE),
-    cs_hit int default 0
+    cs_hit int default 0,
+    FOREIGN KEY (cs_id) REFERENCES c_member(m_id) ON DELETE CASCADE
 );
 --Q&A 테이블
 CREATE TABLE c_qna (
@@ -77,9 +79,9 @@ CREATE TABLE c_qna (
     cq_file VARCHAR2(400 BYTE), 
     QNA_REPLYGROUP NUMBER(*,0), 
     QNA_REPLYTYPE NUMBER(*,0), 
-    QNA_REPLYINDEX NUMBER(*,0)
+    QNA_REPLYINDEX NUMBER(*,0),
+    FOREIGN KEY (cq_id) REFERENCES c_member(m_id) ON DELETE CASCADE
 );
-
 -- 네이버 로그인
 create table social(
  id NUMBER(19) DEFAULT social_seq.nextval primary key ,

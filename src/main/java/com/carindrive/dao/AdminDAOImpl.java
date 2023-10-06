@@ -156,4 +156,9 @@ public class AdminDAOImpl implements AdminDAO {
 		return this.sqlSession.selectList("admin_order_list", p);
 	} // 차량예약리스트
 
+	@Override
+	public void del_rental(String m_id) {
+		this.sqlSession.delete("del_rental", m_id);
+	}
+
 }

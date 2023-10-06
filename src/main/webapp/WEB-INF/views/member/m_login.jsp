@@ -39,7 +39,7 @@
 				</div><%--pwd_form --%>
 				 
 				<div id="maintain">
-					<input type="checkbox" id="checkbox" name="checkbox"><label for="checkbox"><span>로그인 상태 유지</span></label>
+					<input type="checkbox" id="checkbox" name="checkbox" checked><label for="checkbox" ><span>로그인 상태 유지</span></label>
 				</div><%--maitain_form --%>
 				<div id="button_form">
 					<input type="submit" value="로그인" id="btn1" onclick="return logCk()">
@@ -59,6 +59,17 @@
 		</div><%--allform end --%>
 	</div><%-- wrap end --%>
 </form>
+
+<!-- 로그인을 안하고 에러로인해 여기로 돌아왔을 시 -->
+<!-- JSP 파일 내에서 경고 메시지 표시하기 -->
+<c:if test="${not empty LoginNull}">
+    <script>
+        ${LoginNull}
+    </script>
+    <%-- 스크립트가 실행되었으므로 alertScript를 삭제 --%>
+    <c:remove var="alertScript" scope="page" />
+</c:if>
+
 <%-- include : footer --%>
 <%@ include file="../include/footer.jsp" %>
 

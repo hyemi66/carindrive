@@ -4,6 +4,8 @@ package com.carindrive.dao;
 import java.util.List;
 
 import com.carindrive.vo.MemberVO;
+import com.carindrive.vo.OrderVO;
+import com.carindrive.vo.RentalVO;
 /*
 public interface MemberDAO {
 
@@ -48,6 +50,9 @@ public interface MemberDAO {
 
 
 	void delMember(String m_id);
+
+
+	List<OrderVO> checkPay(String m_id);
 
 
 

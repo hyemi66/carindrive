@@ -20,6 +20,8 @@ import javax.transaction.Transactional;
 
 
 import com.carindrive.vo.MemberVO;
+import com.carindrive.vo.OrderVO;
+import com.carindrive.vo.RentalVO;
 import com.carindrive.vo.SocialVO;
 
 
@@ -55,6 +57,8 @@ public interface MemberService {
 	void updateMember(MemberVO m);
 
 	void delMember(String m_id);
+
+	List<OrderVO> checkPay(String m_id);
 
 
 

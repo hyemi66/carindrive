@@ -13,7 +13,6 @@
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 <link href="${path}/css/main.css" rel="stylesheet"/>
 <link href="${path}/css/rent.css" rel="stylesheet"/>
-<link href="${path}/css/rent_Wait.css" rel="stylesheet" />
 
 </head>
 <body>
@@ -26,14 +25,13 @@
 <input type="hidden" name="cr_cname" id="cr_cname" value="${car.c_name}">
 
 <div class="mainmenu">
-
 <div id="menu01">
 	<p>
 		빌 리 는 날 짜&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<input type="datetime-local" name="cr_sdate" id="cr_sdate" value="${cr_sdate}" required readOnly>
-
 	</p>
 </div>
+
 <div id="menu02">
 	<p>
 		반 납 하 는 날 짜&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -43,7 +41,8 @@
 </div>
 
 <div class="clear"></div>
-
+<br><br>
+<div class="mainmenu">
 <div class="carname">
 	<h1>${car.c_brand} ${car.c_name}</h1>
 	<div class="carInfo">
@@ -124,13 +123,17 @@
 				<td>&nbsp;예약 취소일</td> <td>&nbsp;취소 수수료</td>
 			</tr>
 			<tr>
-				<td>&nbsp;인수일기준 2 ~ 3일전</td> <td>&nbsp;총 대여금의 20% 수수료부과</td>
+				<td>&nbsp;인수일 기준  3 일전</td> <td>&nbsp;모든 금액 환불</td>
 			</tr>
 			<tr>
-				<td>&nbsp;인수일기준 1 ~ 당일</td> <td>&nbsp;총 대여금의 24시간 수수료부과</td>
+				<td>&nbsp;인수일 기준  2 일전</td> <td>&nbsp;총 대여금의 50% 수수료부과</td>
+			</tr>
+			<tr>
+				<td>&nbsp;인수일 기준 1 일전 ~ 당일</td> <td>&nbsp;환불 불가</td>
 			</tr>
 		</table>
 	</div>
+</div>
 </div>
 
 </form>

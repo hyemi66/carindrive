@@ -40,7 +40,7 @@
 				<tr>
 					<th width="200">기존 반납시간</th>
 					<td align="center" width="400">
-						${rental.cr_edate}"
+						${rental.cr_edate}
 					</td>
 				</tr>
 				<tr>

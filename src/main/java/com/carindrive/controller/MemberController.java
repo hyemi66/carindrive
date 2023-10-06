@@ -114,6 +114,8 @@ import com.carindrive.service.RegisterMail;
 import com.carindrive.vo.KakaoProfile;
 import com.carindrive.vo.MemberVO;
 import com.carindrive.vo.OAuthToken;
+import com.carindrive.vo.OrderVO;
+import com.carindrive.vo.RentalVO;
 import com.carindrive.vo.SocialVO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;

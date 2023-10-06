@@ -105,3 +105,8 @@
 	padding: 10px 90px;
 	margin-left: 30px;
 }
+#delfont {
+	font-weight: bold;
+	font-size: 15px;
+	color: #ac0000;
+}

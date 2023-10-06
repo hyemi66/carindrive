@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.carindrive.vo.MemberVO;
+import com.carindrive.vo.OrderVO;
+import com.carindrive.vo.RentalVO;
 /*
 @Repository
 public class MemberDAOImpl implements MemberDAO {
@@ -122,6 +124,11 @@ public class MemberDAOImpl implements MemberDAO {
 		public void delMember(String m_id) {
 			this.sqlSession.update("del_mem", m_id);
 		} // 회원탈퇴 state = 2로 수정
+
+		@Override
+		public List<OrderVO> checkPay(String m_id) {
+			return this.sqlSession.selectList("checkPay", m_id);
+		} // 예약내역 확인 후 탈퇴
 
 	
 
