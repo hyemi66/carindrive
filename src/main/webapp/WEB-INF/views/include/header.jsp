@@ -24,7 +24,6 @@
 			<li><a href="${path}/insurance/insurance">보험안내</a></li>
 			<li><a href="${path}/event/event">이벤트</a></li>
 			<li><a href="${path}/service/service_center">고객센터</a></li>
-			<li><a href="${path}/introduce/introduce">회사소개</a></li>
 		</ul>
 	</nav>
 		

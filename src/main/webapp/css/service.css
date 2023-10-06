@@ -58,7 +58,7 @@ body{
 .center_nlist1{
 	width :1200px;
 	position: absolute; 
-		  left: 50%;
+		  left: 48%;
 		  margin-left: -600px; 
 		  margin-top : 100px;
 }
@@ -95,7 +95,7 @@ body{
 
 
 /* 고객센터 메인페이지 하단 공지사항 전체 보기 버튼 */
-.notice-all-btn{text-align: center; margin-top: 500px;}
+.notice-all-btn{text-align: center; margin-top: 600px;}
 
 .notice-all{
 	width: 50px; padding:20px;
@@ -159,7 +159,7 @@ body{
 
 
 #ffff{
-	margin-top: 500px;
+	margin-top: 550px;
 }
 
 
