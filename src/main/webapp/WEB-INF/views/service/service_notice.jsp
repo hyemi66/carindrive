@@ -17,6 +17,7 @@
 <jsp:include page="../include/header.jsp"/>
 </div>
 <div class="CARBig">
+<div class="serBox">
 <div id="sub_img_center"></div>
 <div class="clear"></div>
 
@@ -38,9 +39,26 @@
 <%-- 공지사항 목록 보기 --%>
 <main>
 <form method="get" action="service_notice">
+
 <div class="center_nlist1">
+<h1>공지 목록</h1>
+<%--검색폼 추가 --%>
+<div id="bFind_wrap">
+<select name="find_field">
+	<option value="cs_title" 
+	<c:if test="${find_field == 'cs_title'}">${'selected'}</c:if>>
+	제목</option>
+	<option value="cs_cont"
+	<c:if test="${find_field == 'cs_cont'}">${'selected'}</c:if>>
+	내용</option>
+</select> 
+
+<input type="search" name="find_name" id="find_name" size="16" value="${find_name}" >
+<input type="submit" value="검색" >
+</div>
+
 	<table class="qna-table">
-	<caption class="main_title">공지 목록</caption>
+	
 		<tbody>
 		<tr>
 			<th class="nlist-type">제목</th>
@@ -127,25 +145,13 @@
 </c:if>
 </div>
 
-<%--검색폼 추가 --%>
-<div id="bFind_wrap">
-<select name="find_field">
-	<option value="cs_title" 
-	<c:if test="${find_field == 'cs_title'}">${'selected'}</c:if>>
-	제목</option>
-	<option value="cs_cont"
-	<c:if test="${find_field == 'cs_cont'}">${'selected'}</c:if>>
-	내용</option>
-</select> 
 
-<input type="search" name="find_name" id="find_name" size="16" value="${find_name}" >
-<input type="submit" value="검색" >
-</div>
 </div>
 </form>
 </main>
 <div id="ffff"><br></div>
 <br><br>
+</div>
 </div>
 <div class="CARBig">
 <jsp:include page="../include/footer.jsp"/>

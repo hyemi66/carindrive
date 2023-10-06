@@ -4,7 +4,9 @@ body{
 	padding-left: 120px;
 }
 
-
+.serBox {
+	height: 800px;
+}
 /* 고객센터 메인 페이지 메뉴  */
 #board_name{
 	font-family: verdana, Geneva,sans-serif;
@@ -61,6 +63,9 @@ body{
 	left: 48%;
 	margin-left: -660px; 
 	margin-top : 100px;
+}
+.center_nlist1 h1 {
+	margin-left: 120px;
 }
 #center_nlist2{
 	width :1200px;
@@ -150,8 +155,8 @@ body{
 
 /* 하단 페이지 컨트롤러 */
 #page_control{
-	text-align:center; margin-top: 20px;
-	margin-left: 200px;
+	text-align:center; margin-top: 50px;
+	margin-left: 250px;
 }
 
 #page_control a{
@@ -378,11 +383,11 @@ main .write-table td > input{vertical-align:middle;}
 
 
 /* 공지 사항 목록 검색 */
-.notice_box{text-align: left;}
-
-#bFind_wrap{text-align:center; margin-top: 450px;}
-
-
+#bFind_wrap {
+	text-align: center;
+	margin-right: 700px;
+	margin-bottom: 20px;
+}
 
 /* 1대1문의 목록 페이지 */
 .qna-table{
