@@ -43,6 +43,7 @@
 		<div class="m_conbox con2">이벤트 2</div>
 		<div class="m_conbox con3">이벤트 3</div>
 		
+		</div>
 		<div class="m_btn">
 			<label for="tab01"></label>
 			<label for="tab02"></label>
@@ -50,7 +51,6 @@
 			<p id="m_fullev">
 				<a href="${path}/event/event">▶이벤트 전체 보기</a>
 			</p>
-		</div>
 	</div>
 	
 </div>

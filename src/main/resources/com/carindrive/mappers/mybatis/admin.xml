@@ -133,7 +133,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- admin state -->
 	<select id="admin_state" resultType="int">
-		select m_state from c_member where m_name = #{cq_id}
+		select m_state from c_member where m_id = #{cq_id}
 	</select>
 	
 	<!-- qna 내용보기 -->

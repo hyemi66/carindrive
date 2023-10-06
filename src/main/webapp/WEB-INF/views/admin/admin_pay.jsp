@@ -39,7 +39,8 @@
 							</c:if>
 							)
 						</h2>
-						
+						<p style="color:gray; text-align:right;">*환불을 진행하면 해당 예약과 관련된 시간연장 예약까지 같이 환불처리 됩니다.</p>
+
 						<table id="ag_t2" border="1">
 							<tr>
 								<th width="45">번호</th>
