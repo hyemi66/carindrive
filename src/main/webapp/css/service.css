@@ -74,6 +74,18 @@ body{
 		  margin-left: -710px; 
 		  margin-top : 100px;
 }
+#center_nlist2 h1 {
+	margin-left: 120px;
+}
+#qna_but input[type="button"] {
+	float: right;
+	margin-top: -40px;
+	padding: 5px 10px;
+	margin-right: -110px;
+	font-weight: bold;
+	color: white;
+	background-color: #1c2b37;
+}
 
 .center_nlist caption{
 	text-align: left; text-indent: 5px; margin-bottom: 1%;
@@ -298,6 +310,7 @@ main caption{
 main .write-table {
 	display: table;	table-layout: fixed; width: 90%;
 	border-top: 2px solid #1c2b37; margin-left:5%;
+	margin-top: 120px;
 }
 
 main .write-table input[type=text],
@@ -380,6 +393,12 @@ main .write-table td > input{vertical-align:middle;}
 	background-color: #1c2b37;
 	color: white;
 }
+.write-menu input[type="submit"] {
+	padding: 5px 15px;
+	background-color: #1c2b37;
+	color: white;
+}
+
 
 
 /* 공지 사항 목록 검색 */
@@ -416,6 +435,7 @@ main .write-table td > input{vertical-align:middle;}
 	display: table;	table-layout: fixed; width:800px;
 	border-top: 2px solid #1c2b37; margin-left:115px;
 	text-indent: 10px; 
+	margin-top: 70px;
 }
 .qpwdCheck-table .main_title{
 	text-align: left; text-indent: 5px; margin-bottom: 2%;
