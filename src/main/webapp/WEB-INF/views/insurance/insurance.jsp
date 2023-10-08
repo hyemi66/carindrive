@@ -10,7 +10,10 @@
 </head>
 <body>
 <%-- include : main --%>
+<div class="CARBig">
 <jsp:include page="../include/header.jsp"/>
+</div>
+<div class="CARBig">
 
 <div id="wrap">
 	<div id="form_1">
@@ -74,8 +77,10 @@
 		</div><!-- form2 end -->
 	</div><!-- form1 end -->
 </div><!-- wrap end -->
-
+</div>
+<div class="CARBig">
 <%-- include : footer --%>
 <jsp:include page="../include/footer.jsp"/>
+</div>
 </body>
 </html>

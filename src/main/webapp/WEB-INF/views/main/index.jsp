@@ -12,9 +12,11 @@
 <link href="${path}/css/rent.css" rel="stylesheet"/>
 </head>
 <body>
+<div class="CARBig">
 <jsp:include page="../include/header.jsp"/>
+</div>
 <!-- 페이지 내용 -->
-
+<div class="CARBig">
 <div class="mainimg">
 	<img alt="메인사진" src="${path}/images/MAINIMG.jpg">
 </div>
@@ -39,20 +41,27 @@
 		<input type="radio" name="m_tabmenu" id="tab02">
 		<input type="radio" name="m_tabmenu" id="tab03">
 		
-		<div class="m_conbox con1">이벤트 1</div>
-		<div class="m_conbox con2">이벤트 2</div>
-		<div class="m_conbox con3">이벤트 3</div>
+		<div class="m_conbox con1">
+			<img alt="이벤트1" src="${path}/images/event1.jpg">
+		</div>
+		<div class="m_conbox con2">
+			<img alt="이벤트2" src="${path}/images/event2.jpg">
+		</div>
+		<div class="m_conbox con3">
+			<img alt="이벤트3" src="${path}/images/event3.jpg">
+		</div>
 		
+	
 		<div class="m_btn">
 			<label for="tab01"></label>
 			<label for="tab02"></label>
 			<label for="tab03"></label>
-			<p id="m_fullev">
-				<a href="${path}/event/event">▶이벤트 전체 보기</a>
-			</p>
+			
 		</div>
 	</div>
-	
+	<p id="m_fullev">
+		<a href="${path}/event/event">▶ 이벤트 전체 보기</a>
+	</p>
 </div>
 <div class="m_ser">
 	<input type="button" value="고객센터" onclick="location='${path}/service/service_center'">
@@ -60,7 +69,9 @@
 	<input type="button" value="보험안내" onclick="location='${path}/insurance/insurance'">
 </div>
 
-
+</div>
+<div class="CARBig">
 <jsp:include page="../include/footer.jsp"/>
+</div>
 </body>
 </html>

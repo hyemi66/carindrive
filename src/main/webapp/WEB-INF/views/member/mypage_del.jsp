@@ -13,7 +13,10 @@
 <link href="${path}/css/member/mypage.css" rel="stylesheet"/>
 </head>
 <body>
+<div class="CARBig">
 <jsp:include page="../include/header.jsp"/>
+</div>
+<div class="CARBig">
 <div class="Bmypage">
 	<div class="Mypage">
 		<div class="Mypage_menu">
@@ -40,6 +43,10 @@
 							<th>회원 비밀번호&nbsp;<font style="color:red;">*</style></th>
 							<td><input type="password" size="14" id="m_pwd" name="m_pwd"></td>
 						</tr>
+						<tr></tr>
+						<tr>
+							<td colspan="2" id="delfont">※ 단, 탈퇴시 예약내역도 같이 취소됩니다. ※</td>
+						</tr>
 					</c:forEach>
 				</table>
 				<div id="mypage_del">
@@ -52,6 +59,9 @@
 	</div>
 </div>
 <div class="clear"></div>
+</div>
+<div class="CARBig">
 <jsp:include page="../include/footer.jsp"/>
+</div>
 </body>
 </html>

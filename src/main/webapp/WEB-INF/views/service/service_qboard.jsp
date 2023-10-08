@@ -13,10 +13,12 @@
 <link href="${path}/css/service.css" rel="stylesheet"/>
 </head>
 <body>
+<div class="CARBig">
 <jsp:include page="../include/header.jsp"/>
-
+</div>
+<div class="CARBig">
 <%--서브 메인 이미지--%>
-<h1 id="board_name">고객센터</h1>
+<h1 id="board_name" align="center">고객센터</h1>
 
 <%-- 고객센터 메뉴 --%>
 <div id="sub_menu">
@@ -33,9 +35,12 @@
 <main>
 
 <form method="get" action="service_qboard">
-		<div id="center_nlist">
+		<div id="center_nlist2">
+		<h1>1대1 문의 목록</h1>
+		<div id="qna_but">
+			<input type="button" value="글쓰기" onclick="location='service_qwrite';" />
+		</div>
 			<table class="qna-table">
-			<caption class="main_title">1대1문의 목록</caption>
 			<tr>
 				<th class="nlist-type">번호</th>
 				<th class="nlist-title">제목</th>
@@ -122,26 +127,15 @@
 			<input type="button" value="전체목록" onclick="location='service_qboard?page=${page}';" />
 		</c:if>
 		</div>
-
-		<%--검색폼 추가 --%>
-		<div id="bFind_wrap">
-		<select name="find_field">
-			<option value="cq_title" 
-			<c:if test="${find_field == 'cq_title'}">${'selected'}</c:if>>
-			제목</option>
-			<option value="cq_cont"
-			<c:if test="${find_field == 'cq_cont'}">${'selected'}</c:if>>
-			내용</option>
-		</select> 
 		
-		<input type="search" name="find_name" id="find_name"size="16" value="${find_name}" >
-		<input type="submit" value="검색" >
-		<input type="button" value="글쓰기" onclick="location='service_qwrite';" />
-		</div>
 	</div>
 </form>
 </main>
-
+<div id="ffff"><br></div>
+<br><br>
+</div>
+<div class="CARBig">
 <jsp:include page="../include/footer.jsp"/>
+</div>
 </body>
 </html>

@@ -1,3 +1,5 @@
+update c_member set m_state = 9 where m_id = 'admin01'; --m_state가 9인 계정은 관리자 계정
+commit;
 
 --확인 코드
 select * from c_member order by m_name asc; -- 사용자 확인

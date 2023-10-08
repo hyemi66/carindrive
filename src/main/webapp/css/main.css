@@ -1,4 +1,8 @@
 @charset "UTF-8";
+.CARBig {
+	width: 1500px;
+	margin: 0 auto;
+}
 body {
   margin: 0;
   padding: 0;
@@ -38,7 +42,7 @@ nav a {
   display: flex;
   height: 20px;
   padding: 10px;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: bold;
   text-decoration: none;
   color: #1c2b37;
@@ -75,6 +79,9 @@ footer {
 /* 메인 이미지 */
 .mainimg {
 	margin: 20px 100px 0px 100px;
+	 display: flex;
+     justify-content: center;
+     align-items: center;
 }
 .mainimg img {
 	width: 1320px;
@@ -124,14 +131,19 @@ footer {
 	text-align: center;
 	margin: 0px 100px;
 	margin-bottom: 50px;
+	
 }
 .m_tab_content input[type="radio"] {
 	display: none;
 }
+.m_tab_content{
+	 display: flex;
+     justify-content: center;
+     align-items: center;
+}
 .m_conbox {
 	width: 1200px;
 	height: 600px;
-	background: #aaa;
 	display: none;
 	margin-left: 70px;
 }
@@ -166,19 +178,23 @@ input[id="tab03"]:checked ~ .m_btn > label[for="tab03"] {
 	background: #1c2b37;
 }
 #m_fullev {
-	float: right;
-	margin-right: 40px;
+	display: flex;
+	text-align: center;
+     justify-content: center;
+     align-items: center;
 }
 #m_fullev a {
 	text-decoration: none;
 	color: #1c2b37;
+	font-size: 20px;
 	font-weight: bold;
 }
 /* 안내서비스 */
 .m_ser {
 	display: flex;
 	text-align: center;
-	margin-left: 390px;
+     justify-content: center;
+     align-items: center;
 }
 .m_ser input {
 	border: 1px solid #1c2b37;
@@ -192,4 +208,11 @@ input[id="tab03"]:checked ~ .m_btn > label[for="tab03"] {
 .m_ser input:hover {
 	background-color: #1c2b37;
 	color: white;
+}
+/* event페이지 */
+#eventImg {
+	display: flex;
+	text-align: center;
+     justify-content: center;
+     align-items: center;
 }

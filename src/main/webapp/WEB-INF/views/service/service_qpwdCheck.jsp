@@ -13,7 +13,10 @@
 <link href="${path}/css/service.css" rel="stylesheet"/>
 </head>
 <body>
+<div class="CARBig">
 <jsp:include page="../include/header.jsp"/>
+</div>
+<div class="CARBig">
 <div id="sub_img_center"></div>
 <div class="clear"></div>
 
@@ -21,7 +24,7 @@
 <div id="sub_img_member"></div>
 <div class="clear"></div>
 
-<h1 id="board_name">고객센터</h1>
+<h1 id="board_name" align="center">고객센터</h1>
 
 <%-- 고객센터 메뉴 --%>
 <div id="sub_menu">
@@ -63,7 +66,9 @@
 </div>
 </main>
 
-
+</div>
+<div class="CARBig">
 <jsp:include page="../include/footer.jsp"/>
+</div>
 </body>
 </html>

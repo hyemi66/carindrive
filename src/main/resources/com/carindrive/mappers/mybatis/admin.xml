@@ -133,7 +133,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- admin state -->
 	<select id="admin_state" resultType="int">
-		select m_state from c_member where m_name = #{cq_id}
+		select m_state from c_member where m_id = #{cq_id}
 	</select>
 	
 	<!-- qna 내용보기 -->
@@ -187,6 +187,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="admin_del_mem">
 		delete from c_member where m_id = #{m_id}
 	</delete>
+	
+	<delete id="del_rental">
+      delete from c_order_info where BUYER_NAME = #{m_id}
+   </delete>
 	
 	<!-- 차량예약환불관리 -->
 	<select id="count_order" resultType="int">

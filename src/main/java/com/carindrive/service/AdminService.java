@@ -61,9 +61,12 @@ public interface AdminService {
 
 	void del_mem(String m_id);
 	
+	void del_rental(String m_id);
+	
 	/* 차량환불관리 */
 	int getOrderCount();
 
 	List<OrderVO> getAdminOrderList(PageVO p);
+
 
 }

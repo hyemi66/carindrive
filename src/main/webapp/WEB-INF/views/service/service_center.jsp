@@ -14,7 +14,10 @@
 <link href="${path}/css/service.css" rel="stylesheet"/>
 </head>
 <body>
+<div class="CARBig">
 <jsp:include page="../include/header.jsp"/>
+</div>
+<div class="CARBig">
 <div id="sub_img_center"></div>
 <div class="clear"></div>
 
@@ -22,7 +25,7 @@
 <div id="sub_img_member"></div>
 <div class="clear"></div>
 
-<h1 id="board_name">고객센터</h1>
+<h1 id="board_name" align="center">고객센터</h1>
 
 <%-- 고객센터 메뉴 --%>
 <div id="sub_menu">
@@ -75,7 +78,7 @@
 <main>
 <div class="center_nlist">
 	<table class="center_nlist-table">
-	<caption class="main_title">최신 공지사항</caption>
+	<caption  class="main_title">최신 공지사항</caption>
 		<tbody>
 		<tr>
 			<th class="nlist-title">제목</th>
@@ -110,11 +113,13 @@
 
 <%-- 공지사항 전체 보기 버튼 --%>
 <div class="notice-all-btn">
-	<a a href="${path}/service/service_notice" class="notice-all">공지사항 전체 보기</a>
+	<a href="${path}/service/service_notice" class="notice-all">공지사항 전체 보기</a>
 </div>
 <br><br>
 
-
+</div>
+<div class="CARBig">
 <jsp:include page="../include/footer.jsp"/>
+</div>
 </body>
 </html>

@@ -476,15 +476,16 @@ public class AdminController {
 	} // admin_member()
 	
 	@GetMapping("/admin_member_del")
-	public ModelAndView admin_member_del(String m_id, int page) {
-		this.adminService.del_mem(m_id);
-		
-		ModelAndView mm = new ModelAndView();
-		mm.addObject("page", page);
-		mm.setViewName("redirect:/admin/admin_member");
-		
-		return mm;
-	} // admin_member_del()
+	   public ModelAndView admin_member_del(String m_id, int page) {
+	      this.adminService.del_mem(m_id);
+	      this.adminService.del_rental(m_id);
+	      
+	      ModelAndView mm = new ModelAndView();
+	      mm.addObject("page", page);
+	      mm.setViewName("redirect:/admin/admin_member");
+	      
+	      return mm;
+	   } // admin_member_del()
 	
 	/* 차량환불관리 */
 	@RequestMapping("/admin_pay")

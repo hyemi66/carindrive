@@ -15,7 +15,10 @@
 </head>
 <body>
 <%-- include : main --%>
+<div class="CARBig">
 <%@ include file="../include/header.jsp" %>
+</div>
+<div class="CARBig">
 <form action="member_join_ok" method="post">
 	<div id="logo">
 		<hr>
@@ -82,8 +85,11 @@
 		</div><%--form1 end --%>
 	</div> <%-- wrap end --%>
 </form>
+</div>
+<div class="CARBig">
 <%-- include : footer --%>
 <%@ include file="../include/footer.jsp" %>
+</div>
 </body>
 </html>
 

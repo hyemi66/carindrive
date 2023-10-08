@@ -10,7 +10,10 @@
 <link href="${path}/css/guide.css" rel="stylesheet"/>
 </head>
 <body>
+<div class="CARBig">
 <jsp:include page="../include/header.jsp"/>
+</div>
+<div class="CARBig">
 <div class="l-ct">
 	<h1 class="guideTitle">1. 대여자격</h1>
 	<table class="guideTable">
@@ -104,8 +107,8 @@
 	<div class="guideRefund">
 		<p class="subject">환불안내</p>
 		<div class="equipment-content">
-			<p>환불/변경 신청은 유선상(111-111-1111)으로만 가능합니다.</p>
-			<p>환불규정은 기간에 따라 환불 요금이 변동될 수 있으며, 당사 업무시간 내 (주중/주말 09:00~18:00 ) 에 취소 및 변경을 하셔야 적용됩니다.</p>
+			<p>환불 신청은 유선상(111-111-1111)으로도 신청 가능합니다.</p>
+			<p>환불규정은 기간에 따라 환불 요금이 변동될 수 있으며, 당사 업무시간 내 (주중/주말 09:00~18:00 ) 에 취소 하셔야 적용됩니다.</p>
 			<p>천재지변에 의해 취소가 될 경우에는 취소 확인할 수 있는 확인서를 보내주셔야 취소 수수료 없이 환불이 가능합니다.</p>
 			<p>개인 사정으로 인해 취소 할 경우 취소 수수료가 부과됩니다.</p>
 		</div>
@@ -130,6 +133,9 @@
 		</div>
 	</div>
 </div>
+</div>
+<div class="CARBig">
 <jsp:include page="../include/footer.jsp"/>
+</div>
 </body>
 </html>

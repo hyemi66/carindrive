@@ -1,4 +1,4 @@
-package com.carindrive;
+package com.carindrive.controller;
 
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;

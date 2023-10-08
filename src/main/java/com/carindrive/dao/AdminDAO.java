@@ -63,4 +63,6 @@ public interface AdminDAO {
 
 	List<OrderVO> getAdminOrderList(PageVO p);
 
+	void del_rental(String m_id);
+
 }

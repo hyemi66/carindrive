@@ -12,8 +12,11 @@
 <link href="${path}/css/service.css" rel="stylesheet"/>
 </head>
 <body>
+<div class="CARBig">
 <jsp:include page="../include/header.jsp"/>
-<h1 id="board_name">고객센터</h1>
+</div>
+<div class="CARBig">
+<h1 id="board_name" align="center">고객센터</h1>
 
 <div id="sub_menu">
  <ul>
@@ -59,7 +62,9 @@
     </form>
 </main>
   
-
+</div>
+<div class="CARBig">
 <jsp:include page="../include/footer.jsp"/>
+</div>
 </body>
 </html>

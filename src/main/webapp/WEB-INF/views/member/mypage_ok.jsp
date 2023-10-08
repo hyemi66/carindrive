@@ -13,7 +13,10 @@
 <link href="${path}/css/member/mypage.css" rel="stylesheet"/>
 </head>
 <body>
+<div class="CARBig">
 <jsp:include page="../include/header.jsp"/>
+</div>
+<div class="CARBig">
 <div class="Bmypage">
 	<div class="Mypage">
 		<div class="Mypage_menu">
@@ -49,6 +52,9 @@
 	</div>
 </div>
 <div class="clear"></div>
+</div>
+<div class="CARBig">
 <jsp:include page="../include/footer.jsp"/>
+</div>
 </body>
 </html>

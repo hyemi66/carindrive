@@ -11,8 +11,11 @@
 <script type="text/javascript" src="${path}/js/member/pwd_change.js"></script>
 </head>
 <body>
+<div class="CARBig">
 <%-- include : main --%>
 <%@ include file="../include/header.jsp" %>
+</div>
+<div class="CARBig">
 <div id="wrap">
 	<div id="serchform"> 
 		<div id="logo">
@@ -35,9 +38,11 @@
 	</div>
 </div>
 
-
+</div>
+<div class="CARBig">
 <%-- include : footer --%>
 <%@ include file="../include/footer.jsp" %>
+</div>
 
 
 </body>

@@ -789,8 +789,8 @@ public class RentCheckController {
 		// 로그인 고객정보 가져오기
 		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
 		try {
-			if(memberInfo.getM_id().equals("zzzz")) { //아이디가 zzzz인 경우만 차량환불에 접근가능
-														//admin01이 로그인이 안되는것에 의문을 제기해야함
+			if(memberInfo.getM_id().equals("admin01")) { 
+				
 				//주문번호를 기준으로 해당 결제 내역을 가져옴
 				OrderVO orderInfo = this.orderService.getOrder2(order_number);
 				double refundAmount = orderInfo.getAmount();

@@ -147,4 +147,9 @@ public class AdminServiceImpl implements AdminService {
 		return this.adminDao.getAdminOrderList(p);
 	}
 
+	@Override
+	public void del_rental(String m_id) {
+		this.adminDao.del_rental(m_id);
+	}
+
 }

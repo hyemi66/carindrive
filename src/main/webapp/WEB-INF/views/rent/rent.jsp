@@ -17,7 +17,10 @@
 
 </head>
 <body>
+<<div class="CARBig">
   <jsp:include page="../include/header.jsp"/>
+  </div>
+  <div class="CARBig">
   
   <div class="clear"></div>
 <%-- 예약 선택 메뉴 --%>
@@ -424,7 +427,9 @@
     <c:remove var="alertScript" scope="page" />
 </c:if>
 
-
+</div>
+<div class="CARBig">
 <jsp:include page="../include/footer.jsp"/>
+</div>
 </body>
 </html>

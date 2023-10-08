@@ -39,7 +39,7 @@
 }
 /* 관리자페이지 (공지사항) */
 #admin_show {
-	width: 850px; height: 800px;
+	width: 830px; height: 1200px;
 	float: right;
 	padding-left: 70px;
 	margin-right: 100px;
@@ -80,7 +80,7 @@
 }
 #plus {
 	float:right;
-	margin-right: 92px;
+	margin-right: 77px;
 }
 /* 관리자페이지(공지사항 글쓰기) */
 #ag_button2 {
@@ -99,7 +99,7 @@
 	padding-left: 10px;
 }
 #ag_cont p {
-	height: 250px;
+	height: 700px;
 }
 #ag_button3 {
 	margin-top: 20px;
@@ -113,52 +113,8 @@
 	float:right;
 	margin-right: 5px;
 }
-/* 관리자페이지(차량추가) */
-.filebox input[type="file"] {
-	position: absolute;
-	width: 1px;
-	height: 1px;
-	padding: 0;
-	margin: -1px;
-	overflow: hidden;
-	clip:rect(0,0,0,0);
-	border: 0;
-}
 
-.filebox label {
-	display: inline-block;
-	padding: 7px 20px;
-	color: white;
-	font-size: 14px;
-	font-weight: bold;
-	line-height: normal;
-	vertical-align: middle;
-	background-color: #1c2b37;
-	cursor: pointer;
-	border: 1px solid #ebebeb;
-	border-bottom-color: #e2e2e2;
-	border-radius: .25em;
-}
 
-/* named upload */
-.filebox .upload-name {
-	display: inline-block;
-	width: 570px;
-	padding: .5em .75em;
-	font-size: 14px;
-	font-family: inherit;
-	font-weight: bold;
-	color: #1c2b37;
-	line-height: normal;
-	vertical-align: middle;
-	background-color: #f8f8f8;
-	border: 1px solid #1c2b37;
-	border-bottom-color: white;
-	border-radius: .25em;
-	-webkit-appearance: none; /* 네이티브 외형 감추기 */
-	-moz-appearance: none;
-	appearance: none;
-}
 /* 관리자페이지(차량 상세정보) */
 #admin_show2 {
 	width: 850px; height: 950px;

@@ -1,45 +1,45 @@
--- ìœ ì € ì •ë³´ í…Œì´ë¸”
+-- À¯Àú Á¤º¸ Å×ÀÌºí
 create table c_member(
-    m_id VARCHAR2(200) PRIMARY KEY, --ìœ ì € ID
-    m_pwd VARCHAR2(400) not null, --ì‚¬ìš©ì ë¹„ë°€ë²ˆí˜¸
-    m_birth VARCHAR2(200) not null, --ì‚¬ìš©ì ìƒì¼
-    m_name VARCHAR2(200) not null, --ì‚¬ìš©ìì´ë¦„
-    m_email VARCHAR2(200) not null, --ì‚¬ìš©ì ì´ë©”ì¼
-    m_tel VARCHAR2(200) not null, --ì‚¬ìš©ì í†µì‹ ì‚¬
-    m_phone VARCHAR2(200) not null, --ì‚¬ìš©ì ì „í™”ë²ˆí˜¸
-    m_state Number not null, -- ê°€ì…íšŒì›ì´ë©´ 1, íƒˆí‡´íšŒì›ì´ë©´ 2
-    m_regdate date -- íšŒì›ê°€ì… ë‚ ì§œ
+    m_id VARCHAR2(200) PRIMARY KEY, --À¯Àú ID
+    m_pwd VARCHAR2(400) not null, --»ç¿ëÀÚ ºñ¹Ğ¹øÈ£
+    m_birth VARCHAR2(200) not null, --»ç¿ëÀÚ »ıÀÏ
+    m_name VARCHAR2(200) not null, --»ç¿ëÀÚÀÌ¸§
+    m_email VARCHAR2(200) not null, --»ç¿ëÀÚ ÀÌ¸ŞÀÏ
+    m_tel VARCHAR2(200) not null, --»ç¿ëÀÚ Åë½Å»ç
+    m_phone VARCHAR2(200) not null, --»ç¿ëÀÚ ÀüÈ­¹øÈ£
+    m_state Number not null, -- °¡ÀÔÈ¸¿øÀÌ¸é 1, Å»ÅğÈ¸¿øÀÌ¸é 2
+    m_regdate date -- È¸¿ø°¡ÀÔ ³¯Â¥
 );
--- ì°¨ ì •ë³´ í…Œì´ë¸”
+-- Â÷ Á¤º¸ Å×ÀÌºí
 create table c_car(
-    c_num number not null, -- ì°¨ëŸ‰ ì½”ë“œë²ˆí˜¸
-    c_name varchar2(200) primary key, -- ì°¨ëŸ‰ ì´ë¦„
-    c_brand varchar2(200)not null, -- ì°¨ëŸ‰ ë¸Œëœë“œ
-    c_year varchar2(200) not null, -- ì°¨ëŸ‰ ë…„ì‹
-    c_color varchar2(200) not null, -- ì°¨ëŸ‰ ìƒ‰ìƒ
-    c_type varchar2(200) not null, -- ì°¨ëŸ‰ ìƒì„¸ì°¨ì¢…
-    c_type2 varchar2(200) not null, -- ì°¨ëŸ‰ ì°¨ì¢…
-    c_oil varchar2(200) not null, -- ì°¨ëŸ‰ ê¸°ë¦„
-    c_price number not null, -- ì°¨ëŸ‰ ê°€ê²©
-    c_ok int default 1, -- ì°¨ëŸ‰ ê°€ëŠ¥ ì—¬ë¶€
-    c_img varchar2(200) not null -- ì°¨ëŸ‰ ì´ë¯¸ì§€
+    c_num number not null, -- Â÷·® ÄÚµå¹øÈ£
+    c_name varchar2(200) primary key, -- Â÷·® ÀÌ¸§
+    c_brand varchar2(200)not null, -- Â÷·® ºê·£µå
+    c_year varchar2(200) not null, -- Â÷·® ³â½Ä
+    c_color varchar2(200) not null, -- Â÷·® »ö»ó
+    c_type varchar2(200) not null, -- Â÷·® »ó¼¼Â÷Á¾
+    c_type2 varchar2(200) not null, -- Â÷·® Â÷Á¾
+    c_oil varchar2(200) not null, -- Â÷·® ±â¸§
+    c_price number not null, -- Â÷·® °¡°İ
+    c_img varchar2(200) not null -- Â÷·® ÀÌ¹ÌÁö
 );
--- ì˜ˆì•½ í…Œì´ë¸”
+-- ¿¹¾à Å×ÀÌºí
 CREATE TABLE c_rental (
-    cr_num number PRIMARY KEY,                    -- ì˜ˆì•½ë²ˆí˜¸
-    cr_mid VARCHAR2(30),                          -- ê³ ê° ì•„ì´ë””
-    cr_cname VARCHAR2(200),                     --ì°¨ ì´ë¦„            --cr_cidë¥¼ cr_cnameìœ¼ë¡œ ë°”ê¿ˆ
-    cr_rdate VARCHAR2(200),                       --ì˜ˆì•½ ì¼ì
-    cr_sdate VARCHAR2(200),                      --ì‹¤ì œ ëŒ€ì—¬ì¼
-    cr_edate VARCHAR2(200),                      --ë°˜ë‚© ì¼ì
-    cr_price number,                                       --ë ŒíŠ¸ ë¹„ìš©
-    cr_order VARCHAR2(100),                       --ì£¼ë¬¸ ë²ˆí˜¸
-    cr_status VARCHAR2(30) DEFAULT 'wait' NOT NULL, --ê²°ì œ ìƒíƒœ í™•ì¸
+    cr_num number PRIMARY KEY,                              -- ¿¹¾à¹øÈ£
+    cr_mid VARCHAR2(30),                                        -- °í°´ ¾ÆÀÌµğ
+    cr_cname VARCHAR2(200),                                     --Â÷ ÀÌ¸§
+    cr_rdate VARCHAR2(200),                                      --¿¹¾à ÀÏÀÚ
+    cr_sdate VARCHAR2(200),                                     --½ÇÁ¦ ´ë¿©ÀÏ
+    cr_edate VARCHAR2(200),                                     --¹İ³³ ÀÏÀÚ
+    cr_price number,                                              --·»Æ® ºñ¿ë
+    cr_order VARCHAR2(100),                                   --ÁÖ¹® ¹øÈ£
+    cr_status VARCHAR2(30) DEFAULT 'wait' NOT NULL, --°áÁ¦ »óÅÂ È®ÀÎ
     cr_paytime TIMESTAMP,
     cr_waittime VARCHAR2(200),
-    FOREIGN KEY (cr_mid) REFERENCES c_member(m_id),
+    FOREIGN KEY (cr_mid) REFERENCES c_member(m_id) ON DELETE CASCADE,
     FOREIGN KEY (cr_cname) REFERENCES c_car(c_name)
 );
+-- °áÁ¦Á¤º¸Ã¢
 create table c_order_info (
     id number primary key,
     buyer_name varchar2(255),
@@ -56,7 +56,7 @@ create table c_order_info (
     refund varchar2(20),
     parent_merchant_id varchar2(255)
 );
--- ê³µì§€ì‚¬í•­ í…Œì´ë¸”
+-- °øÁö»çÇ× Å×ÀÌºí
 CREATE TABLE C_SERVICE (
     cs_no NUMBER(*,0),
     cs_id varchar2(200 byte),
@@ -65,9 +65,10 @@ CREATE TABLE C_SERVICE (
     cs_cont VARCHAR2(4000 BYTE), 
     cs_date DATE DEFAULT SYSDATE, 
     cs_type VARCHAR2(20 BYTE),
-    cs_hit int default 0
+    cs_hit int default 0,
+    FOREIGN KEY (cs_id) REFERENCES c_member(m_id) ON DELETE CASCADE
 );
---Q&A í…Œì´ë¸”
+--Q&A Å×ÀÌºí
 CREATE TABLE c_qna (
     cq_no NUMBER(*,0), 
     cq_id VARCHAR2(20 BYTE), 
@@ -78,10 +79,10 @@ CREATE TABLE c_qna (
     cq_file VARCHAR2(400 BYTE), 
     QNA_REPLYGROUP NUMBER(*,0), 
     QNA_REPLYTYPE NUMBER(*,0), 
-    QNA_REPLYINDEX NUMBER(*,0)
+    QNA_REPLYINDEX NUMBER(*,0),
+    FOREIGN KEY (cq_id) REFERENCES c_member(m_id) ON DELETE CASCADE
 );
-
--- ë„¤ì´ë²„ ë¡œê·¸ì¸
+-- ³×ÀÌ¹ö ·Î±×ÀÎ
 create table social(
  id NUMBER(19) DEFAULT social_seq.nextval primary key ,
  username VARCHAR2(400) not null,
@@ -92,99 +93,99 @@ create table social(
  k_state NUMBER(38)
 );
 
--- ë„¤ì´ë²„ ë¡œê·¸ì¸ ì‹œí€€ìŠ¤
+-- ³×ÀÌ¹ö ·Î±×ÀÎ ½ÃÄö½º
 create SEQUENCE social_seq
 INCREMENT by 1
 START WITH 1
 NOCACHE;
 
--- ì°¨ëŸ‰ ì •ë³´ í…Œì´ë¸” ì‹œí€€ìŠ¤
+-- Â÷·® Á¤º¸ Å×ÀÌºí ½ÃÄö½º
 create sequence car_seq
 start with 1
 increment by 1
 nocache;
--- ì˜ˆì•½ í…Œì´ë¸” ì‹œí€€ìŠ¤
+-- ¿¹¾à Å×ÀÌºí ½ÃÄö½º
 create sequence cr_seq
 start with 1
 increment by 1
 nocache;
--- ê²°ì œ ì •ë³´ í…Œì´ë¸” ì‹œí€€ìŠ¤
+-- °áÁ¦ Á¤º¸ Å×ÀÌºí ½ÃÄö½º
 create sequence co_seq
 start with 1
 increment by 1
 nocache;
--- ê³µì§€ì‚¬í•­ í…Œì´ë¸” ì‹œí€€ìŠ¤
+-- °øÁö»çÇ× Å×ÀÌºí ½ÃÄö½º
 create sequence cs_seq
 start with 1
 increment by 1
 nocache;
--- Q&A í…Œì´ë¸” ì‹œí€€ìŠ¤
+-- Q&A Å×ÀÌºí ½ÃÄö½º
 create sequence cq_seq
 start with 1
 increment by 1
 nocache;
 
--- ìë™ì°¨ insert
--- ê²½í˜•
+-- ÀÚµ¿Â÷ insert
+-- °æÇü
 insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
-values(car_seq.nextval, 'ë ˆì´', 'KIA', 'ê²½í˜• RV', 'ê²½í˜•', 'ê°€ì†”ë¦°', '2023', 'WHITE', 100, 'Gcar01.png');
+values(car_seq.nextval, '·¹ÀÌ', 'KIA', '°æÇü RV', '°æÇü', '°¡¼Ö¸°', '2023', 'WHITE', 100, 'Gcar01.png');
 
 insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
-values(car_seq.nextval, 'ëª¨ë‹', 'KIA', 'ê²½í˜• í•´ì¹˜ë°±', 'ê²½í˜•', 'ê°€ì†”ë¦°', '2023', 'WHITE', 100, 'Gcar02.png');
+values(car_seq.nextval, '¸ğ´×', 'KIA', '°æÇü ÇØÄ¡¹é', '°æÇü', '°¡¼Ö¸°', '2023', 'WHITE', 100, 'Gcar02.png');
 
 insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
-values(car_seq.nextval, 'ìºìŠ¤í¼', 'í˜„ëŒ€', 'ê²½í˜• SUV', 'ê²½í˜•', 'ê°€ì†”ë¦°', '2023', 'BLUE', 200, 'Gcar03.JPG');
+values(car_seq.nextval, 'Ä³½ºÆÛ', 'Çö´ë', '°æÇü SUV', '°æÇü', '°¡¼Ö¸°', '2023', 'BLUE', 200, 'Gcar03.JPG');
 
--- ì†Œí˜•
+-- ¼ÒÇü
 insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
-values(car_seq.nextval, 'í•´ì¹˜ë°±', 'MINI', 'ì†Œí˜• í•´ì¹˜ë°±', 'ì†Œí˜•', 'ê°€ì†”ë¦°', '2024', 'RED', 200, 'Scar01.png');
-
-insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
-values(car_seq.nextval, 'ì½”ë‚˜', 'í˜„ëŒ€', 'ì†Œí˜• SUV', 'ì†Œí˜•', 'ê°€ì†”ë¦°', '2023', 'GRAY', 200, 'Scar02.JPG');
-
--- ì¤‘í˜• ì„¸ë‹¨
-insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
-values(car_seq.nextval, 'K5', 'KIA', 'ì¤‘í˜• ì„¸ë‹¨', 'ì¤‘í˜• ì„¸ë‹¨', 'LPG, ê°€ì†”ë¦°', '2022', 'BLACK', 250, 'Jcar01.png');
+values(car_seq.nextval, 'ÇØÄ¡¹é', 'MINI', '¼ÒÇü ÇØÄ¡¹é', '¼ÒÇü', '°¡¼Ö¸°', '2024', 'RED', 200, 'Scar01.png');
 
 insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
-values(car_seq.nextval, 'ì˜ë‚˜íƒ€', 'í˜„ëŒ€', 'ì¤‘í˜• ì„¸ë‹¨', 'ì¤‘í˜• ì„¸ë‹¨', 'LPG, ê°€ì†”ë¦°', '2019', 'LIGHTGRAY', 250, 'Jcar02.JPG');
+values(car_seq.nextval, 'ÄÚ³ª', 'Çö´ë', '¼ÒÇü SUV', '¼ÒÇü', '°¡¼Ö¸°', '2023', 'GRAY', 200, 'Scar02.JPG');
+
+-- ÁßÇü ¼¼´Ü
+insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
+values(car_seq.nextval, 'K5', 'KIA', 'ÁßÇü ¼¼´Ü', 'ÁßÇü ¼¼´Ü', 'LPG, °¡¼Ö¸°', '2022', 'BLACK', 250, 'Jcar01.png');
 
 insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
-values(car_seq.nextval, '3 ì‹œë¦¬ì¦ˆ', 'BMW', 'ì¤‘í˜• ì„¸ë‹¨', 'ì¤‘í˜• ì„¸ë‹¨', 'ê°€ì†”ë¦°, ë””ì ¤', '2019', 'WHITE', 300, 'Jcar03.png');
+values(car_seq.nextval, '½î³ªÅ¸', 'Çö´ë', 'ÁßÇü ¼¼´Ü', 'ÁßÇü ¼¼´Ü', 'LPG, °¡¼Ö¸°', '2019', 'LIGHTGRAY', 250, 'Jcar02.JPG');
 
 insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
-values(car_seq.nextval, 'ì•„í…Œì˜¨', 'í­ìŠ¤ë°”ê²', 'ì¤‘í˜• ì„¸ë‹¨', 'ì¤‘í˜• ì„¸ë‹¨', 'ë””ì ¤', '2019', 'BLUE', 300, 'Jcar04.JPG');
+values(car_seq.nextval, '3 ½Ã¸®Áî', 'BMW', 'ÁßÇü ¼¼´Ü', 'ÁßÇü ¼¼´Ü', '°¡¼Ö¸°, µğÁ©', '2019', 'WHITE', 300, 'Jcar03.png');
 
 insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
-values(car_seq.nextval, 'A4', 'ì•„ìš°ë””', 'ì¤‘í˜• ì„¸ë‹¨', 'ì¤‘í˜• ì„¸ë‹¨', 'ê°€ì†”ë¦°, ë””ì ¤', '2019', 'BLACK', 300, 'Jcar05.png');
-
--- ì¤‘í˜• SUV
-insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
-values(car_seq.nextval, 'ì‹¼íƒ€í˜ í•˜ì´ë¸Œë¦¬ë“œ', 'í˜„ëŒ€', 'ì¤‘í˜• SUV', 'ì¤‘í˜• SUV', 'ê°€ì†”ë¦°, í•˜ì´ë¸Œë¦¬ë“œ', '2023', 'WHITE', 350, 'Jcar06.png');
+values(car_seq.nextval, '¾ÆÅ×¿Â', 'Æø½º¹Ù°Õ', 'ÁßÇü ¼¼´Ü', 'ÁßÇü ¼¼´Ü', 'µğÁ©', '2019', 'BLUE', 300, 'Jcar04.JPG');
 
 insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
-values(car_seq.nextval, 'ì˜ë Œí† ', 'KIA', 'ì¤‘í˜• SUV', 'ì¤‘í˜• SUV', 'ê°€ì†”ë¦°, ë””ì ¤', '2023', 'WHITE', 350, 'Jcar07.png');
+values(car_seq.nextval, 'A4', '¾Æ¿ìµğ', 'ÁßÇü ¼¼´Ü', 'ÁßÇü ¼¼´Ü', '°¡¼Ö¸°, µğÁ©', '2019', 'BLACK', 300, 'Jcar05.png');
+
+-- ÁßÇü SUV
+insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
+values(car_seq.nextval, '½ÑÅ¸Æä ÇÏÀÌºê¸®µå', 'Çö´ë', 'ÁßÇü SUV', 'ÁßÇü SUV', '°¡¼Ö¸°, ÇÏÀÌºê¸®µå', '2023', 'WHITE', 350, 'Jcar06.png');
 
 insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
-values(car_seq.nextval, 'GV70', 'ì œë„¤ì‹œìŠ¤', 'ì¤‘í˜• SUV', 'ì¤‘í˜• SUV', 'ê°€ì†”ë¦°, ë””ì ¤', '2022', 'BLACK', 350, 'Jcar08.png');
+values(car_seq.nextval, '½î·»Åä', 'KIA', 'ÁßÇü SUV', 'ÁßÇü SUV', '°¡¼Ö¸°, µğÁ©', '2023', 'WHITE', 350, 'Jcar07.png');
 
 insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
-values(car_seq.nextval, 'X3', 'BMW', 'ì¤‘í˜• SUV', 'ì¤‘í˜• SUV', 'ê°€ì†”ë¦°, ë””ì ¤', '2022', 'BLACK', 350, 'Jcar09.png');
+values(car_seq.nextval, 'GV70', 'Á¦³×½Ã½º', 'ÁßÇü SUV', 'ÁßÇü SUV', '°¡¼Ö¸°, µğÁ©', '2022', 'BLACK', 350, 'Jcar08.png');
 
 insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
-values(car_seq.nextval, 'SQ5', 'ì•„ìš°ë””', 'ì¤‘í˜• SUV', 'ì¤‘í˜• SUV', 'ê°€ì†”ë¦°', '2021', 'WHITE', 350, 'Jcar10.png');
-
--- ì „ê¸°ì°¨
-insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
-values(car_seq.nextval, 'ì½”ë‚˜ Electric', 'í˜„ëŒ€', 'ì†Œí˜• SUV', 'ì „ê¸°ì°¨', 'ì „ê¸°', '2023', 'RED', 400, 'Icar01.JPG');
+values(car_seq.nextval, 'X3', 'BMW', 'ÁßÇü SUV', 'ÁßÇü SUV', '°¡¼Ö¸°, µğÁ©', '2022', 'BLACK', 350, 'Jcar09.png');
 
 insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
-values(car_seq.nextval, 'ì•„ì´ì˜¤ë‹‰6', 'í˜„ëŒ€', 'ì¤‘í˜• ì„¸ë‹¨', 'ì „ê¸°ì°¨', 'ì „ê¸°', '2023', 'GRAY', 400, 'Icar02.JPG');
+values(car_seq.nextval, 'SQ5', '¾Æ¿ìµğ', 'ÁßÇü SUV', 'ÁßÇü SUV', '°¡¼Ö¸°', '2021', 'WHITE', 350, 'Jcar10.png');
+
+-- Àü±âÂ÷
+insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
+values(car_seq.nextval, 'ÄÚ³ª Electric', 'Çö´ë', '¼ÒÇü SUV', 'Àü±âÂ÷', 'Àü±â', '2023', 'RED', 400, 'Icar01.JPG');
 
 insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
-values(car_seq.nextval, 'ë‹ˆë¡œ EV', 'KIA', 'ì†Œí˜• SUV', 'ì „ê¸°ì°¨', 'ì „ê¸°', '2024', 'RED', 400, 'Icar03.png');
+values(car_seq.nextval, '¾ÆÀÌ¿À´Ğ6', 'Çö´ë', 'ÁßÇü ¼¼´Ü', 'Àü±âÂ÷', 'Àü±â', '2023', 'GRAY', 400, 'Icar02.JPG');
 
--- adminê³„ì • ì¶”ê°€
+insert into c_car(c_num, c_name, c_brand, c_type, c_type2, c_oil, c_year, c_color, c_price, c_img)
+values(car_seq.nextval, '´Ï·Î EV', 'KIA', '¼ÒÇü SUV', 'Àü±âÂ÷', 'Àü±â', '2024', 'RED', 400, 'Icar03.png');
+
+-- admin°èÁ¤ Ãß°¡
 insert into c_member (m_id,m_birth,m_email,m_name,m_phone,m_pwd,m_state,m_tel,regdate)
 values('admin01','','','','','admin01',9,'',sysdate);
 
@@ -194,5 +195,6 @@ select * from c_rental;
 select * from c_order_info;
 select * from c_service;
 select * from c_qna;
+
 
 commit;

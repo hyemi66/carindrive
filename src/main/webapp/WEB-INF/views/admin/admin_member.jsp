@@ -11,7 +11,10 @@
 <link rel="stylesheet" type="text/css" href="${path}/css/admin.css" />
 </head>
 <body>
+<div class="CARBig">
 <jsp:include page="../include/header.jsp"/>
+</div>
+<div class="CARBig">
 <div class="Badmin">
 	<div class="Admin">
 		<div class="Admin_menu">
@@ -106,6 +109,9 @@
 	</div>
 </div>
 <div class="clear"></div>
+</div>
+<div class="CARBig">
 <jsp:include page="../include/footer.jsp"/>
+</div>
 </body>
 </html>
